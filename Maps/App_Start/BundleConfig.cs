@@ -23,8 +23,8 @@ namespace Maps
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/Css/bootstrap.css",
+                      "~/Content/Css/site.css"));
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Maps.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("MapsConnection", throwIfV1Schema: false)
         {
         }
 
