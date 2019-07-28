@@ -9,7 +9,6 @@
                 @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
             <li class="nav-item">
                 <input class="form-control mr-sm-2 btn btn-link nav-link" value="Log out" type="submit" />
-                @*<a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>*@
             </li>
         </ul>
     }
