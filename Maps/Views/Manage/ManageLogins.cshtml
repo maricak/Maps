@@ -25,14 +25,12 @@
                     {
                         if (ViewBag.ShowRemoveButton)
                         {
-                            using (Html.BeginForm("RemoveLogin", "Manage"))
+                            using (Html.BeginForm("RemoveLogin", "Manage", FormMethod.Post, new { @class = "d-inline" }))
                             {
                                 @Html.AntiForgeryToken()
-                                <div>
-                                    @Html.Hidden("loginProvider", account.LoginProvider)
-                                    @Html.Hidden("providerKey", account.ProviderKey)
-                                    <input type="submit" class="btn btn-outline-primary" value="@account.LoginProvider" title="Remove this @account.LoginProvider login from your account" />
-                                </div>
+                                @Html.Hidden("loginProvider", account.LoginProvider)
+                                @Html.Hidden("providerKey", account.ProviderKey)
+                                <input type="submit" class="btn btn-outline-primary" value="@account.LoginProvider" title="Remove this @account.LoginProvider login from your account" />
                             }
                         }
                     }
@@ -42,7 +40,7 @@
             {
                 <li class="list-group-item">
                     Add login provider:
-                    @using (Html.BeginForm("LinkLogin", "Manage"))
+                    @using (Html.BeginForm("LinkLogin", "Manage", FormMethod.Post, new { @class = "d-inline" }))
                     {
                         @Html.AntiForgeryToken()
                         foreach (AuthenticationDescription p in Model.OtherLogins)

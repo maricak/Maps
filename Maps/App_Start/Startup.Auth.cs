@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using Maps.Models;
+using Owin.Security.Providers.GitHub;
 
 namespace Maps
 {
@@ -45,24 +46,29 @@ namespace Maps
             // This is similar to the RememberMe option when you log in.
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
+            app.UseGitHubAuthentication(
+                clientId: "ec12008720d9c8f6ae1a",
+                clientSecret: "5a8a65fedd1ce82798439385e3dec7dc423c20cc");
+
             // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "bb922106-8369-4423-a713-fe7365461c9f",
-            //    clientSecret: "dllHE566!bsbqQADOU50$[{");
+            app.UseMicrosoftAccountAuthentication(
+                clientId: "3248f9fa-7186-4d7c-8ae3-f75e7400cc14",
+                clientSecret: "[cPkBv7SF7e.3LbYmVcwAn1fHvVe[We/");
 
             //app.UseTwitterAuthentication(
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "355864615088208",
+               appSecret: "1e978de4f1d56960d4448455f9012c09");
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
                 ClientId = "959161207695-hs1uefh9utbufoe731iv8m372lji4nqc.apps.googleusercontent.com",
                 ClientSecret = "uRlWvE1U7FXILYAuolaX4qLh"
             });
+
         }
     }
 }
