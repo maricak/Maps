@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -16,18 +17,34 @@ namespace Maps.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        public ICollection<Map> Maps { get; set; }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class MapsDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
+        public MapsDbContext()
             : base("MapsConnection", throwIfV1Schema: false)
         {
         }
 
-        public static ApplicationDbContext Create()
+        public static MapsDbContext Create()
         {
-            return new ApplicationDbContext();
+            return new MapsDbContext();
         }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ApplicationUser>().ToTable("User");
+            modelBuilder.Entity<IdentityUserClaim>().ToTable("Claim");
+            modelBuilder.Entity<IdentityUserRole>().ToTable("UserRole");
+            modelBuilder.Entity<IdentityUserLogin>().ToTable("Login");
+            modelBuilder.Entity<IdentityRole>().ToTable("Role");
+        }
+
+        public virtual DbSet<Map> Maps{ get; set; }
+        public virtual DbSet<Layer> Layers { get; set; }
     }
 }

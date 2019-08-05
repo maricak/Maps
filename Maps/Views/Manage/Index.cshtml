@@ -1,4 +1,5 @@
-﻿@model Maps.Models.IndexViewModel
+﻿@using Microsoft.AspNet.Identity
+@model Maps.Models.IndexViewModel
 @{
     ViewBag.Title = "Manage your account settings";
 }
@@ -13,6 +14,9 @@
         {
             <li class="list-group-item text-success">@ViewBag.StatusMessage</li>
         }
+        <li class="list-group-item">
+            Username: [ @User.Identity.GetUserName() ]
+        </li>
         <li class="list-group-item">
             Password:
             [

@@ -87,6 +87,10 @@ namespace Maps.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    if(string.IsNullOrEmpty(returnUrl))
+                    {
+                        return RedirectToAction("Index", "Maps");
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -186,7 +190,20 @@ namespace Maps.Controllers
                 return View("Error");
             }
             var result = await UserManager.ConfirmEmailAsync(userId, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            if (result.Succeeded)
+            {
+                result = await UserManager.AddToRoleAsync(userId, "User");
+                if (result.Succeeded)
+                {
+                    return View("ConfirmEmail");
+                }
+                else
+                {
+                    var user = await UserManager.FindByIdAsync(userId);
+                    await UserManager.DeleteAsync(user);
+                }
+            }
+            return View("Error");
         }
 
         //
@@ -335,6 +352,10 @@ namespace Maps.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    if (string.IsNullOrEmpty(returnUrl))
+                    {
+                        return RedirectToAction("Index", "Maps");
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -376,13 +397,20 @@ namespace Maps.Controllers
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
+                        result = await UserManager.AddToRoleAsync(user.Id, "User");
+                        if (result.Succeeded)
+                        {
+                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                            return RedirectToAction(returnUrl);
+                        }
+                        else
+                        {
+                            await UserManager.DeleteAsync(user);
+                        }
                     }
                 }
                 AddErrors(result);
             }
-
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
@@ -441,7 +469,7 @@ namespace Maps.Controllers
         {
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError("", error);
+                ModelState.AddModelError(String.Empty, error);
             }
         }
 
