@@ -20,11 +20,20 @@ namespace Maps.Controllers
         // GET: Maps
         public ActionResult Index()
         {
-            var userId = User.Identity.GetUser().Id;
-            using (var db = new MapsDbContext())
+            try
             {
-                return View(db.Maps.Where(m => m.User.Id.Equals(userId)).ToList());
+                var userId = User.Identity.GetUser().Id;
+                using (var access = new DataAccess())
+                {
+                    var maps = access.Maps.Get(m => m.User.Id.Equals(userId));
+                    return View(maps.ToList());
+                }
             }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+            return View();
         }
 
         // GET: Maps/Details/5
@@ -77,7 +86,7 @@ namespace Maps.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, ex.Message);   
+                    ModelState.AddModelError(string.Empty, ex.Message);
                 }
             }
             return View(model);

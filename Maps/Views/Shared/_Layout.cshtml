@@ -24,6 +24,12 @@
 
     <main class="flex-shrink-0">
         <div class="container">
+            @if (!Html.ViewData.ModelState.IsValid)
+            {
+                <div class="card bg-danger mt-3 p-0">
+                    @Html.ValidationSummary(true, "", new { @class = "pt-2" })
+                </div>
+            }
             @RenderBody()
         </div>
     </main>
@@ -32,7 +38,9 @@
             &copy; @DateTime.Now.Year - Maps - Marija Kostić
         </div>
     </footer>
-    @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
 </body>
 </html>
