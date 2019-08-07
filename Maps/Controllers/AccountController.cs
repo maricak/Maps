@@ -84,7 +84,7 @@ namespace Maps.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    if(string.IsNullOrEmpty(returnUrl))
+                    if (string.IsNullOrEmpty(returnUrl))
                     {
                         return RedirectToAction("Index", "Maps");
                     }
@@ -255,9 +255,6 @@ namespace Maps.Controllers
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
-     
-
-      
         //
         // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
@@ -288,8 +285,16 @@ namespace Maps.Controllers
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                    return RedirectToAction("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
             }
+        }
+
+        //
+        // GET: /Account/ExternalLoginConfirmation
+        [AllowAnonymous]
+        public ActionResult ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model)
+        {
+            return View(model);
         }
 
         //
@@ -323,7 +328,7 @@ namespace Maps.Controllers
                         if (result.Succeeded)
                         {
                             await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                            return RedirectToAction(returnUrl);
+                            return RedirectToAction("Index", "Maps");
                         }
                         else
                         {
