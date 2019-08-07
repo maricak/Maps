@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using Maps.Data;
+﻿using Maps.Data;
 using Maps.Entities;
 using Microsoft.AspNet.Identity;
+using PagedList;
+using System;
+using System.Linq;
+using System.Net;
+using System.Web.Mvc;
 
 namespace Maps.Controllers
 {
@@ -18,7 +15,7 @@ namespace Maps.Controllers
         //private MapsDbContext db = new MapsDbContext();
 
         // GET: Maps
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
             try
             {
@@ -26,7 +23,10 @@ namespace Maps.Controllers
                 using (var access = new DataAccess())
                 {
                     var maps = access.Maps.Get(m => m.User.Id.Equals(userId));
-                    return View(maps.ToList());
+                   // return View(maps.ToList());
+                    int pageSize = 3;
+                    int pageNumber = (page ?? 1);
+                    return View(maps.ToList().ToPagedList(pageNumber, pageSize));
                 }
             }
             catch (Exception)

@@ -24,7 +24,8 @@ namespace Maps
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/Css/bootstrap.css",
-                      "~/Content/Css/site.css"));
+                      "~/Content/Css/site.css",
+                      "~/Content/Css/PagedList.css"));
         }
     }
 }
