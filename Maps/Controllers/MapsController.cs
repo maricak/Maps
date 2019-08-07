@@ -6,7 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Maps.Models;
+using Maps.Data;
+using Maps.Entities;
 using Microsoft.AspNet.Identity;
 
 namespace Maps.Controllers

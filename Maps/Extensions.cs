@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Maps.Models;
+using Maps.Data;
+using Maps.Entities;
 using Microsoft.AspNet.Identity;
 
 public static class Extensions
 {
-    public static ApplicationUser GetUser(this System.Security.Principal.IIdentity identity)
+    public static User GetUser(this System.Security.Principal.IIdentity identity)
     {
         if (identity.IsAuthenticated)
         {

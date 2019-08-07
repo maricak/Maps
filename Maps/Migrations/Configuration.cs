@@ -1,19 +1,20 @@
 namespace Maps.Migrations
 {
+    using Maps.Data;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Maps.Models.MapsDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<MapsDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "Maps.Models.MapsDbContext";
+            ContextKey = "Maps.Data.MapsDbContext";
         }
 
-        protected override void Seed(Maps.Models.MapsDbContext context)
+        protected override void Seed(MapsDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 

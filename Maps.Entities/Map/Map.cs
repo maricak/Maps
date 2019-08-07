@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Maps.Models
+namespace Maps.Entities
 {
     [Table("Map")]
     public class Map
@@ -21,13 +22,6 @@ namespace Maps.Models
 
         public ICollection<Layer> Layers { get; set; }
 
-        public virtual ApplicationUser User { get; set; }
-    }
-
-    public class CreateMapViewModel
-    {
-        [Required(ErrorMessage = "The map name is required.")]
-        [StringLength(50, ErrorMessage = "Name must be less than {1} characters.")]
-        public string Name { get; set; }
+        public virtual User User { get; set; }
     }
 }
