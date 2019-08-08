@@ -1,9 +1,9 @@
-namespace Maps.Migrations
+namespace Maps.Data.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class Initia : DbMigration
     {
         public override void Up()
         {
@@ -24,12 +24,13 @@ namespace Maps.Migrations
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        Name = c.String(),
+                        Name = c.String(maxLength: 50),
                         CreationTime = c.DateTime(nullable: false),
                         User_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.User", t => t.User_Id)
+                .Index(t => t.Name, unique: true)
                 .Index(t => t.User_Id);
             
             CreateTable(
@@ -117,6 +118,7 @@ namespace Maps.Migrations
             DropIndex("dbo.Claim", new[] { "UserId" });
             DropIndex("dbo.User", "UserNameIndex");
             DropIndex("dbo.Map", new[] { "User_Id" });
+            DropIndex("dbo.Map", new[] { "Name" });
             DropIndex("dbo.Layer", new[] { "Map_Id" });
             DropTable("dbo.Role");
             DropTable("dbo.UserRole");

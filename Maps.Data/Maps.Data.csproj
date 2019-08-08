@@ -77,6 +77,11 @@
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
     <Compile Include="MapsDbContext.cs" />
+    <Compile Include="Migrations\201908072014256_Initia.cs" />
+    <Compile Include="Migrations\201908072014256_Initia.Designer.cs">
+      <DependentUpon>201908072014256_Initia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
   </ItemGroup>
@@ -89,6 +94,11 @@
       <Project>{F789CEEC-BEC7-4568-96CA-33048ED9C79E}</Project>
       <Name>Maps.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201908072014256_Initia.resx">
+      <DependentUpon>201908072014256_Initia.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

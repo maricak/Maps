@@ -1,23 +1,18 @@
 ﻿using Maps.Entities;
 using System;
+using System.Data.Entity;
 
 namespace Maps.Data
 {
     public class DataAccess : IDisposable
     {
         private readonly MapsDbContext context = new MapsDbContext();
-        private Repository<Map> maps;
-        private Repository<Layer> layers;
 
         public Repository<Map> Maps
         {
             get
             {
-                if (maps == null)
-                {
-                    maps = new Repository<Map>(context);
-                }
-                return maps;
+                    return new Repository<Map>(context);
             }
         }
 
@@ -25,11 +20,13 @@ namespace Maps.Data
         {
             get
             {
-                if (layers == null)
-                {
-                    layers = new Repository<Layer>(context);
-                }
-                return layers;
+                return new Repository<Layer>(context);
+            }
+        }
+        public Repository<User> Users {
+            get
+            {
+                return new Repository<User>(context);
             }
         }
 

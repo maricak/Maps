@@ -15,10 +15,10 @@
             <li class="list-group-item text-success">@ViewBag.StatusMessage</li>
         }
         <li class="list-group-item">
-            Username: [ @User.Identity.GetUserName() ]
+            <strong>Username: </strong>[ @User.Identity.GetUserName() ]
         </li>
         <li class="list-group-item">
-            Password:
+            <strong>Password: </strong>
             [
             @if (Model.HasPassword)
             {
@@ -31,7 +31,7 @@
             ]
         </li>
         <li class="list-group-item">
-            External Logins:
+            <strong>External Logins: </strong>
             @Model.Logins.Count [
             @Html.ActionLink("Manage", "ManageLogins") ]
         </li>

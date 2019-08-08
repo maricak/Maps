@@ -1,26 +1,25 @@
-﻿@model Maps.Entities.Map
+﻿@model Maps.Entities.DetailsMapViewModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>Map</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
+<div class="card mt-3">
+    <div class="card-header">
+        <h2 class="card-title">@ViewBag.Title</h2>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <strong>@Html.DisplayNameFor(model => model.Name):</strong>
             @Html.DisplayFor(model => model.Name)
-        </dd>
-
-    </dl>
+        </li>
+        <li class="list-group-item">
+            <strong>@Html.DisplayNameFor(model => model.CreationTime):</strong>
+            @Model.CreationTime.ToLocalTime()
+        </li>
+    </ul>
+    <div class="card-body text-right">
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
