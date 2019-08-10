@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Maps.Entities;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using Maps.Entities;
 
 namespace Maps.Controllers
 {
@@ -32,9 +31,9 @@ namespace Maps.Controllers
             {
                 return signInManager_ ?? HttpContext.GetOwinContext().Get<SignInManager>();
             }
-            private set 
-            { 
-                signInManager_ = value; 
+            private set
+            {
+                signInManager_ = value;
             }
         }
 
@@ -214,7 +213,7 @@ namespace Maps.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -252,6 +251,6 @@ namespace Maps.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

@@ -21,7 +21,7 @@ namespace Maps.Controllers
                 var userId = User.Identity.GetUser().Id;
                 using (var access = new DataAccess())
                 {
-                    var maps = access.Maps.Get(m => m.User.Id.Equals(userId));
+                    var maps = access.Maps.Get(m => m.User.Id.Equals(userId), orderBy: m => m.OrderByDescending(i => i.CreationTime));
                     return View(maps.ToList().ToPagedList(page ?? 1, PAGE_SIZE));
                 }
             }
@@ -168,32 +168,6 @@ namespace Maps.Controllers
             return View(model);
         }
 
-        // GET: Maps/Delete/5
-        public ActionResult Delete(Guid? id)
-        {
-            try
-            {
-                if (id == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-                using (var access = new DataAccess())
-                {
-                    Map map = access.Maps.GetByID(id);
-                    if (map == null)
-                    {
-                        return HttpNotFound();
-                    }
-                    return View(map);
-                }
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-            }
-            return View();
-        }
-
         // POST: Maps/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -201,13 +175,14 @@ namespace Maps.Controllers
         {
             try
             {
-                using(var access = new DataAccess())
+                using (var access = new DataAccess())
                 {
                     access.Maps.Delete(id);
                     access.Save();
-            return RedirectToAction("Index");
+                    return RedirectToAction("Index");
                 }
-            } catch (Exception ex) 
+            }
+            catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
             }

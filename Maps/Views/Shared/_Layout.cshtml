@@ -6,7 +6,7 @@
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
+    <script src="https://kit.fontawesome.com/1d590cac1f.js"></script>
 </head>
 <body background="~/Content/Images/background.png"
       class="d-flex flex-column h-100">
@@ -21,7 +21,7 @@
                     @if (Request.IsAuthenticated && User.IsInRole("User"))
                     {
                         <li class="nav-item">
-                            @Html.ActionLink("My maps", "Index", "Maps", new { }, new { @class = "nav-link" })
+                            @Html.ActionLink("My maps", "Index", "Map", new { }, new { @class = "nav-link" })
                         </li>
                     }
                     @Html.Partial("_LoginPartial")
@@ -29,17 +29,14 @@
             </div>
         </nav>
     </header>
-
-    <main class="flex-shrink-0">
-        <div class="container">
-            @if (!Html.ViewData.ModelState.IsValid)
-            {
-                <div class="card bg-danger mt-3 p-0">
-                    @Html.ValidationSummary(true, "", new { @class = "pt-2" })
-                </div>
-            }
-            @RenderBody()
-        </div>
+    <main class="@(Url.RequestContext.RouteData.Values["controller"].Equals("Map") && Url.RequestContext.RouteData.Values["action"].Equals("Details") ? "" : "container")">
+        @if (!Html.ViewData.ModelState.IsValid)
+        {
+            <div class="card bg-danger mt-3 p-0">
+                @Html.ValidationSummary(true, "", new { @class = "pt-2" })
+            </div>
+        }
+        @RenderBody()
     </main>
     <footer class="footer mt-auto py-3 bg-white">
         <div class="container h-100">

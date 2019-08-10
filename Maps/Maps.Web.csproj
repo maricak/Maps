@@ -516,11 +516,10 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Maps\Create.cshtml" />
-    <Content Include="Views\Maps\Delete.cshtml" />
-    <Content Include="Views\Maps\Details.cshtml" />
-    <Content Include="Views\Maps\Edit.cshtml" />
-    <Content Include="Views\Maps\Index.cshtml" />
+    <Content Include="Views\Map\Create.cshtml" />
+    <Content Include="Views\Map\Details.cshtml" />
+    <Content Include="Views\Map\Edit.cshtml" />
+    <Content Include="Views\Map\Index.cshtml" />
     <Content Include="Views\Home\NotFound.cshtml" />
     <Content Include="Views\Home\BadRequest.cshtml" />
   </ItemGroup>

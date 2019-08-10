@@ -86,7 +86,7 @@ namespace Maps.Controllers
                 case SignInStatus.Success:
                     if (string.IsNullOrEmpty(returnUrl))
                     {
-                        return RedirectToAction("Index", "Maps");
+                        return RedirectToAction("Index", "Map");
                     }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
@@ -273,7 +273,7 @@ namespace Maps.Controllers
                 case SignInStatus.Success:
                     if (string.IsNullOrEmpty(returnUrl))
                     {
-                        return RedirectToAction("Index", "Maps");
+                        return RedirectToAction("Index", "Map");
                     }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
@@ -328,7 +328,7 @@ namespace Maps.Controllers
                         if (result.Succeeded)
                         {
                             await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                            return RedirectToAction("Index", "Maps");
+                            return RedirectToAction("Index", "Map");
                         }
                         else
                         {

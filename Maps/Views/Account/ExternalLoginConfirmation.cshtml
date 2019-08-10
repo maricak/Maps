@@ -4,7 +4,7 @@
 }
 <div class="card mt-3">
     <div class="card-header">
-        <h2 class="card-title">Associate your @ViewBag.LoginProvider account</h2>
+        <h3 class="card-title m-0">Associate your @ViewBag.LoginProvider account</h3>
     </div>
     <div class="card-body">
         @using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
