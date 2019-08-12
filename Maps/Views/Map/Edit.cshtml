@@ -1,12 +1,20 @@
 ﻿@model Maps.Entities.EditMapViewModel
 
-@using (Ajax.BeginForm("Edit", "Map", new { }, new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = string.Concat("map", Model.Id) }, new { id = string.Concat("form", Model.Id) }))
-{
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(model => model.Id)
-    @Html.HiddenFor(model => model.CreationTime)
-
-    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { autofocus = "autofocus" } })
-    <input type="submit" value="Save" class="btn btn-link" />
-    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-}
+<div class="card" id="@string.Concat("map", Model.Id)">
+    @using (Ajax.BeginForm("Edit", "Map", new { }, new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = string.Concat("map", Model.Id) }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.CreationTime)
+        <span>&nbsp;</span>
+        @Html.LabelFor(model => model.Name)
+        <span>:&nbsp;</span>
+        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { autofocus = "autofocus" } })
+        <div class="float-right">
+            <input type="submit" value="Save" class="btn btn-link" />
+            <span>|</span>
+            @Ajax.ActionLink("Discard", "Details", new { id = Model.Id }, new AjaxOptions { UpdateTargetId = string.Concat("map" , Model.Id), InsertionMode = InsertionMode.ReplaceWith, HttpMethod = "get" }, new { @class = "btn btn-link" })
+        </div>
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    }
+</div>

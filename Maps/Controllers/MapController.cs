@@ -14,7 +14,6 @@ namespace Maps.Controllers
     {
         private const int PAGE_SIZE = 20;
 
-        // GET: Maps
         public ActionResult Index(int? page)
         {
             try
@@ -38,7 +37,6 @@ namespace Maps.Controllers
             return View();
         }
 
-        // GET: Maps/Details/5
         public ActionResult Details(Guid? id)
         {
             try
@@ -54,8 +52,31 @@ namespace Maps.Controllers
                     {
                         return HttpNotFound();
                     }
-                    //var model = new DetailsMapViewModel(map);
-                    //return View(model);
+                    return PartialView(new DetailsMapViewModel(map));
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+            return PartialView();
+        }
+
+        public ActionResult MapDetails(Guid? id)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                using (var access = new DataAccess())
+                {
+                    Map map = access.Maps.GetByID(id);
+                    if (map == null)
+                    {
+                        return HttpNotFound();
+                    }
                     return View("Map");
                 }
             }
@@ -65,6 +86,8 @@ namespace Maps.Controllers
             }
             return View();
         }
+
+
 
         [ChildActionOnly]
         public ActionResult SidebarPartial(Guid? id)
@@ -134,7 +157,6 @@ namespace Maps.Controllers
                         {                            
                             access.Maps.Insert(map);
                             access.Save();
-                            //return RedirectToAction("Index");
                             return PartialView("CreateButton", new DetailsMapViewModel(map));
                         }
                     }
@@ -147,7 +169,6 @@ namespace Maps.Controllers
             return PartialView(model);
         }
 
-        //GET: Maps/Edit/5
         public ActionResult Edit(Guid? id)
         {
             try
@@ -174,10 +195,9 @@ namespace Maps.Controllers
             return PartialView();
         }
 
-        // POST: Maps/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name, CreationTime")] EditMapViewModel model)
+        public ActionResult Edit([Bind(Include = "Id,Name,CreationTime")] EditMapViewModel model)
         {          
             try
             {
@@ -188,7 +208,6 @@ namespace Maps.Controllers
                         var map = access.Maps.GetByID(model.Id);
                         if (map == null)
                         {
-                            ViewBag.Error = "Map does not exists.";
                             ModelState.AddModelError("", "Map does not exists.");
                         }
                         else
@@ -196,21 +215,16 @@ namespace Maps.Controllers
                             var sameNameMap = access.Maps.Get(m => m.Name.Equals(model.Name)).SingleOrDefault();
                             if (sameNameMap != null && !sameNameMap.Id.Equals(map.Id))
                             {
-                                //ViewBag.Error = "Map with name '" + model.Name + "' already exists.";
-                                //ModelState.AddModelError("", "Map with name '" + model.Name + "' already exists.");
+                                ModelState.AddModelError("", "Map with name '" + model.Name + "' already exists.");
                                 return PartialView("Edit", model);
-                                //return RedirectToAction("Index");
                             }
                             map.Name = model.Name;
-                            //ModelState.Clear();
                             access.Maps.Update(map);
                             access.Save();
                             return PartialView("Details", new DetailsMapViewModel(map));
-                            //return RedirectToAction("Index");
                         }
                     }
                 }
-                //return RedirectToAction("Index");
                 return PartialView(model);
             }
             catch (Exception ex)
@@ -220,8 +234,7 @@ namespace Maps.Controllers
             return PartialView(model);
         }
 
-        // POST: Maps/Delete/
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(DetailsMapViewModel model)
         {
@@ -235,7 +248,6 @@ namespace Maps.Controllers
                 {
                     access.Maps.Delete(model.Id);
                     access.Save();
-                    //return RedirectToAction("Index");
                     return new EmptyResult();
                 }
             }

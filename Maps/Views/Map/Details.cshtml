@@ -3,7 +3,7 @@
 <div class="card" id="@string.Concat("map", Model.Id)">
     @using (Ajax.BeginForm("Delete", "Map", null, new AjaxOptions { HttpMethod = "post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = string.Concat("map", Model.Id) }, new { id = string.Concat("deleteForm", Model.Id), @class = "" }))
     {
-        @Html.ActionLink(Model.Name, "Details", new { id = Model.Id }, new { @class = "btn btn-link" })
+        @Html.ActionLink(Model.Name, "MapDetails", new { id = Model.Id }, new { @class = "btn btn-link" })
         <span>[</span>
         @Model.CreationTime.ToLocalTime()
         <span>]</span>
