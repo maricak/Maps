@@ -6,34 +6,33 @@
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval") @*For validate and validate-unobtrusive*@
+    @Scripts.Render("~/bundles/jqueryunobtrusive") @*For unobtrusive-ajax*@
+
     <script src="https://kit.fontawesome.com/1d590cac1f.js"></script>
 </head>
 <body background="~/Content/Images/background.png"
       class="d-flex flex-column h-100">
-    <header class="bg-white">
-        <nav class="container navbar navbar-expand-lg navbar-light">
-            @Html.ActionLink("Map", "Index", "Home", new { area = "" }, new { @class = "navbar-brand mr-auto" })
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="nav navbar-nav ml-auto">
-                    @if (Request.IsAuthenticated && User.IsInRole("User"))
-                    {
-                        <li class="nav-item">
-                            @Html.ActionLink("My maps", "Index", "Map", new { }, new { @class = "nav-link" })
-                        </li>
-                    }
-                    @Html.Partial("_LoginPartial")
-                </ul>
-            </div>
-        </nav>
-    </header>
-    <main class="@(Url.RequestContext.RouteData.Values["controller"].Equals("Map") && Url.RequestContext.RouteData.Values["action"].Equals("Details") ? "" : "container")">
+    @if (!Url.RequestContext.RouteData.Values["controller"].Equals("Map") || !Url.RequestContext.RouteData.Values["action"].Equals("Details"))
+    {
+       @Html.Partial("~/Views/Home/HomeHeaderPartial.cshtml");
+    }
+    else
+    {
+
+    }
+    <main class="@(Url.RequestContext.RouteData.Values["controller"].Equals("Map") && Url.RequestContext.RouteData.Values["action"].Equals("Details") ? "container-fluid w-100" : "container")">
         @if (!Html.ViewData.ModelState.IsValid)
+        {           
+            @Html.ValidationSummary(true, "", new { @class = "pt-2 card bg-danger mt-3 " })         
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.Error))
         {
-            <div class="card bg-danger mt-3 p-0">
-                @Html.ValidationSummary(true, "", new { @class = "pt-2" })
+            <div class="validation-summary-errors pt-2 mt-3 card bg-danger">
+                <ul>
+                    <li>@ViewBag.Error</li>
+                </ul>
             </div>
         }
         @RenderBody()
@@ -44,8 +43,5 @@
         </div>
     </footer>
     @RenderSection("scripts", required: false)
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/bootstrap")
 </body>
 </html>

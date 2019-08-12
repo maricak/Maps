@@ -1,25 +1,21 @@
 ﻿@model Maps.Entities.DetailsMapViewModel
 
-@{
-    ViewBag.Title = "Details";
-}
-
-<div class="card mt-3">
-    <div class="card-header">
-        <h3 class="card-title m-0">@ViewBag.Title</h3>
-    </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-            <strong>@Html.DisplayNameFor(model => model.Name):</strong>
-            @Html.DisplayFor(model => model.Name)
-        </li>
-        <li class="list-group-item">
-            <strong>@Html.DisplayNameFor(model => model.CreationTime):</strong>
-            @Model.CreationTime.ToLocalTime()
-        </li>
-    </ul>
-    <div class="card-body text-right">
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-        @Html.ActionLink("Back to List", "Index")
-    </div>
+<div class="card" id="@string.Concat("map", Model.Id)">
+    @using (Ajax.BeginForm("Delete", "Map", null, new AjaxOptions { HttpMethod = "post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = string.Concat("map", Model.Id) }, new { id = string.Concat("deleteForm", Model.Id), @class = "" }))
+    {
+        @Html.ActionLink(Model.Name, "Details", new { id = Model.Id }, new { @class = "btn btn-link" })
+        <span>[</span>
+        @Model.CreationTime.ToLocalTime()
+        <span>]</span>
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.CreationTime)
+        @Html.HiddenFor(m => m.Name)
+        <div class="float-right">
+            @Ajax.ActionLink("Edit", "Edit", new { id = Model.Id }, new AjaxOptions { HttpMethod = "Get", UpdateTargetId = string.Concat("map", Model.Id.ToString()), InsertionMode = InsertionMode.ReplaceWith }, new { @class = "btn btn-link" })
+            <span>|</span>
+            <input type="submit" value="Delete" class="btn btn-link"/>
+            <span>&nbsp;</span>
+        </div>
+    }
 </div>

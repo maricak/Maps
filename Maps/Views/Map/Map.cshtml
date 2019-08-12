@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "Details";
+}
+<div class="row">
+    <div class="col-3 p-0">
+        @Html.Action("SidebarPartial", new { id = Url.RequestContext.RouteData.Values["id"] })
+    </div>
+    <div class="col border p-0">
+        MAPA
+    </div>
+</div>
+
+
+

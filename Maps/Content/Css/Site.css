@@ -30,6 +30,8 @@ html {
 
 body {
     margin-bottom: 60px; /* Margin bottom by footer height */
+    /*min-height: 2000px;*/
+    /*padding-top: 60px;*/
 }
 
 .footer {

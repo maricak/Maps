@@ -10,7 +10,7 @@ namespace Maps.Entities
 
         [Display(Name = "Creation time")]
         public DateTime CreationTime { get; set; }
-
+   
         public DetailsMapViewModel() { }
 
         public DetailsMapViewModel(Map map)

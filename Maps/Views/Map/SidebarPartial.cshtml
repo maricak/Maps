@@ -1,0 +1,21 @@
+﻿@model Maps.Entities.DetailsMapViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = null;
+}
+
+<div class="card">
+    <div class="card-header">
+        <b>
+            @Html.DisplayFor(model => model.Name)
+        </b>
+        <span class="float-right">
+            <a href="@Url.Action("Index", new { id = Model.Id})"><i class="fas fa-long-arrow-alt-left" title="Back"></i></a> |
+            <a href="@Url.Action("Edit", new { id = Model.Id})"><i class="fas fa-edit" title="Edit"></i></a>
+        </span>
+    </div>
+    <div class="card-body">
+        @Html.Action("Index", "Layer", new { id = Url.RequestContext.RouteData.Values["id"] })
+    </div>
+</div>

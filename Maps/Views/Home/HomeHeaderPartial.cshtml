@@ -1,0 +1,24 @@
+﻿
+@{
+    Layout = null;
+}
+
+<header class="bg-white">
+    <nav class="container navbar navbar-expand-sm navbar-light">
+        @Html.ActionLink("Map", "Index", "Home", new { }, new { @class = "navbar-brand mr-auto" })
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="nav navbar-nav ml-auto">
+                @if (Request.IsAuthenticated && User.IsInRole("User"))
+                {
+                    <li class="nav-item">
+                        @Html.ActionLink("My maps", "Index", "Map", new { }, new { @class = "nav-link" })
+                    </li>
+                }
+                @Html.Partial("_LoginPartial")
+            </ul>
+        </div>
+    </nav>
+</header>

@@ -55,28 +55,40 @@ namespace Maps.Data
 
         public virtual void Insert(TEntity entity)
         {
-            dbSet.Add(entity);
+            if(entity != null)
+            {
+                dbSet.Add(entity);
+            }
         }
 
         public virtual void Delete(object id)
         {
             TEntity entityToDelete = dbSet.Find(id);
-            Delete(entityToDelete);
+            if(entityToDelete != null)
+            {
+                Delete(entityToDelete);
+            }
         }
 
         public virtual void Delete(TEntity entityToDelete)
         {
-            if (context.Entry(entityToDelete).State == EntityState.Detached)
+            if(entityToDelete != null)
             {
-                dbSet.Attach(entityToDelete);
+                if (context.Entry(entityToDelete).State == EntityState.Detached)
+                {
+                    dbSet.Attach(entityToDelete);
+                }
+                dbSet.Remove(entityToDelete);
             }
-            dbSet.Remove(entityToDelete);
         }
 
         public virtual void Update(TEntity entityToUpdate)
         {
-            dbSet.Attach(entityToUpdate);
-            context.Entry(entityToUpdate).State = EntityState.Modified;
+            if(entityToUpdate != null)
+            {
+                dbSet.Attach(entityToUpdate);
+                context.Entry(entityToUpdate).State = EntityState.Modified;
+            }
         }
     }
 }
