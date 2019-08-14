@@ -531,7 +531,7 @@
     <Content Include="Views\Map\Index.cshtml" />
     <Content Include="Views\Home\NotFound.cshtml" />
     <Content Include="Views\Home\BadRequest.cshtml" />
-    <Content Include="Views\Map\Map.cshtml" />
+    <Content Include="Views\Map\MapDetails.cshtml" />
     <Content Include="Views\Home\HomeHeaderPartial.cshtml" />
     <Content Include="Views\Layer\Create.cshtml" />
     <Content Include="Views\Layer\Delete.cshtml" />

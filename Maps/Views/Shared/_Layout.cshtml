@@ -14,7 +14,7 @@
 </head>
 <body background="~/Content/Images/background.png"
       class="d-flex flex-column h-100">
-    @if (!Url.RequestContext.RouteData.Values["controller"].Equals("Map") || !Url.RequestContext.RouteData.Values["action"].Equals("Details"))
+    @if (!Url.RequestContext.RouteData.Values["controller"].Equals("Map") || !Url.RequestContext.RouteData.Values["action"].Equals("MapDetails"))
     {
        @Html.Partial("~/Views/Home/HomeHeaderPartial.cshtml");
     }
@@ -22,7 +22,7 @@
     {
 
     }
-    <main class="@(Url.RequestContext.RouteData.Values["controller"].Equals("Map") && Url.RequestContext.RouteData.Values["action"].Equals("Details") ? "container-fluid w-100" : "container")">
+    <main class="@(Url.RequestContext.RouteData.Values["controller"].Equals("Map") && Url.RequestContext.RouteData.Values["action"].Equals("MapDetails") ? "container-fluid h-100" : "container")">
         @*@if (!Html.ViewData.ModelState.IsValid)
         {           
             @Html.ValidationSummary(true, "", new { @class = "text-danger mt-3 " })         
@@ -37,7 +37,7 @@
         }*@
         @RenderBody()
     </main>
-    <footer class="footer mt-auto py-3 bg-white">
+    <footer class="footer mt-auto py-3 bg-white card">
         <div class="container h-100">
             &copy; @DateTime.Now.Year - Maps - Marija Kostić
         </div>

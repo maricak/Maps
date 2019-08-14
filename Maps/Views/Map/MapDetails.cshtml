@@ -2,8 +2,8 @@
 @{
     ViewBag.Title = "Details";
 }
-<div class="row">
-    <div class="col-3 p-0">
+<div class="row h-100">
+    <div class="col-3 p-0" id="sidebar">
         @Html.Action("SidebarPartial", new { id = Url.RequestContext.RouteData.Values["id"] })
     </div>
     <div class="col border p-0">

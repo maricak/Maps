@@ -77,7 +77,7 @@ namespace Maps.Controllers
                     {
                         return HttpNotFound();
                     }
-                    return View("Map");
+                    return View();
                 }
             }
             catch (Exception ex)
@@ -86,8 +86,6 @@ namespace Maps.Controllers
             }
             return View();
         }
-
-
 
         [ChildActionOnly]
         public ActionResult SidebarPartial(Guid? id)

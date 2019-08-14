@@ -5,17 +5,17 @@
     Layout = null;
 }
 
-<div class="card">
+<div class="card h-100">
     <div class="card-header">
         <b>
             @Html.DisplayFor(model => model.Name)
         </b>
         <span class="float-right">
-            @Html.ActionLink("Back", "Index")
-            @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+            @Html.ActionLink("Back to list", "Index")
         </span>
     </div>
     <div class="card-body">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
         @Html.Action("Index", "Layer", new { id = Url.RequestContext.RouteData.Values["id"] })
     </div>
 </div>
