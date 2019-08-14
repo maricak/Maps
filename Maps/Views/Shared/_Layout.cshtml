@@ -23,7 +23,7 @@
 
     }
     <main class="@(Url.RequestContext.RouteData.Values["controller"].Equals("Map") && Url.RequestContext.RouteData.Values["action"].Equals("Details") ? "container-fluid w-100" : "container")">
-        @if (!Html.ViewData.ModelState.IsValid)
+        @*@if (!Html.ViewData.ModelState.IsValid)
         {           
             @Html.ValidationSummary(true, "", new { @class = "text-danger mt-3 " })         
         }
@@ -34,7 +34,7 @@
                     <li>@ViewBag.Error</li>
                 </ul>
             </div>
-        }
+        }*@
         @RenderBody()
     </main>
     <footer class="footer mt-auto py-3 bg-white">

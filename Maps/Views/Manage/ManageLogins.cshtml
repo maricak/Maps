@@ -14,7 +14,6 @@
         {
             <li class="list-group-item text-success">@ViewBag.StatusMessage</li>
         }
-
         @{
             var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
             if (Model.CurrentLogins.Count > 0)

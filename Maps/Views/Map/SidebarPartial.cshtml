@@ -11,8 +11,8 @@
             @Html.DisplayFor(model => model.Name)
         </b>
         <span class="float-right">
-            <a href="@Url.Action("Index", new { id = Model.Id})"><i class="fas fa-long-arrow-alt-left" title="Back"></i></a> |
-            <a href="@Url.Action("Edit", new { id = Model.Id})"><i class="fas fa-edit" title="Edit"></i></a>
+            @Html.ActionLink("Back", "Index")
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
         </span>
     </div>
     <div class="card-body">
