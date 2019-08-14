@@ -23,9 +23,9 @@ namespace Maps.Controllers
                 {
                     var maps = access.Maps.Get(m => m.User.Id.Equals(userId), orderBy: m => m.OrderByDescending(i => i.CreationTime));
                     List<DetailsMapViewModel> models = new List<DetailsMapViewModel>();
-                    foreach(var map in maps.ToList())
+                    foreach (var map in maps.ToList())
                     {
-                        models.Add(new DetailsMapViewModel(map));                      
+                        models.Add(new DetailsMapViewModel(map));
                     }
                     return View(models.ToPagedList(page ?? 1, PAGE_SIZE));
                 }
@@ -36,7 +36,7 @@ namespace Maps.Controllers
             }
             return View();
         }
-
+        [AjaxOnly]
         public ActionResult Details(Guid? id)
         {
             try
@@ -98,7 +98,7 @@ namespace Maps.Controllers
                 }
                 using (var access = new DataAccess())
                 {
-                    Map map = access.Maps.GetByID(id);
+                    Map map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers").SingleOrDefault();
                     if (map == null)
                     {
                         return HttpNotFound();
@@ -114,18 +114,19 @@ namespace Maps.Controllers
             return View();
         }
 
-        public ActionResult CreateButton()
+        [AjaxOnly]
+        public ActionResult AddMap()
         {
             return PartialView(null);
         }
 
-        // GET: Maps/Create
+        [AjaxOnly]
         public ActionResult Create()
         {
             return PartialView();
         }
 
-        // POST: Maps/Create
+        [AjaxOnly]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Name")] CreateMapViewModel model)
@@ -138,6 +139,12 @@ namespace Maps.Controllers
                     {
                         var userId = User.Identity.GetUser().Id;
                         var user = access.Users.GetByID(userId);
+
+                        if(user == null)
+                        {
+                            ModelState.AddModelError("", "Unkonw user.");
+                            return PartialView(model);
+                        }
 
                         Map map = new Map
                         {
@@ -152,10 +159,10 @@ namespace Maps.Controllers
                             ModelState.AddModelError("", "Map with name '" + map.Name + "' already exists.");
                         }
                         else
-                        {                            
+                        {
                             access.Maps.Insert(map);
                             access.Save();
-                            return PartialView("CreateButton", new DetailsMapViewModel(map));
+                            return PartialView("AddMap", new DetailsMapViewModel(map));
                         }
                     }
                 }
@@ -167,6 +174,7 @@ namespace Maps.Controllers
             return PartialView(model);
         }
 
+        [AjaxOnly]
         public ActionResult Edit(Guid? id)
         {
             try
@@ -193,10 +201,11 @@ namespace Maps.Controllers
             return PartialView();
         }
 
+        [AjaxOnly]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,CreationTime")] EditMapViewModel model)
-        {          
+        {
             try
             {
                 if (ModelState.IsValid)
@@ -234,11 +243,12 @@ namespace Maps.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AjaxOnly]
         public ActionResult Delete(DetailsMapViewModel model)
         {
             try
             {
-                if(model == null || model.Id == null)
+                if (model == null || model.Id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }

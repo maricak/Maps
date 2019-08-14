@@ -14,6 +14,8 @@ namespace Maps.Entities
         [Key]
         public Guid Id { get; set; }
 
+        [StringLength(50)]
+        [Index(IsUnique = true)]
         public string Name { get; set; }
 
         public virtual Map Map { get; set; }

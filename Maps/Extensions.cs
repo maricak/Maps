@@ -27,32 +27,19 @@ public static class Extensions
     }
 }
 
-
-public static class HtmlHelperExtensions
+[AttributeUsage(AttributeTargets.Method)]
+public class AjaxOnly : ActionFilterAttribute
 {
-
-    public static MvcHtmlString IconActionLink(this AjaxHelper ajaxHelper, string icon, string action, object routeValues, AjaxOptions ajaxOptions)
+    public override void OnActionExecuting(ActionExecutingContext filterContext)
     {
-        string holder = Guid.NewGuid().ToString();
-        string anchor = ajaxHelper.ActionLink(holder, action, routeValues, ajaxOptions).ToString();
-        var innerHtml = "<i class=\"fas fa-" + icon + "\"></i>";
-        return MvcHtmlString.Create(anchor.Replace(holder, innerHtml));
+        if (!filterContext.HttpContext.Request.IsAjaxRequest())
+        {
+            filterContext.HttpContext.Response.StatusCode = 404;
+            filterContext.Result = new HttpNotFoundResult();
+        }
+        else
+        {
+            base.OnActionExecuting(filterContext);
+        }
     }
-
-    public static MvcHtmlString IconActionLink(this AjaxHelper ajaxHelper, string icon, string action, object routeValues, AjaxOptions ajaxOptions, IDictionary<String, Object> htmlAttributes)
-    {
-        string holder = Guid.NewGuid().ToString();
-        string anchor = ajaxHelper.ActionLink(holder, action, routeValues, ajaxOptions, htmlAttributes).ToString();
-        var innerHtml = "<i class=\"fas fa-" + icon + "\"></i>";
-        return MvcHtmlString.Create(anchor.Replace(holder, innerHtml));
-    }
-
-    public static MvcHtmlString IconActionLink(this HtmlHelper htmlHelper, string icon, string action, object routeValues)
-    {
-        string holder = Guid.NewGuid().ToString();
-        string anchor = htmlHelper.ActionLink(holder, action, routeValues).ToString();
-        var innerHtml = "<i class=\"fas fa-" + icon + "\"></i>";
-        return MvcHtmlString.Create(anchor.Replace(holder, innerHtml));
-    }
-
 }

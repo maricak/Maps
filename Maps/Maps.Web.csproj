@@ -537,9 +537,9 @@
     <Content Include="Views\Layer\Delete.cshtml" />
     <Content Include="Views\Layer\Details.cshtml" />
     <Content Include="Views\Layer\Edit.cshtml" />
-    <Content Include="Views\Layer\Index.cshtml" />
     <Content Include="Views\Map\Details.cshtml" />
-    <Content Include="Views\Map\CreateButton.cshtml" />
+    <Content Include="Views\Map\AddMap.cshtml" />
+    <Content Include="Views\Layer\AddLayer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

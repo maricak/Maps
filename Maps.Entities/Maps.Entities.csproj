@@ -92,6 +92,9 @@
     <Compile Include="Account\RegisterViewModel.cs" />
     <Compile Include="Account\ResetPasswordViewModel.cs" />
     <Compile Include="Account\SetPasswordViewModel.cs" />
+    <Compile Include="Layer\CreateLayerViewModel.cs" />
+    <Compile Include="Layer\DetailsLayerViewModel.cs" />
+    <Compile Include="Layer\EditLayerViewModel.cs" />
     <Compile Include="Layer\Layer.cs" />
     <Compile Include="Map\CreateMapViewModel.cs" />
     <Compile Include="Map\DetailsMapViewModel.cs" />

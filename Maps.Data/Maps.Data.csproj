@@ -81,6 +81,10 @@
     <Compile Include="Migrations\201908072014256_Initia.Designer.cs">
       <DependentUpon>201908072014256_Initia.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908141916114_MakeLayerNameUnique.cs" />
+    <Compile Include="Migrations\201908141916114_MakeLayerNameUnique.Designer.cs">
+      <DependentUpon>201908141916114_MakeLayerNameUnique.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
@@ -98,6 +102,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201908072014256_Initia.resx">
       <DependentUpon>201908072014256_Initia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908141916114_MakeLayerNameUnique.resx">
+      <DependentUpon>201908141916114_MakeLayerNameUnique.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

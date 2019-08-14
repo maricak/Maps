@@ -50,12 +50,16 @@ namespace Maps.Data
 
         public virtual TEntity GetByID(object id)
         {
-            return dbSet.Find(id);
+            if (id != null)
+            {
+                return dbSet.Find(id);
+            }
+            return null;
         }
 
         public virtual void Insert(TEntity entity)
         {
-            if(entity != null)
+            if (entity != null)
             {
                 dbSet.Add(entity);
             }
@@ -64,7 +68,7 @@ namespace Maps.Data
         public virtual void Delete(object id)
         {
             TEntity entityToDelete = dbSet.Find(id);
-            if(entityToDelete != null)
+            if (entityToDelete != null)
             {
                 Delete(entityToDelete);
             }
@@ -72,7 +76,7 @@ namespace Maps.Data
 
         public virtual void Delete(TEntity entityToDelete)
         {
-            if(entityToDelete != null)
+            if (entityToDelete != null)
             {
                 if (context.Entry(entityToDelete).State == EntityState.Detached)
                 {
@@ -84,7 +88,7 @@ namespace Maps.Data
 
         public virtual void Update(TEntity entityToUpdate)
         {
-            if(entityToUpdate != null)
+            if (entityToUpdate != null)
             {
                 dbSet.Attach(entityToUpdate);
                 context.Entry(entityToUpdate).State = EntityState.Modified;

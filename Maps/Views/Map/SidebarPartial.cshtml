@@ -7,15 +7,21 @@
 
 <div class="card h-100">
     <div class="card-header">
-        <b>
+        <big class="font-weight-bold">
             @Html.DisplayFor(model => model.Name)
-        </b>
-        <span class="float-right">
-            @Html.ActionLink("Back to list", "Index")
-        </span>
+        </big>
     </div>
-    <div class="card-body">
-        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-        @Html.Action("Index", "Layer", new { id = Url.RequestContext.RouteData.Values["id"] })
+    @if (!Html.ViewData.ModelState.IsValid)
+    {
+        <div class="card">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        </div>
+    }
+    <div class="" id="accordion">
+        @Html.Partial("../Layer/AddLayer", new Maps.Entities.DetailsLayerViewModel(Model.Id))
+        @foreach (var layer in Model.Layers)
+        {
+            @Html.Partial("../Layer/Details", layer);
+        }
     </div>
 </div>

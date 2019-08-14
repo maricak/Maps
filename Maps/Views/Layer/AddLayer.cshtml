@@ -1,0 +1,10 @@
+﻿@model Maps.Entities.DetailsLayerViewModel
+
+<div class="card" id="newLayer">
+    @Ajax.ActionLink("Add layer", "Create", "Layer", new { mapId = Model.MapId }, new AjaxOptions { InsertionMode = InsertionMode.ReplaceWith, HttpMethod = "get", UpdateTargetId = "newLayer" }, new { @class = "btn btn-link text-right" })
+</div>
+
+@if (Model != null && Model.Name != null && !Model.Name.IsEmpty())
+{
+    @Html.Partial("../Layer/Details", Model)
+}

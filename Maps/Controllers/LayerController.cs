@@ -13,117 +13,195 @@ namespace Maps.Controllers
 {
     public class LayerController : Controller
     {
-        private MapsDbContext db = new MapsDbContext();
-
-        // GET: Layer
-        public ActionResult Index(Guid? id)
+        [AjaxOnly]
+        public ActionResult AddLayer(Guid mapId)
         {
-            return View(db.Layers.ToList());
+            if (mapId == null)
+            {
+                ModelState.AddModelError("", "Map id cannot be empty.");
+                return PartialView();
+            }
+            return PartialView(new DetailsLayerViewModel(mapId));
         }
 
-        // GET: Layer/Details/5
+        [AjaxOnly]
+        public ActionResult Create(Guid mapId)
+        {
+            if (mapId == null)
+            {
+                ModelState.AddModelError("", "Map id cannot be empty.");
+                return PartialView();
+            }
+            return PartialView(new CreateLayerViewModel(mapId));
+        }
+
+        [AjaxOnly]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "MapId,Name")] CreateLayerViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        using (var access = new DataAccess())
+                        {
+                            var mapId = model.MapId;
+                            if (mapId == null)
+                            {
+                                ModelState.AddModelError("", "Map id cannot be empty.");
+                                return PartialView(model);
+                            }
+                            var map = access.Maps.GetByID(mapId);
+
+                            Layer layer = new Layer
+                            {
+                                Name = model.Name,
+                                Id = Guid.NewGuid(),
+                                Map = map
+                            };
+                            var duplicateLayer = access.Layers.Get(l => l.Name.Equals(layer.Name) && l.Map.Id == mapId);
+                            if (duplicateLayer.Count() != 0)
+                            {
+                                ModelState.AddModelError("", "Layer with name '" + layer.Name + "' already exists.");
+                            }
+                            else
+                            {
+                                access.Layers.Insert(layer);
+                                access.Save();
+                                return PartialView("AddLayer", new DetailsLayerViewModel(layer));
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", ex.Message);
+                    }
+                }
+                return PartialView(model);
+            }
+            return PartialView(model);
+        }
+
+        [AjaxOnly]
         public ActionResult Details(Guid? id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                using (var access = new DataAccess())
+                {
+                    Layer layer = access.Layers.GetByID(id);
+                    if (layer == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return PartialView(new DetailsLayerViewModel(layer));
+                }
             }
-            Layer layer = db.Layers.Find(id);
-            if (layer == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                ModelState.AddModelError("", ex.Message);
             }
-            return View(layer);
+            return PartialView();
         }
 
-        // GET: Layer/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Layer/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Layer layer)
-        {
-            if (ModelState.IsValid)
-            {
-                layer.Id = Guid.NewGuid();
-                db.Layers.Add(layer);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(layer);
-        }
-
-        // GET: Layer/Edit/5
+        [AjaxOnly]
         public ActionResult Edit(Guid? id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                using (var access = new DataAccess())
+                {
+                    Layer layer = access.Layers.GetByID(id);
+                    if (layer == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    var model = new EditLayerViewModel(layer);
+                    return PartialView(model);
+                }
             }
-            Layer layer = db.Layers.Find(id);
-            if (layer == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                ModelState.AddModelError("", ex.Message);
             }
-            return View(layer);
+            return PartialView();
         }
 
-        // POST: Layer/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [AjaxOnly]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] Layer layer)
+        public ActionResult Edit([Bind(Include = "Id,Name")] EditLayerViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(layer).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    using (var access = new DataAccess())
+                    {
+                        var layer = access.Layers.GetByID(model.Id);
+                        if (layer == null)
+                        {
+                            ModelState.AddModelError("", "Layer does not exists.");
+                        }
+                        else
+                        {
+                            var sameNameLayer = access.Layers.Get(l => l.Name.Equals(model.Name)).SingleOrDefault();
+                            if (sameNameLayer != null && !sameNameLayer.Id.Equals(layer.Id))
+                            {
+                                ModelState.AddModelError("", "Layer with name '" + model.Name + "' already exists.");
+                                return PartialView(model);
+                            }
+                            layer.Name = model.Name;
+                            access.Layers.Update(layer);
+                            access.Save();
+                            return PartialView("Details", new DetailsLayerViewModel(layer));
+                        }
+                    }
+                }
+                return PartialView(model);
             }
-            return View(layer);
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+            return PartialView(model);
         }
 
-        // GET: Layer/Delete/5
-        public ActionResult Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Layer layer = db.Layers.Find(id);
-            if (layer == null)
-            {
-                return HttpNotFound();
-            }
-            return View(layer);
-        }
 
-        // POST: Layer/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
+        [AjaxOnly]
+        public ActionResult Delete(DetailsLayerViewModel model)
         {
-            Layer layer = db.Layers.Find(id);
-            db.Layers.Remove(layer);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            try
             {
-                db.Dispose();
+                if (model == null || model.Id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                using (var access = new DataAccess())
+                {
+                    access.Layers.Delete(model.Id);
+                    access.Save();
+                    return new EmptyResult();
+                }
             }
-            base.Dispose(disposing);
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+            return PartialView("Details", model);
         }
     }
 }
