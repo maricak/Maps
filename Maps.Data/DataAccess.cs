@@ -15,7 +15,6 @@ namespace Maps.Data
                     return new Repository<Map>(context);
             }
         }
-
         public Repository<Layer> Layers
         {
             get
@@ -27,6 +26,21 @@ namespace Maps.Data
             get
             {
                 return new Repository<User>(context);
+            }
+        }
+        public Repository<Column> Columns
+        {
+            get
+            {
+                return new Repository<Column>(context);
+            }
+        }
+
+        public Repository<Entities.Data> Data
+        {
+            get
+            {
+                return new Repository<Entities.Data>(context);
             }
         }
 

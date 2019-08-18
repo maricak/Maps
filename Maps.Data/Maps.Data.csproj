@@ -89,6 +89,10 @@
     <Compile Include="Migrations\201908181043574_RemoveUnique.Designer.cs">
       <DependentUpon>201908181043574_RemoveUnique.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908181257469_AddColumnAndDataTables.cs" />
+    <Compile Include="Migrations\201908181257469_AddColumnAndDataTables.Designer.cs">
+      <DependentUpon>201908181257469_AddColumnAndDataTables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
@@ -112,6 +116,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908181043574_RemoveUnique.resx">
       <DependentUpon>201908181043574_RemoveUnique.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908181257469_AddColumnAndDataTables.resx">
+      <DependentUpon>201908181257469_AddColumnAndDataTables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
