@@ -1,0 +1,23 @@
+﻿@model Maps.Entities.EditMapViewModel
+
+    <div class="card" id="@string.Concat("map", Model.Id)">
+        @using (Ajax.BeginForm("Edit", "Map", new { }, new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = string.Concat("map", Model.Id) }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.CreationTime)
+            <span>&nbsp;</span>
+            @Html.LabelFor(model => model.Name)
+            <span>:&nbsp;</span>
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { autofocus = "autofocus" } })
+            <div class="float-right">
+                <input type="submit" value="Save" class="btn btn-link" />
+                <span>|</span>
+                @Ajax.ActionLink("Discard", "Details", new { id = Model.Id }, new AjaxOptions { UpdateTargetId = string.Concat("map", Model.Id), InsertionMode = InsertionMode.ReplaceWith, HttpMethod = "get" }, new { @class = "btn btn-link" })
+            </div>
+        }
+        @if (!Html.ViewData.ModelState.IsValid)
+        {
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        }
+    </div>

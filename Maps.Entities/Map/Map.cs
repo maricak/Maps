@@ -15,7 +15,6 @@ namespace Maps.Entities
         public Guid Id { get; set; }
 
         [StringLength(50)]
-        [Index(IsUnique = true)]
         public string Name { get; set; }
 
         [Display(Name = "Creation time")]

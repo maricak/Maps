@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "Details";
+}
+
+@if (!Html.ViewData.ModelState.IsValid)
+{
+    <div class="row">
+        <div class="col card">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        </div>
+    </div>
+}
+<div class="row h-100">
+    <div class="col-3 p-0" id="sidebar">
+        @Html.Action("SidebarPartial", new { id = Url.RequestContext.RouteData.Values["id"] })
+    </div>
+    <div class="col border p-0">
+        MAPA
+    </div>
+</div>
+
+
+

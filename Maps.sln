@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maps.Web", "Maps\Maps.Web.csproj", "{59333722-1F52-4DBC-A085-14AF0B3A1A0F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maps.Web", "Maps.Web\Maps.Web.csproj", "{59333722-1F52-4DBC-A085-14AF0B3A1A0F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maps.Entities", "Maps.Entities\Maps.Entities.csproj", "{F789CEEC-BEC7-4568-96CA-33048ED9C79E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maps.Data", "Maps.Data\Maps.Data.csproj", "{D9A5D0CC-D04A-4CBE-937F-1F51D40725BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maps.Utils", "Maps.Utils\Maps.Utils.csproj", "{A0DD3E6D-51E7-49DD-82B2-DDB066E48295}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{D9A5D0CC-D04A-4CBE-937F-1F51D40725BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9A5D0CC-D04A-4CBE-937F-1F51D40725BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9A5D0CC-D04A-4CBE-937F-1F51D40725BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0DD3E6D-51E7-49DD-82B2-DDB066E48295}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0DD3E6D-51E7-49DD-82B2-DDB066E48295}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0DD3E6D-51E7-49DD-82B2-DDB066E48295}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0DD3E6D-51E7-49DD-82B2-DDB066E48295}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
