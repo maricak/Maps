@@ -21,5 +21,5 @@ namespace Maps.Entities
         public string ConfirmPassword { get; set; }
     }
 
-   
+
 }

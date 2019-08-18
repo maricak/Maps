@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using Maps.Data;
+using Maps.Entities;
+using System;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using Maps.Data;
-using Maps.Entities;
 
 namespace Maps.Controllers
 {

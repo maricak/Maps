@@ -1,6 +1,5 @@
 ﻿using Maps.Entities;
 using System;
-using System.Data.Entity;
 
 namespace Maps.Data
 {
@@ -12,7 +11,7 @@ namespace Maps.Data
         {
             get
             {
-                    return new Repository<Map>(context);
+                return new Repository<Map>(context);
             }
         }
         public Repository<Layer> Layers
@@ -22,7 +21,8 @@ namespace Maps.Data
                 return new Repository<Layer>(context);
             }
         }
-        public Repository<User> Users {
+        public Repository<User> Users
+        {
             get
             {
                 return new Repository<User>(context);
