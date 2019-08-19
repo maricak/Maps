@@ -1,6 +1,9 @@
 ﻿using Maps.Data;
 using Maps.Entities;
+using Maps.Utils;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -35,7 +38,7 @@ namespace Maps.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", ex);
             }
             return PartialView(new DetailsLayerViewModel(mapId));
         }
@@ -66,7 +69,7 @@ namespace Maps.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", ex);
             }
             return PartialView(new CreateLayerViewModel(mapId));
         }
@@ -119,7 +122,7 @@ namespace Maps.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError("", ex.Message);
+                    ModelState.AddModelError("", ex);
                 }
             }
             return PartialView(model);
@@ -150,7 +153,7 @@ namespace Maps.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", ex);
             }
             return PartialView();
         }
@@ -181,7 +184,7 @@ namespace Maps.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", ex);
             }
             return PartialView();
         }
@@ -225,7 +228,7 @@ namespace Maps.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", ex);
             }
             return PartialView(model);
         }
@@ -238,32 +241,83 @@ namespace Maps.Controllers
         {
             try
             {
-                if (model == null || model.Id == null)
+                if (ModelState.IsValid)
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-                using (var access = new DataAccess())
-                {
-                    var layer = access.Layers.GetByID(model.Id);
-                    if (layer == null)
+                    using (var access = new DataAccess())
                     {
-                        ModelState.AddModelError("", "Layer does not exists.");
-                    }
-                    else if (layer.Map.User.Id != User.Identity.GetUser().Id)
-                    {
-                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-                    }
-                    else
-                    {
-                        access.Layers.Delete(model.Id);
-                        access.Save();
-                        return new EmptyResult();
+                        var layer = access.Layers.GetByID(model.Id);
+                        if (layer == null)
+                        {
+                            ModelState.AddModelError("", "Layer does not exists.");
+                        }
+                        else if (layer.Map.User.Id != User.Identity.GetUser().Id)
+                        {
+                            return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                        }
+                        else
+                        {
+                            access.Layers.Delete(model.Id);
+                            access.Save();
+                            return new EmptyResult();
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", ex);
+            }
+            return PartialView("Details", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //[AjaxOnly]
+        public ActionResult LoadData(DetailsLayerViewModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (var access = new DataAccess())
+                    {
+                        var layer = access.Layers.GetByID(model.Id);
+                        if (layer == null)
+                        {
+                            ModelState.AddModelError("", "Layer does not exists.");
+                            return PartialView("Details", model);
+                        }
+                        if (layer.Map.User.Id != User.Identity.GetUser().Id)
+                        {
+                            return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                        }
+                        var extension = Path.GetExtension(model.DataFile.FileName);
+                        if (extension == ".json")
+                        {
+                            IList<string> messages = new List<string>();
+                            JsonDataReader reader = new JsonDataReader();
+                            if (reader.LoadFile(model.DataFile.InputStream, layer, ref messages))
+                            {
+                                layer.HasData = true;
+                                access.Layers.Update(layer);
+                                access.Save();
+                                ModelState.AddModelError("", "Successful data load!");
+                            }
+                            foreach (var message in messages)
+                            {
+                                ModelState.AddModelError("", message);
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Extension '" + extension + "' is not supported");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex);
             }
             return PartialView("Details", model);
         }

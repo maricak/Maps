@@ -14,6 +14,7 @@ namespace Maps.Controllers
     {
         private const int PAGE_SIZE = 10;
 
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public ActionResult Index(int? page)
         {
             try
@@ -32,13 +33,13 @@ namespace Maps.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", ex);
             }
             return View();
         }
 
         [AjaxOnly]
-        public ActionResult DetailsAsync(Guid? id)
+        public ActionResult Details(Guid? id)
         {
             try
             {
@@ -62,7 +63,7 @@ namespace Maps.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", ex);
             }
             return PartialView();
         }
@@ -91,7 +92,7 @@ namespace Maps.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", ex);
             }
             return View();
         }
@@ -122,7 +123,7 @@ namespace Maps.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", ex);
             }
             return View();
         }
@@ -182,7 +183,7 @@ namespace Maps.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError("", ex.Message);
+                    ModelState.AddModelError("", ex);
                 }
             }
             return PartialView(model);
@@ -214,7 +215,7 @@ namespace Maps.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", ex);
             }
             return PartialView();
         }
@@ -259,7 +260,7 @@ namespace Maps.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", ex);
             }
             return PartialView(model);
         }
@@ -296,7 +297,7 @@ namespace Maps.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", ex);
             }
             return PartialView("Details", model);
         }

@@ -31,6 +31,21 @@ namespace Maps.Data
 
             modelBuilder.Entity<Entities.Data>()
                 .Property(d => d.Values_).HasColumnName("Values");
+
+            modelBuilder.Entity<Layer>()
+              .HasOptional(l => l.Map)
+              .WithMany(m => m.Layers)
+              .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Column>()
+            .HasOptional(c => c.Layer)
+            .WithMany(l => l.Columns)
+            .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Entities.Data>()
+              .HasOptional(d => d.Layer)
+              .WithMany(l => l.Data)
+              .WillCascadeOnDelete(true);
         }
 
         public virtual DbSet<Map> Maps { get; set; }

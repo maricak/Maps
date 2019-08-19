@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 namespace Maps.Entities
 {
@@ -7,6 +8,10 @@ namespace Maps.Entities
         public Guid MapId { get; set; }
         public Guid Id { get; set; }
         public string Name { get; set; }
+
+        public bool HasData { get; set; }
+
+        public HttpPostedFileBase DataFile { get; set; }
 
         public DetailsLayerViewModel() { }
 
@@ -18,6 +23,7 @@ namespace Maps.Entities
             {
                 MapId = layer.Map.Id;
             }
+            HasData = layer.HasData;
         }
 
         public DetailsLayerViewModel(Guid mapId)

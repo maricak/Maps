@@ -46,7 +46,7 @@ namespace Maps.Data
 
         public void Save()
         {
-            context.SaveChanges();
+            context.BatchSaveChanges();
         }
 
         private bool disposed = false;

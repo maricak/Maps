@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,5 +18,9 @@ namespace Maps.Entities
         public bool HasData { get; set; }
 
         public virtual Map Map { get; set; }
+
+        public ICollection<Data> Data { get; set; }
+        public ICollection<Column> Columns { get; set; }
+
     }
 }

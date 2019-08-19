@@ -63,6 +63,14 @@ namespace Maps.Data
             }
         }
 
+        public virtual void BulkInsert(IList<TEntity> entities)
+        {
+            if (entities != null && entities.Count != 0)
+            {
+                context.BulkInsert(entities);
+            }
+        }
+
         public virtual void Delete(object id)
         {
             TEntity entityToDelete = dbSet.Find(id);

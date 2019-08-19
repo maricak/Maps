@@ -570,6 +570,8 @@
     <Content Include="Views\Map\AddMap.cshtml" />
     <Content Include="Views\Layer\AddLayer.cshtml" />
     <Content Include="Views\Home\Forbidden.cshtml" />
+    <Content Include="Views\Layer\DetailsHeader.cshtml" />
+    <Content Include="Views\Layer\DetailsCollapse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -591,6 +593,10 @@
     <ProjectReference Include="..\Maps.Entities\Maps.Entities.csproj">
       <Project>{F789CEEC-BEC7-4568-96CA-33048ED9C79E}</Project>
       <Name>Maps.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Maps.Utils\Maps.Utils.csproj">
+      <Project>{A0DD3E6D-51E7-49DD-82B2-DDB066E48295}</Project>
+      <Name>Maps.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

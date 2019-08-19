@@ -48,10 +48,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataReader.cs" />
+    <Compile Include="JsonDataReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Maps.Data\Maps.Data.csproj">
+      <Project>{D9A5D0CC-D04A-4CBE-937F-1F51D40725BE}</Project>
+      <Name>Maps.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Maps.Entities\Maps.Entities.csproj">
+      <Project>{F789CEEC-BEC7-4568-96CA-33048ED9C79E}</Project>
+      <Name>Maps.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,7 +4,7 @@
     @using (Ajax.BeginForm("Create", "Layer", null, new AjaxOptions { HttpMethod = "post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = "newLayer" }, new { id = "createMap", @class = "m-1" }))
     {
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(m => m.MapId)
+        <input type="hidden" id="MapId" name="MapId" value="@Model.MapId" />
         <span>&nbsp;</span>
         @Html.LabelFor(model => model.Name)
         <span>:&nbsp;</span>

@@ -14,13 +14,13 @@ namespace Maps.Entities
 
         public virtual Layer Layer { get; set; }
 
-        public string Values_ { get; set; }
+        public string Values_
+        {
+            get { return Values != null ? JsonConvert.SerializeObject(Values) : null; }
+            set { Values = JsonConvert.DeserializeObject<JObject>(value); }
+        }
 
         [NotMapped]
-        public JObject Values
-        {
-            get { return Values_ == null ? null : JsonConvert.DeserializeObject<JObject>(Values_); }
-            set { Values_ = JsonConvert.SerializeObject(value); }
-        }
+        public JObject Values { get; set; }
     }
 }

@@ -73,6 +73,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Z.EntityFramework.Extensions, Version=3.22.1.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Extensions.3.22.1\lib\net45\Z.EntityFramework.Extensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
@@ -96,6 +99,10 @@
     <Compile Include="Migrations\201908181352133_LayerHasData.cs" />
     <Compile Include="Migrations\201908181352133_LayerHasData.Designer.cs">
       <DependentUpon>201908181352133_LayerHasData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908192029222_OnCascadeDelete.cs" />
+    <Compile Include="Migrations\201908192029222_OnCascadeDelete.Designer.cs">
+      <DependentUpon>201908192029222_OnCascadeDelete.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -126,6 +133,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908181352133_LayerHasData.resx">
       <DependentUpon>201908181352133_LayerHasData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908192029222_OnCascadeDelete.resx">
+      <DependentUpon>201908192029222_OnCascadeDelete.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

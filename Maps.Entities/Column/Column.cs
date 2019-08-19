@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Maps.Entities
 {
-    public enum UserDataType { ENUM, STRING, NUMBER, DATE, BOOL }
+    public enum UserDataType { ENUM, STRING, NUMBER, BOOL, LONGITUDE, LATITUDE }
 
     [Table("Column")]
     public class Column
@@ -18,14 +19,14 @@ namespace Maps.Entities
 
         public UserDataType DataType { get; set; }
 
-        public string EnumValues_ { get; set; }
+        public string EnumValues_
+        {
+            get { return EnumValues != null ? JsonConvert.SerializeObject(EnumValues) : null; }
+            set { EnumValues = JsonConvert.DeserializeObject<List<string>>(value); }
+        }
 
         [NotMapped]
-        public string[] Tags
-        {
-            get { return EnumValues_ == null ? null : JsonConvert.DeserializeObject<string[]>(EnumValues_); }
-            set { EnumValues_ = JsonConvert.SerializeObject(value); }
-        }
+        public List<string> EnumValues { get; set; }
         public virtual Layer Layer { get; set; }
     }
 }
