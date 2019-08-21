@@ -25,3 +25,19 @@
         }
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function() {
+        $("#@string.Concat("upload", Model.Id)").submit(function (event) {
+            event.preventDefault();
+            var dataString = new FormData($("#@string.Concat("upload", Model.Id)").get(0));
+            $.ajax({
+                type: "POST",
+                url: "Layer/LoadData",
+                data: dataString,
+                contentType: false,
+                processData: false,
+            });
+        });
+    });
+</script>
