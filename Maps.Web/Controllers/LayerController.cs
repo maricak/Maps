@@ -299,6 +299,7 @@ namespace Maps.Controllers
                             if (reader.LoadFile(model.DataFile.InputStream, layer, ref messages))
                             {
                                 layer.HasData = true;
+                                model.HasData = true;
                                 access.Layers.Update(layer);
                                 access.Save();
                                 ModelState.AddModelError("", "Successful data load!");

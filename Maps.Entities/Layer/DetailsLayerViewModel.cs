@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
 
 namespace Maps.Entities
@@ -13,7 +14,12 @@ namespace Maps.Entities
 
         public HttpPostedFileBase DataFile { get; set; }
 
-        public DetailsLayerViewModel() { }
+        public List<DetailsDataViewModel> Data { get; set; }
+
+        public DetailsLayerViewModel()
+        {
+            Data = new List<DetailsDataViewModel>();
+        }
 
         public DetailsLayerViewModel(Layer layer)
         {
@@ -24,6 +30,14 @@ namespace Maps.Entities
                 MapId = layer.Map.Id;
             }
             HasData = layer.HasData;
+            Data = new List<DetailsDataViewModel>();
+            if (layer.Data!= null)
+            {
+                foreach (var data in layer.Data)
+                {
+                    Data.Add(new DetailsDataViewModel(data));
+                }
+            }
         }
 
         public DetailsLayerViewModel(Guid mapId)

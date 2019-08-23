@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Maps.Entities
 {
-    public enum UserDataType { ENUM, STRING, NUMBER, BOOL, LONGITUDE, LATITUDE }
+    public enum UserDataType { ENUM, STRING, NUMBER, LONGITUDE, LATITUDE }
 
     [Table("Column")]
     public class Column

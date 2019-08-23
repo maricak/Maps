@@ -50,7 +50,6 @@ namespace Maps.Utils
         private static readonly Dictionary<JSchemaType?, UserDataType> NameToType = new Dictionary<JSchemaType?, UserDataType>
         {
             { JSchemaType.String, UserDataType.STRING},
-            { JSchemaType.Boolean, UserDataType.BOOL},
             { JSchemaType.Number, UserDataType.NUMBER},
         };
 

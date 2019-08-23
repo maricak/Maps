@@ -9,8 +9,7 @@
         }
         else
         {
-
-            @*using (Html.BeginForm("LoadData", "Layer", null, FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))*@
+            //using (Html.BeginForm("LoadData", "Layer", null, FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
 
             using (Ajax.BeginForm("LoadData", "Layer", null, new AjaxOptions { HttpMethod = "post", UpdateTargetId = string.Concat("layer", Model.Id), InsertionMode = InsertionMode.ReplaceWith }, new { enctype = "multipart/form-data", id = string.Concat("upload", Model.Id) }))
             {
@@ -23,7 +22,6 @@
                 <input type="file" name="DataFile" id="DataFile" required />
                 <input type="submit" value="Load" class="btn btn-link" />
             }
-
         }
     </div>
 </div>

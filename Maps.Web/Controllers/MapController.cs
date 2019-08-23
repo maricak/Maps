@@ -78,7 +78,7 @@ namespace Maps.Controllers
                 }
                 using (var access = new DataAccess())
                 {
-                    Map map = access.Maps.GetByID(id);
+                    Map map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers, Layers.Data").SingleOrDefault();
                     if (map == null)
                     {
                         return HttpNotFound();
@@ -87,38 +87,7 @@ namespace Maps.Controllers
                     {
                         return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                     }
-                    return View();
-                }
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", ex);
-            }
-            return View();
-        }
-
-        [ChildActionOnly]
-        public ActionResult SidebarPartial(Guid? id)
-        {
-            try
-            {
-                if (id == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-                using (var access = new DataAccess())
-                {
-                    Map map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers").SingleOrDefault();
-                    if (map == null)
-                    {
-                        return HttpNotFound();
-                    }
-                    if (map.User.Id != User.Identity.GetUser().Id)
-                    {
-                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-                    }
-                    var model = new DetailsMapViewModel(map);
-                    return View(model);
+                    return View(new DetailsMapViewModel(map));
                 }
             }
             catch (Exception ex)
