@@ -1,7 +1,6 @@
 ﻿@model Maps.Entities.DetailsLayerViewModel
 
-<div id="@string.Concat("layer", Model.Id)">
-
-    @Html.Partial("../Layer/DetailsHeader", Model)
-    @Html.Partial("../Layer/DetailsCollapse", Model)
+<div id="@string.Concat("layer", Model.HeaderModel.Id)">
+    @Html.Partial("../Layer/DetailsHeader", Model.HeaderModel)
+    @Html.Partial("../Layer/DetailsCollapse", Model.CollapseModel)
 </div>

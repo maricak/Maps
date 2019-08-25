@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<Maps.Entities.DetailsMapViewModel>
+﻿@model PagedList.IPagedList<Maps.Entities.DetailsListItemMapViewModel>
 @using PagedList.Mvc;
 
 @{
@@ -15,11 +15,11 @@
             <div class="card">
                 @Html.ValidationSummary(false, "", new { @class = "text-danger" })
             </div>
-        }  
+        }
         @Html.Partial("AddMap", new ViewDataDictionary())
         @foreach (var item in Model)
         {
-            @Html.Partial("Details", item)
+            @Html.Partial("DetailsListItem", item)
         }
         @if (@Model.PageCount > 1)
         {

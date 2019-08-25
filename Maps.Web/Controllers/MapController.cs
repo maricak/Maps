@@ -23,10 +23,10 @@ namespace Maps.Controllers
                 using (var access = new DataAccess())
                 {
                     var maps = access.Maps.Get(m => m.User.Id.Equals(userId), orderBy: m => m.OrderByDescending(i => i.CreationTime));
-                    List<DetailsMapViewModel> models = new List<DetailsMapViewModel>();
+                    List<DetailsListItemMapViewModel> models = new List<DetailsListItemMapViewModel>();
                     foreach (var map in maps.ToList())
                     {
-                        models.Add(new DetailsMapViewModel(map));
+                        models.Add(new DetailsListItemMapViewModel(map));
                     }
                     return View(models.ToPagedList(page ?? 1, PAGE_SIZE));
                 }
@@ -39,7 +39,7 @@ namespace Maps.Controllers
         }
 
         [AjaxOnly]
-        public ActionResult Details(Guid? id)
+        public ActionResult DetailsListItem(Guid? id)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace Maps.Controllers
                     {
                         return PartialView("../Home/Forbidden");
                     }
-                    return PartialView(new DetailsMapViewModel(map));
+                    return PartialView(new DetailsListItemMapViewModel(map));
                 }
             }
             catch (Exception ex)
@@ -68,7 +68,7 @@ namespace Maps.Controllers
             return PartialView();
         }
 
-        public ActionResult MapDetails(Guid? id)
+        public ActionResult Details(Guid? id)
         {
             try
             {
@@ -146,7 +146,7 @@ namespace Maps.Controllers
                         {
                             access.Maps.Insert(map);
                             access.Save();
-                            return PartialView("AddMap", new DetailsMapViewModel(map));
+                            return PartialView("AddMap", new DetailsListItemMapViewModel(map));
                         }
                     }
                 }
@@ -221,7 +221,7 @@ namespace Maps.Controllers
                             map.Name = model.Name;
                             access.Maps.Update(map);
                             access.Save();
-                            return PartialView("Details", new DetailsMapViewModel(map));
+                            return PartialView("DetailsListItem", new DetailsListItemMapViewModel(map));
                         }
                     }
                 }
@@ -237,7 +237,7 @@ namespace Maps.Controllers
         [AjaxOnly]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete([Bind(Include = "Id,CreationTime,Name")] DetailsMapViewModel model)
+        public ActionResult Delete([Bind(Include = "Id")] DetailsMapViewModel model)
         {
             try
             {
@@ -267,7 +267,7 @@ namespace Maps.Controllers
             {
                 ModelState.AddModelError("", ex);
             }
-            return PartialView("Details", model);
+            return PartialView("DetailsListItem", model);
         }
     }
 }

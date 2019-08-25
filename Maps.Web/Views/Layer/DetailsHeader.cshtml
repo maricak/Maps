@@ -1,23 +1,23 @@
-﻿@model Maps.Entities.DetailsLayerViewModel
+﻿@model Maps.Entities.DetailsHeaderLayerViewModel
 
-    <div class="card" id="@string.Concat("heading", Model.Id)">
-        @using (Ajax.BeginForm("Delete", "Layer", null, new AjaxOptions { HttpMethod = "post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = string.Concat("layer", Model.Id) }))
-        {
-            <button class="btn btn-link text-left" type="button" data-toggle="collapse" data-target="@string.Concat("#collapse", Model.Id)" aria-expanded="true" aria-controls="@string.Concat("collapse", Model.Id)">
-                @Model.Name
-            </button>
-            @Html.AntiForgeryToken()
-            @Html.HiddenFor(m => m.Name)
-            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
-            <input type="hidden" id="MapId" name="MapId" value="@Model.MapId" />
-            <div class="float-right">
-                @Ajax.ActionLink("Edit", "Edit", "Layer", new { id = Model.Id }, new AjaxOptions { HttpMethod = "Get", UpdateTargetId = string.Concat("layer", Model.Id), InsertionMode = InsertionMode.ReplaceWith }, new { @class = "btn btn-link" })
-                <span>|</span>
-                <input type="submit" value="Delete" class="btn btn-link" />
-            </div>
-        }
-        @if (!Html.ViewData.ModelState.IsValid)
-        {
-            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-        }
-    </div>
+<div class="card" id="@string.Concat("heading", Model.Id)">
+    @using (Ajax.BeginForm("Delete", "Layer", null, new AjaxOptions { HttpMethod = "post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = string.Concat("layer", Model.Id) }))
+    {
+        <button class="btn btn-link text-left" type="button" data-toggle="collapse" data-target="@string.Concat("#collapse", Model.Id)" aria-expanded="true" aria-controls="@string.Concat("collapse", Model.Id)">
+            @Model.Name
+        </button>
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Name)
+        <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+        <input type="hidden" id="MapId" name="MapId" value="@Model.MapId" />
+        <div class="float-right">
+            @Ajax.ActionLink("Edit", "Edit", "Layer", new { id = Model.Id }, new AjaxOptions { HttpMethod = "Get", UpdateTargetId = string.Concat("layer", Model.Id), InsertionMode = InsertionMode.ReplaceWith }, new { @class = "btn btn-link" })
+            <span>|</span>
+            <input type="submit" value="Delete" class="btn btn-link" />
+        </div>
+    }
+    @if (!Html.ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    }
+</div>

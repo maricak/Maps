@@ -15,14 +15,14 @@
 </head>
 <body background="~/Content/Images/background.png"
       class="d-flex flex-column h-100">
-    @if (!Url.RequestContext.RouteData.Values["controller"].Equals("Map") || !Url.RequestContext.RouteData.Values["action"].Equals("MapDetails"))
+    @if (!Url.RequestContext.RouteData.Values["controller"].Equals("Map") || !Url.RequestContext.RouteData.Values["action"].Equals("Details"))
     {
         @Html.Partial("~/Views/Home/HomeHeaderPartial.cshtml");
     }
-    <main class="@(Url.RequestContext.RouteData.Values["controller"].Equals("Map") && Url.RequestContext.RouteData.Values["action"].Equals("MapDetails") ? "container-fluid h-100" : "container")">
+    <main class="@(Url.RequestContext.RouteData.Values["controller"].Equals("Map") && Url.RequestContext.RouteData.Values["action"].Equals("Details") ? "container-fluid h-100" : "container")">
         @RenderBody()
     </main>
-    @if (!Url.RequestContext.RouteData.Values["controller"].Equals("Map") || !Url.RequestContext.RouteData.Values["action"].Equals("MapDetails"))
+    @if (!Url.RequestContext.RouteData.Values["controller"].Equals("Map") || !Url.RequestContext.RouteData.Values["action"].Equals("Details"))
     {
         <footer class="footer mt-auto py-3 bg-white card">
             <div class="container h-100 align-middle">

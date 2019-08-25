@@ -1,0 +1,23 @@
+﻿@model Maps.Entities.DetailsListItemMapViewModel
+
+<div class="card" id="@string.Concat("map", Model.Id)">
+    @using (Ajax.BeginForm("Delete", "Map", null, new AjaxOptions { HttpMethod = "post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = string.Concat("map", Model.Id) }))
+    {
+        @Html.ActionLink(Model.Name, "Details", new { id = Model.Id }, new { @class = "btn btn-link" })
+        <span>[</span>
+        @Model.CreationTime.ToLocalTime()
+        <span>]</span>
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Id)
+        <div class="float-right">
+            @Ajax.ActionLink("Edit", "Edit", new { id = Model.Id }, new AjaxOptions { HttpMethod = "Get", UpdateTargetId = string.Concat("map", Model.Id), InsertionMode = InsertionMode.ReplaceWith }, new { @class = "btn btn-link" })
+            <span>|</span>
+            <input type="submit" value="Delete" class="btn btn-link" />
+            <span>&nbsp;</span>
+        </div>
+    }
+    @if (!Html.ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    }
+</div>

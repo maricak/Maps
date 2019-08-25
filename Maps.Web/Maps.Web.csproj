@@ -563,13 +563,12 @@
     <Content Include="Views\Map\Index.cshtml" />
     <Content Include="Views\Home\NotFound.cshtml" />
     <Content Include="Views\Home\BadRequest.cshtml" />
-    <Content Include="Views\Map\MapDetails.cshtml" />
+    <Content Include="Views\Map\Details.cshtml" />
     <Content Include="Views\Home\HomeHeaderPartial.cshtml" />
     <Content Include="Views\Layer\Create.cshtml" />
-    <Content Include="Views\Layer\Delete.cshtml" />
     <Content Include="Views\Layer\Details.cshtml" />
     <Content Include="Views\Layer\Edit.cshtml" />
-    <Content Include="Views\Map\Details.cshtml" />
+    <Content Include="Views\Map\DetailsListItem.cshtml" />
     <Content Include="Views\Map\AddMap.cshtml" />
     <Content Include="Views\Layer\AddLayer.cshtml" />
     <Content Include="Views\Home\Forbidden.cshtml" />
@@ -590,6 +589,7 @@
     <Content Include="Views\Layer\ChartDropdown.cshtml" />
     <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Views\Home\ServerError.cshtml" />
+    <Content Include="Views\Map\Tabs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

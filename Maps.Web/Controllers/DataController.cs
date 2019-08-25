@@ -29,7 +29,7 @@ namespace Maps.Controllers
                     {
                         return PartialView("../Home/Forbidden");
                     }
-                    var model = new DetailsLayerViewModel(layer);
+                    var model = new TableDataViewModel(layer);
                     return PartialView(model);
                 }
             }
@@ -60,7 +60,7 @@ namespace Maps.Controllers
                     {
                         return PartialView("../Home/Forbidden");
                     }
-                    var model = new DetailsLayerViewModel(layer);
+                    var model = new ChartDataViewModel(layer);
                     return PartialView(model);
                 }
             }

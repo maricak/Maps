@@ -1,4 +1,4 @@
-﻿@model Maps.Entities.DetailsMapViewModel
+﻿@model Maps.Entities.DetailsListItemMapViewModel
 
 <div id="newMap" class="card" >
     <div class="text-right">
@@ -9,5 +9,5 @@
 
 @if (Model != null)
 {
-    @Html.Partial("Details", Model)
+    @Html.Partial("DetailsListItem", Model)
 }

@@ -1,4 +1,4 @@
-﻿@model Maps.Entities.DetailsLayerViewModel
+﻿@model Maps.Entities.ChartDataViewModel
 
 @{
     ViewBag.Title = "Chart";
@@ -9,7 +9,7 @@
     @if (Model.HasData && Model.Data.Count != 0)
     {
         <div class="card-header">
-            Layer: <strong>@Model.Name</strong>
+            Layer: <strong>@Model.LayerName</strong>
         </div>
         <div class="card-body">
            chart
@@ -18,7 +18,7 @@
     else
     {
         <div class="card-header">
-            Layer <strong>@Model.Name</strong> does not have any data.
+            Layer <strong>@Model.LayerName</strong> does not have any data.
         </div>
     }
 </div>

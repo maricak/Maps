@@ -235,7 +235,7 @@ namespace Maps.Controllers
         [AjaxOnly]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete([Bind(Include = "Id,MapId,Name")] DetailsLayerViewModel model)
+        public ActionResult Delete([Bind(Include = "Id,MapId,Name")] DetailsHeaderLayerViewModel model)
         {
             try
             {
@@ -271,7 +271,7 @@ namespace Maps.Controllers
         [AjaxOnly]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LoadData(DetailsLayerViewModel model)
+        public ActionResult LoadData([Bind(Include ="Id,DataFile")]DetailsCollapseLayerViewModel model)
         {
             try
             {
@@ -283,11 +283,16 @@ namespace Maps.Controllers
                         if (layer == null)
                         {
                             ModelState.AddModelError("", "Layer does not exists.");
-                            return PartialView("Details", model);
+                            return PartialView("DetailsCollapse", model);
                         }
                         if (layer.Map.User.Id != User.Identity.GetUser().Id)
                         {
                             return PartialView("../Home/Forbidden");
+                        }
+                        if(layer.HasData)
+                        {
+                            ModelState.AddModelError("", "Layer already has data.");
+                            return PartialView("DetailsCollapse", model);
                         }
                         var extension = Path.GetExtension(model.DataFile.FileName);
                         if (extension == ".json")
@@ -318,7 +323,7 @@ namespace Maps.Controllers
             {
                 ModelState.AddModelError("", ex);
             }
-            return PartialView("Details", model);
+            return PartialView("DetailsCollapse", model);
         }
 
         [AjaxOnly]
@@ -337,7 +342,12 @@ namespace Maps.Controllers
                     {
                         return PartialView("../Home/Forbidden");
                     }
-                    return PartialView(new DetailsMapViewModel(map).Layers);
+                    IList<DropdownItemLayerViewModel> items = new List<DropdownItemLayerViewModel>();
+                    foreach (var layer in map.Layers)
+                    {
+                        items.Add(new DropdownItemLayerViewModel(layer));
+                    }
+                    return PartialView(items);
                 }
             }
             catch (Exception ex)
@@ -363,7 +373,12 @@ namespace Maps.Controllers
                     {
                         return PartialView("../Home/Forbidden");
                     }
-                    return PartialView(new DetailsMapViewModel(map).Layers);
+                    IList<DropdownItemLayerViewModel> items = new List<DropdownItemLayerViewModel>();
+                    foreach (var layer in map.Layers)
+                    {
+                        items.Add(new DropdownItemLayerViewModel(layer));
+                    }
+                    return PartialView(items);
                 }
             }
             catch (Exception ex)
