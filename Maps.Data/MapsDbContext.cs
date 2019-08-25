@@ -26,9 +26,6 @@ namespace Maps.Data
             modelBuilder.Entity<IdentityUserLogin>().ToTable("Login");
             modelBuilder.Entity<IdentityRole>().ToTable("Role");
 
-            modelBuilder.Entity<Column>()
-               .Property(c => c.EnumValues_).HasColumnName("EnumValues");
-
             modelBuilder.Entity<Entities.Data>()
                 .Property(d => d.Values_).HasColumnName("Values");
 

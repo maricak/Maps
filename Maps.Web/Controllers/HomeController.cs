@@ -5,7 +5,6 @@ namespace Maps.Controllers
     [RequireHttps]
     public class HomeController : Controller
     {
-        // GET: Home
         public ActionResult Index()
         {
             return View();
@@ -20,6 +19,11 @@ namespace Maps.Controllers
             return View();
         }
         public ActionResult Forbidden()
+        {
+            return View();
+        }
+
+        public ActionResult ServerError()
         {
             return View();
         }

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Maps.Entities
 {
-    public enum UserDataType { ENUM, STRING, NUMBER, LONGITUDE, LATITUDE }
+    public enum UserDataType { STRING, NUMBER, LONGITUDE, LATITUDE }
 
     [Table("Column")]
     public class Column
@@ -19,14 +19,6 @@ namespace Maps.Entities
 
         public UserDataType DataType { get; set; }
 
-        public string EnumValues_
-        {
-            get { return EnumValues != null ? JsonConvert.SerializeObject(EnumValues) : null; }
-            set { EnumValues = JsonConvert.DeserializeObject<List<string>>(value); }
-        }
-
-        [NotMapped]
-        public List<string> EnumValues { get; set; }
         public virtual Layer Layer { get; set; }
     }
 }

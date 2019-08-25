@@ -8,7 +8,6 @@ namespace Maps.Entities
 {
     public class DetailsDataViewModel
     {
-        [Key]
         public Guid Id { get; set; }
 
         public virtual Layer Layer { get; set; }
@@ -19,7 +18,6 @@ namespace Maps.Entities
             set { Values = JsonConvert.DeserializeObject<JObject>(value); }
         }
 
-        [NotMapped]
         public JObject Values { get; set; }
 
 

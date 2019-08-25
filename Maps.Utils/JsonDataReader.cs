@@ -85,15 +85,6 @@ namespace Maps.Utils
                         DataType = type
                     };
                     columns.Add(column);
-                    if (column.DataType == UserDataType.STRING && property.Value.Enum != null && property.Value.Enum.Count != 0)
-                    {
-                        column.DataType = UserDataType.ENUM;
-                        column.EnumValues = new List<string>();
-                        foreach (var enumValue in property.Value.Enum)
-                        {
-                            column.EnumValues.Add(enumValue.Value<string>());
-                        }
-                    }
                 }
             }
             return CheckColumns(columns, ref messages);
