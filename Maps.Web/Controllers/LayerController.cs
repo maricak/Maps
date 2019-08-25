@@ -19,8 +19,7 @@ namespace Maps.Controllers
             {
                 if (mapId == null)
                 {
-                    ModelState.AddModelError("", "Map id cannot be empty.");
-                    return PartialView();
+                    return PartialView("../Home/BadRequest");
                 }
                 using (var access = new DataAccess())
                 {
@@ -32,7 +31,7 @@ namespace Maps.Controllers
                     }
                     else if (map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                        return PartialView("../Home/Forbidden");
                     }
                 }
             }
@@ -50,8 +49,7 @@ namespace Maps.Controllers
             {
                 if (mapId == null)
                 {
-                    ModelState.AddModelError("", "Map id cannot be empty.");
-                    return PartialView();
+                    return PartialView("../Home/BadRequest");
                 }
                 using (var access = new DataAccess())
                 {
@@ -63,7 +61,7 @@ namespace Maps.Controllers
                     }
                     else if (map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                        return PartialView("../Home/Forbidden");
                     }
                 }
             }
@@ -99,7 +97,7 @@ namespace Maps.Controllers
                         }
                         else if (map.User.Id != User.Identity.GetUser().Id)
                         {
-                            return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                            return PartialView("../Home/Forbidden");
                         }
                         Layer layer = new Layer
                         {
@@ -135,7 +133,7 @@ namespace Maps.Controllers
             {
                 if (id == null)
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    return PartialView("../Home/BadRequest");
                 }
                 using (var access = new DataAccess())
                 {
@@ -146,7 +144,7 @@ namespace Maps.Controllers
                     }
                     else if (layer.Map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                        return PartialView("../Home/Forbidden");
                     }
                     return PartialView(new DetailsLayerViewModel(layer));
                 }
@@ -165,18 +163,18 @@ namespace Maps.Controllers
             {
                 if (id == null)
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    return PartialView("../Home/BadRequest");
                 }
                 using (var access = new DataAccess())
                 {
                     Layer layer = access.Layers.GetByID(id);
                     if (layer == null)
                     {
-                        return HttpNotFound();
+                        return PartialView("../Home/NotFound");
                     }
                     else if (layer.Map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                        return PartialView("../Home/Forbidden");
                     }
                     var model = new EditLayerViewModel(layer);
                     return PartialView(model);
@@ -207,7 +205,7 @@ namespace Maps.Controllers
                         }
                         else if (layer.Map.User.Id != User.Identity.GetUser().Id)
                         {
-                            return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                            return PartialView("../Home/Forbidden");
                         }
                         else
                         {
@@ -234,10 +232,10 @@ namespace Maps.Controllers
         }
 
 
+        [AjaxOnly]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AjaxOnly]
-        public ActionResult Delete(DetailsLayerViewModel model)
+        public ActionResult Delete([Bind(Include = "Id,MapId,Name")] DetailsLayerViewModel model)
         {
             try
             {
@@ -252,7 +250,7 @@ namespace Maps.Controllers
                         }
                         else if (layer.Map.User.Id != User.Identity.GetUser().Id)
                         {
-                            return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                            return PartialView("../Home/Forbidden");
                         }
                         else
                         {
@@ -270,9 +268,9 @@ namespace Maps.Controllers
             return PartialView("Details", model);
         }
 
+        [AjaxOnly]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[AjaxOnly]
         public ActionResult LoadData(DetailsLayerViewModel model)
         {
             try
@@ -289,7 +287,7 @@ namespace Maps.Controllers
                         }
                         if (layer.Map.User.Id != User.Identity.GetUser().Id)
                         {
-                            return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                            return PartialView("../Home/Forbidden");
                         }
                         var extension = Path.GetExtension(model.DataFile.FileName);
                         if (extension == ".json")

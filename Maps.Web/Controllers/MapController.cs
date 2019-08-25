@@ -45,18 +45,18 @@ namespace Maps.Controllers
             {
                 if (id == null)
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    return PartialView("../Home/BadRequest");
                 }
                 using (var access = new DataAccess())
                 {
                     Map map = access.Maps.GetByID(id);
                     if (map == null)
                     {
-                        return HttpNotFound();
+                        return PartialView("../Home/NotFound");
                     }
                     if (map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                        return PartialView("../Home/Forbidden");
                     }
                     return PartialView(new DetailsMapViewModel(map));
                 }
@@ -165,18 +165,18 @@ namespace Maps.Controllers
             {
                 if (id == null)
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    return PartialView("../Home/BadRequest");
                 }
                 using (var access = new DataAccess())
                 {
                     Map map = access.Maps.GetByID(id);
                     if (map == null)
                     {
-                        return HttpNotFound();
+                        return PartialView("../Home/NotFound");
                     }
                     if (map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                        return PartialView("../Home/Forbidden");
                     }
                     var model = new EditMapViewModel(map);
                     return PartialView(model);
@@ -208,7 +208,7 @@ namespace Maps.Controllers
                         }
                         else if (map.User.Id != userId)
                         {
-                            return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                            return PartialView("../Home/Forbidden");
                         }
                         else
                         {
@@ -234,33 +234,32 @@ namespace Maps.Controllers
             return PartialView(model);
         }
 
+        [AjaxOnly]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AjaxOnly]
-        public ActionResult Delete(DetailsMapViewModel model)
+        public ActionResult Delete([Bind(Include = "Id,CreationTime,Name")] DetailsMapViewModel model)
         {
             try
             {
-                if (model == null || model.Id == null)
+                if (ModelState.IsValid)
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-                using (var access = new DataAccess())
-                {
-                    var map = access.Maps.GetByID(model.Id);
-                    if (map == null)
+                    using (var access = new DataAccess())
                     {
-                        ModelState.AddModelError("", "Map does not exists.");
-                    }
-                    else if (map.User.Id != User.Identity.GetUser().Id)
-                    {
-                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-                    }
-                    else
-                    {
-                        access.Maps.Delete(model.Id);
-                        access.Save();
-                        return new EmptyResult();
+                        var map = access.Maps.GetByID(model.Id);
+                        if (map == null)
+                        {
+                            ModelState.AddModelError("", "Map does not exists.");
+                        }
+                        else if (map.User.Id != User.Identity.GetUser().Id)
+                        {
+                            return PartialView("../Home/Forbidden");
+                        }
+                        else
+                        {
+                            access.Maps.Delete(model.Id);
+                            access.Save();
+                            return new EmptyResult();
+                        }
                     }
                 }
             }

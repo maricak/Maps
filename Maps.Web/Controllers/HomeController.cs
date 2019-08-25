@@ -18,7 +18,10 @@ namespace Maps.Controllers
         public ActionResult NotFound()
         {
             return View();
-
+        }
+        public ActionResult Forbidden()
+        {
+            return View();
         }
     }
 }

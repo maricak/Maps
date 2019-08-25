@@ -24,11 +24,11 @@ namespace Maps.Controllers
                     Layer layer = access.Layers.Get(l => l.Id == id, includeProperties: "Map,Data").SingleOrDefault();
                     if (layer == null)
                     {
-                        return HttpNotFound();
+                        return PartialView("../Home/NotFound");
                     }
                     if (layer.Map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                        return PartialView("../Home/Forbidden");
                     }
                     var model = new DetailsLayerViewModel(layer);
                     return PartialView(model);

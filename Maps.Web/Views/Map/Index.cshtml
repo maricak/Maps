@@ -15,7 +15,8 @@
             <div class="card">
                 @Html.ValidationSummary(false, "", new { @class = "text-danger" })
             </div>
-        }  @Html.Partial("AddMap", new ViewDataDictionary())
+        }  
+        @Html.Partial("AddMap", new ViewDataDictionary())
         @foreach (var item in Model)
         {
             @Html.Partial("Details", item)
