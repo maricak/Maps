@@ -22,8 +22,11 @@
                     <a class="nav-link" id="nav-map-tab" data-toggle="tab" href="#nav-map" role="tab" aria-controls="nav-map" aria-selected="true">Map</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Data tables</a>
-                    @Html.Partial("../Data/TablesDropdownPartial", Model.Layers)
+                    <a id="layersDataDropdownLink" onclick="layersDataDropdownLink()" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Data tables</a>
+                    <div id="layersDataDropdown" class="dropdown-menu" aria-labelledby="layerListDropdown">
+
+                        @Html.Partial("../Layer/LayersDataDropdown", Model.Layers)
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="nav-chart-tab" data-toggle="tab" href="#nav-chart" role="tab" aria-controls="nav-chart" aria-selected="false">Chart</a>
@@ -39,8 +42,21 @@
 </div>
 
 <script>
-    function complete() {
+    function completeShowTable() {
         $('#nav-table').tab('show')
+    }
+
+    function layersDataDropdownLink() {
+        var request = $.ajax({
+            type: "get",
+            url: "../../Layer/LayersDataDropdown",
+            data: {
+                mapId: "@Model.Id"
+            }
+        });
+        request.done(function (msg) {
+            $("#layersDataDropdown").html(msg);
+        });
     }
 </script>
 

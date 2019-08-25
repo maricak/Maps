@@ -320,5 +320,31 @@ namespace Maps.Controllers
             }
             return PartialView("Details", model);
         }
+
+        [AjaxOnly]
+        public ActionResult LayersDataDropdown(Guid? mapId)
+        {
+            try
+            {
+                using (var access = new DataAccess())
+                {
+                    var map = access.Maps.Get(m => m.Id == mapId, includeProperties: "Layers").FirstOrDefault();
+                    if (map == null)
+                    {
+                        return PartialView("../Home/BadRequest");
+                    }
+                    if (map.User.Id != User.Identity.GetUser().Id)
+                    {
+                        return PartialView("../Home/Forbidden");
+                    }
+                    return PartialView(new DetailsMapViewModel(map).Layers);
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex);
+            }
+            return PartialView();
+        }
     }
 }
