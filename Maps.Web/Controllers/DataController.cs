@@ -51,7 +51,7 @@ namespace Maps.Controllers
                 }
                 using (var access = new DataAccess())
                 {
-                    Layer layer = access.Layers.Get(l => l.Id == id, includeProperties: "Map,Data").SingleOrDefault();
+                    Layer layer = access.Layers.Get(l => l.Id == id, includeProperties: "Map,Data,Columns").SingleOrDefault();
                     if (layer == null)
                     {
                         return PartialView("../Home/NotFound");

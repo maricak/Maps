@@ -5,15 +5,30 @@
     Layout = null;
 }
 
-<div class="card m-2">
+<script>
+    function dynamicColors() {
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+        return "rgba(" + r + "," + g + "," + b + ", 0.5)";
+    }
+
+    function colorArray(a) {
+        var pool = [];
+        for (i = 0; i < a; i++) {
+            pool.push(dynamicColors());
+        }
+        return pool;
+    }
+</script>
+
+<div class="m-2">
     @if (Model.HasData && Model.Data.Count != 0)
     {
-        <div class="card-header">
-            Layer: <strong>@Model.LayerName</strong>
-        </div>
-        <div class="card-body">
-           chart
-        </div>
+        foreach (var item in @Model.ChartModels)
+        {
+            @Html.Partial("HorizontalBarChart", item.Value)
+        }
     }
     else
     {
@@ -22,3 +37,6 @@
         </div>
     }
 </div>
+
+
+

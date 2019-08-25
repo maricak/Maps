@@ -590,6 +590,7 @@
     <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Views\Home\ServerError.cshtml" />
     <Content Include="Views\Map\Tabs.cshtml" />
+    <Content Include="Views\Data\HorizontalBarChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

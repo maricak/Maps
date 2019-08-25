@@ -96,10 +96,12 @@
     <Compile Include="Account\RegisterViewModel.cs" />
     <Compile Include="Account\ResetPasswordViewModel.cs" />
     <Compile Include="Account\SetPasswordViewModel.cs" />
+    <Compile Include="Column\ChartColumnViewModel.cs" />
     <Compile Include="Column\Column.cs" />
     <Compile Include="Data\Data.cs" />
     <Compile Include="Data\DetailsDataViewModel.cs" />
     <Compile Include="Data\ChartDataViewModel.cs" />
+    <Compile Include="Data\HorizontalBarUniqueStringModelView.cs" />
     <Compile Include="Data\TableDataViewModel.cs" />
     <Compile Include="Layer\CreateLayerViewModel.cs" />
     <Compile Include="Layer\DetailsCollapseLayerViewModel.cs" />
