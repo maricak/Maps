@@ -22,36 +22,52 @@
                     <a class="nav-link" id="nav-map-tab" data-toggle="tab" href="#nav-map" role="tab" aria-controls="nav-map" aria-selected="true">Map</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a onclick="layersDataDropdownLinkClick()" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Data tables</a>
-                    <div id="layersDataDropdown" class="dropdown-menu" aria-labelledby="layerListDropdown">
-                        @Html.Partial("../Layer/LayersDataDropdown", Model.Layers)
+                    <a onclick="tableDropdownLinkClick()" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Data tables</a>
+                    <div id="tableDropdown" class="dropdown-menu">
+                        @Html.Partial("../Layer/TableDropdown", Model.Layers)
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="nav-chart-tab" data-toggle="tab" href="#nav-chart" role="tab" aria-controls="nav-chart" aria-selected="false">Chart</a>
+                <li class="nav-item dropdown">
+                    <a onclick="chartDropdownLinkClick()" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Data charts</a>
+                    <div id="chartDropdown" class="dropdown-menu">
+                        @Html.Partial("../Layer/TableDropdown", Model.Layers)
+                    </div>
                 </li>
             </ul>
         </nav>
         <div class="tab-content">
             <div class="tab-pane fade show" id="nav-map" role="tabpanel" aria-labelledby="nav-map-tab">MAPA</div>
             <div class="tab-pane fade" id="nav-table" role="tabpanel" aria-labelledby="nav-table-tab"></div>
-            <div class="tab-pane fade" id="nav-chart" role="tabpanel" aria-labelledby="nav-chart-tab">GRAFIKON</div>
+            <div class="tab-pane fade" id="nav-chart" role="tabpanel" aria-labelledby="nav-chart-tab"></div>
         </div>
     </div>
 </div>
 
 
 <script>
-    function layersDataDropdownLinkClick() {
+    function tableDropdownLinkClick() {
         var request = $.ajax({
             type: "get",
-            url: "../../Layer/LayersDataDropdown",
+            url: "../../Layer/TableDropdown",
             data: {
                 mapId: "@Model.Id"
             }
         });
         request.done(function (msg) {
-            $("#layersDataDropdown").html(msg);
+            $("#tableDropdown").html(msg);
+        });
+    }
+
+     function chartDropdownLinkClick() {
+        var request = $.ajax({
+            type: "get",
+            url: "../../Layer/ChartDropdown",
+            data: {
+                mapId: "@Model.Id"
+            }
+        });
+        request.done(function (msg) {
+            $("#chartDropdown").html(msg);
         });
     }
 </script>

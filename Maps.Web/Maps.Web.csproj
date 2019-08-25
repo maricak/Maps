@@ -586,7 +586,9 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Layer\LayersDataDropdown.cshtml" />
+    <Content Include="Views\Layer\TableDropdown.cshtml" />
+    <Content Include="Views\Data\Chart.cshtml" />
+    <Content Include="Views\Layer\ChartDropdown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

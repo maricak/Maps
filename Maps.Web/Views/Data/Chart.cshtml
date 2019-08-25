@@ -1,0 +1,24 @@
+﻿@model Maps.Entities.DetailsLayerViewModel
+
+@{
+    ViewBag.Title = "Chart";
+    Layout = null;
+}
+
+<div class="card m-2">
+    @if (Model.HasData && Model.Data.Count != 0)
+    {
+        <div class="card-header">
+            Layer: <strong>@Model.Name</strong>
+        </div>
+        <div class="card-body">
+           chart
+        </div>
+    }
+    else
+    {
+        <div class="card-header">
+            Layer <strong>@Model.Name</strong> does not have any data.
+        </div>
+    }
+</div>

@@ -1,0 +1,29 @@
+﻿@model IList<Maps.Entities.DetailsLayerViewModel>
+
+@{
+    ViewBag.Title = "Chart dropdown";
+    Layout = null;
+}
+
+
+@if (Model != null)
+{
+    foreach (var layer in Model)
+    {
+        @Ajax.ActionLink(layer.Name, "Chart", "Data",
+                        new { id = layer.Id },
+                        new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "nav-chart", OnComplete = "showChartComplete()" },
+                        new { @class = "dropdown-item", data_toggle = "tab", role = "tab", aria_controls = "nav-chart", aria_selected = "false", id = "nav-chart-tab" })
+    }
+}
+
+<script>
+    function showChartComplete() {
+        $('#nav-chart').tab('show')
+        $('#nav-table').removeClass('show')
+        $('#nav-table').removeClass('active')
+        $('#nav-map').removeClass('show')
+        $('#nav-map').removeClass('active')
+    }
+</script>
+

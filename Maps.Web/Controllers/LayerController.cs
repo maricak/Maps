@@ -322,7 +322,33 @@ namespace Maps.Controllers
         }
 
         [AjaxOnly]
-        public ActionResult LayersDataDropdown(Guid? mapId)
+        public ActionResult TableDropdown(Guid? mapId)
+        {
+            try
+            {
+                using (var access = new DataAccess())
+                {
+                    var map = access.Maps.Get(m => m.Id == mapId, includeProperties: "Layers").FirstOrDefault();
+                    if (map == null)
+                    {
+                        return PartialView("../Home/BadRequest");
+                    }
+                    if (map.User.Id != User.Identity.GetUser().Id)
+                    {
+                        return PartialView("../Home/Forbidden");
+                    }
+                    return PartialView(new DetailsMapViewModel(map).Layers);
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex);
+            }
+            return PartialView();
+        }
+
+        [AjaxOnly]
+        public ActionResult ChartDropdown(Guid? mapId)
         {
             try
             {
