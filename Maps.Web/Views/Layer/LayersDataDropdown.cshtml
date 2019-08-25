@@ -6,16 +6,24 @@
 }
 
 
-@*<div  id="layersDataDropdown" class="dropdown-menu" aria-labelledby="layerListDropdown">
-    </div>*@
 @if (Model != null)
 {
     foreach (var layer in Model)
     {
         @Ajax.ActionLink(layer.Name, "Table", "Data",
                         new { id = layer.Id },
-                        new AjaxOptions { InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = "nav-table", OnComplete = "completeShowTable" },
-                        new { @class = "dropdown-item", data_toggle = "tab", role = "tab", aria_controls = "nav-table", aria_selected = "false" })
+                        new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "nav-table", OnComplete = "showTableComplete()" },
+                        new { @class = "dropdown-item", data_toggle = "tab", role = "tab", aria_controls = "nav-table", aria_selected = "false", id = "nav-table-tab" })
     }
 }
+
+<script>
+    function showTableComplete() {
+        $('#nav-table').tab('show')
+        $('#nav-chart').removeClass('show')
+        $('#nav-chart').removeClass('active')
+        $('#nav-map').removeClass('show')
+        $('#nav-map').removeClass('active')
+    }
+</script>
 
