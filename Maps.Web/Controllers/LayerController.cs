@@ -5,11 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 
 namespace Maps.Controllers
 {
+    [Authorize(Roles = "User")]
+
     public class LayerController : Controller
     {
         [AjaxOnly]
@@ -271,7 +272,7 @@ namespace Maps.Controllers
         [AjaxOnly]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LoadData([Bind(Include ="Id,DataFile")]DetailsCollapseLayerViewModel model)
+        public ActionResult LoadData([Bind(Include = "Id,DataFile")]DetailsCollapseLayerViewModel model)
         {
             try
             {
@@ -289,7 +290,7 @@ namespace Maps.Controllers
                         {
                             return PartialView("../Home/Forbidden");
                         }
-                        if(layer.HasData)
+                        if (layer.HasData)
                         {
                             ModelState.AddModelError("", "Layer already has data.");
                             return PartialView("DetailsCollapse", model);
@@ -301,7 +302,6 @@ namespace Maps.Controllers
                             JsonDataReader reader = new JsonDataReader();
                             if (reader.LoadFile(model.DataFile.InputStream, layer, ref messages))
                             {
-                                layer.HasData = true;
                                 model.HasData = true;
                                 access.Layers.Update(layer);
                                 access.Save();

@@ -5,29 +5,35 @@
     Layout = null;
 }
 
-<div class="card">
-    <div class="card-header">
-        Column: <strong>@Model.ColumnName</strong>
+@if (Model.LabelArray?.Count != 0)
+{
+    <div class="card">
+        <div class="card-header">
+            Column: <strong>@Model.ColumnName</strong>
+        </div>
+        <div class="card-body">
+            <canvas id="@string.Concat("bar-chart", Model.ColumnId)" class="w-100"></canvas>
+        </div>
     </div>
-    <div class="card-body">
-        <canvas id="@string.Concat("bar-chart", Model.ColumnId)" class="w-100"></canvas>
-    </div>
-</div>
-<script>
-  new Chart(document.getElementById("@string.Concat("bar-chart", Model.ColumnId)"), {
-    type: 'horizontalBar',
-      data: {
-          labels:  @Html.Raw(Model.LabelArray),
-      datasets: [
-        {
-          backgroundColor: colorArray(@Model.LabelArray.Count),
-          data:  @Html.Raw(Model.CountArray),
-        }
-      ]
-    },
-    options: {
-        legend: { display: false },
-        scales: { xAxes: [ { ticks: {beginAtZero:true} } ] }
-    }
-  });
-</script>
+    <script>
+        new Chart(document.getElementById("@string.Concat("bar-chart", Model.ColumnId)"), {
+            type: 'horizontalBar',
+                data: {
+                    labels:  @Html.Raw(Model.LabelArray),
+                datasets: [
+                {
+                    backgroundColor: colorArray(@Model.LabelArray.Count),
+                    data:  @Html.Raw(Model.CountArray),
+                }
+                ]
+            },
+            options: {
+                legend: { display: false },
+                scales: {
+                    xAxes: [{ ticks: { beginAtZero: true } }],
+                    yAxes: [{ ticks: { display: false } }]
+                }
+            }
+        });
+    </script>
+}

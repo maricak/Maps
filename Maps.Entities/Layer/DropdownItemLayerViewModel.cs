@@ -11,7 +11,7 @@ namespace Maps.Entities
 
         public DropdownItemLayerViewModel(Layer layer)
         {
-            if(layer != null)
+            if (layer != null)
             {
                 Id = layer.Id;
                 Name = layer.Name;

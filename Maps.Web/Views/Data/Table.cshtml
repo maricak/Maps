@@ -11,28 +11,29 @@
             Layer: <strong>@Model.LayerName</strong>
         </div>
         <div class="card-body">
-
-            <table class="table table-striped table-bordered table-sm">
-                <thead>
-                    <tr>
-                        @foreach (var property in Model.Data.FirstOrDefault().Values)
-                        {
-                            <td>@property.Key</td>
-                        }
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var data in Model.Data)
-                    {
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-sm">
+                    <thead>
                         <tr>
-                            @foreach (var property in data.Values)
+                            @foreach (var property in Model.Data.FirstOrDefault().Values)
                             {
-                                <td>@property.Value</td>
+                                <td>@property.Key</td>
                             }
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.Data)
+                        {
+                            <tr>
+                                @foreach (var property in data.Values)
+                                {
+                                    <td>@property.Value</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     }
     else

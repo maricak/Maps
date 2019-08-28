@@ -1,7 +1,9 @@
 ﻿@model Maps.Entities.CreateLayerViewModel
 
 <div class="card" id="newLayer">
-    @using (Ajax.BeginForm("Create", "Layer", null, new AjaxOptions { HttpMethod = "post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = "newLayer" }, new { id = "createMap", @class = "m-1" }))
+    @using (Ajax.BeginForm("Create", "Layer", null, 
+                            new AjaxOptions { HttpMethod = "post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = "newLayer" }, 
+                            new { id = "createMap", @class = "m-1 form-inline" }))
     {
         @Html.AntiForgeryToken()
         <input type="hidden" id="MapId" name="MapId" value="@Model.MapId" />
@@ -14,9 +16,9 @@
             <span>|</span>
             @Ajax.ActionLink("Discard", "AddLayer", new { mapId = Model.MapId }, new AjaxOptions { UpdateTargetId = "newLayer", InsertionMode = InsertionMode.ReplaceWith, HttpMethod = "get" }, new { @class = "btn btn-link" })
         </div>
-        if (!Html.ViewData.ModelState.IsValid)
-        {
-            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-        }
+    }
+    @if (!Html.ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
     }
 </div>

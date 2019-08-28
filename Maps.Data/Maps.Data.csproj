@@ -108,6 +108,10 @@
     <Compile Include="Migrations\201908251534519_RemoveEnum.Designer.cs">
       <DependentUpon>201908251534519_RemoveEnum.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908281538200_RemoveHasData.cs" />
+    <Compile Include="Migrations\201908281538200_RemoveHasData.Designer.cs">
+      <DependentUpon>201908281538200_RemoveHasData.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
@@ -143,6 +147,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908251534519_RemoveEnum.resx">
       <DependentUpon>201908251534519_RemoveEnum.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908281538200_RemoveHasData.resx">
+      <DependentUpon>201908281538200_RemoveHasData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
