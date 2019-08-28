@@ -112,6 +112,10 @@
     <Compile Include="Migrations\201908281538200_RemoveHasData.Designer.cs">
       <DependentUpon>201908281538200_RemoveHasData.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908282022141_AddHasChart.cs" />
+    <Compile Include="Migrations\201908282022141_AddHasChart.Designer.cs">
+      <DependentUpon>201908282022141_AddHasChart.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
@@ -150,6 +154,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908281538200_RemoveHasData.resx">
       <DependentUpon>201908281538200_RemoveHasData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908282022141_AddHasChart.resx">
+      <DependentUpon>201908282022141_AddHasChart.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
