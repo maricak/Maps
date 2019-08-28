@@ -1,0 +1,23 @@
+﻿@model Maps.Entities.LoadDataViewModel
+
+@if (!Html.ViewData.ModelState.IsValid)
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+}
+
+@using (Ajax.BeginForm("LoadData", "Layer", null,
+                    new AjaxOptions { HttpMethod = "post", UpdateTargetId = string.Concat("schema", Model.LayerId) },
+                    new { enctype = "multipart/form-data", id = string.Concat("upload", Model.LayerId), @class = "form-inline" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="LayerId" name="LayerId" value="@Model.LayerId" />
+    <div class="form-row">
+        <div class="form-group col">
+            <label for="Datafile">File</label>
+            <input type="file" name="DataFile" id="DataFile" required class="form-control-file form-control-sm" />
+        </div>
+    </div>
+    <div class="float-right">
+        <input type="submit" value="Load" class="btn btn-link" />
+    </div>
+}

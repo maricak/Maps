@@ -3,7 +3,7 @@
 <div class="card" id="newLayer">
     @using (Ajax.BeginForm("Create", "Layer", null, 
                             new AjaxOptions { HttpMethod = "post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = "newLayer" }, 
-                            new { id = "createMap", @class = "m-1 form-inline" }))
+                            new { id = "createMap", @class = "m-1" }))
     {
         @Html.AntiForgeryToken()
         <input type="hidden" id="MapId" name="MapId" value="@Model.MapId" />

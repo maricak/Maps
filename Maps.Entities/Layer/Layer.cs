@@ -15,9 +15,10 @@ namespace Maps.Entities
         [StringLength(50)]
         public string Name { get; set; }
 
+        public virtual Map Map { get; set; }
         public bool HasData { get; set; }
 
-        public virtual Map Map { get; set; }
+        public bool HasColumns { get; set; }
 
         public ICollection<Data> Data { get; set; }
         public ICollection<Column> Columns { get; set; }

@@ -2,28 +2,24 @@
 
 <div id="@string.Concat("collapse", Model.Id)" class="collapse card" aria-labelledby="@string.Concat("heading", Model.Id)">
     <div class="card-body">
-        @if (!Html.ViewData.ModelState.IsValid)
-        {
-            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-        }
         @if (Model.HasData)
         {
             @Model.Id
+            // TODO: filter info
+        }
+        else if (Model.HasColumns)
+        {
+            <h5>Load data</h5>
+            <div id="@string.Concat("schema", Model.Id)">
+                @Html.Partial("../Layer/LoadData", new Maps.Entities.LoadDataViewModel(Model.Id))
+            </div>
         }
         else
         {
-            var onComplete = string.Concat("dataLoadComplete('", Model.Id, "')");
-            using (Ajax.BeginForm("LoadData", "Layer", null,
-                                new AjaxOptions { HttpMethod = "post", UpdateTargetId = string.Concat("collapse", Model.Id), InsertionMode = InsertionMode.ReplaceWith, OnComplete = onComplete },
-                                new { enctype = "multipart/form-data", id = string.Concat("upload", Model.Id) }))
-            {
-                <span>File</span>
-                @Html.AntiForgeryToken()
-                @Html.HiddenFor(m => m.HasData)
-                <input type="hidden" id="Id" name="Id" value="@Model.Id" />
-                <input type="file" name="DataFile" id="DataFile" required />
-                <input type="submit" value="Load" class="btn btn-link" />
-            }
+            <h5>Load data</h5>
+            <div id="@string.Concat("schema", Model.Id)">
+                @Html.Partial("../Schema/DisplayForm", new Maps.Entities.FormSchemaViewModel(Model.Id))
+            </div>
         }
     </div>
 </div>

@@ -50,6 +50,7 @@
     <Compile Include="DataReader.cs" />
     <Compile Include="JsonDataReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SchemaUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

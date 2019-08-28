@@ -16,24 +16,18 @@ namespace Maps.Utils
         {
             try
             {
+                JSchema schema = CreateSchema(layer.Id, ref messages);
+                if (schema == null)
+                {
+                    return false;
+                }
                 using (StreamReader file = new StreamReader(stream))
                 using (JsonTextReader reader = new JsonTextReader(file))
                 {
                     JArray array = JToken.ReadFrom(reader) as JArray;
-                    JSchema schema = JSchema.Parse(array[0].ToString());
-
-                    if (!GetColumns(schema, layer, out IList<Column> columns, ref messages))
-                    {
-                        return false;
-                    }
-                    array.RemoveAt(0);
                     if (!array.IsValid(schema, out messages))
                     {
                         return false;
-                    }
-                    using (var access = new DataAccess())
-                    {
-                        access.Columns.BulkInsert(columns);
                     }
                     StoreData(array, layer);
 
@@ -47,78 +41,44 @@ namespace Maps.Utils
             return false;
         }
 
-        private static readonly Dictionary<JSchemaType?, UserDataType> NameToType = new Dictionary<JSchemaType?, UserDataType>
+        private static readonly Dictionary<UserDataType, string> UserTypeToJsonType = new Dictionary<UserDataType, string>
         {
-            { JSchemaType.String, UserDataType.STRING},
-            { JSchemaType.Number, UserDataType.NUMBER},
+            { UserDataType.STRING,  "string"},
+            { UserDataType.NUMBER, "number"},
+            { UserDataType.LONGITUDE, "number"},
+            { UserDataType.LATITUDE, "number"},
         };
 
-        private bool GetColumns(JSchema schema, Layer layer, out IList<Column> columns, ref IList<string> messages)
+        private JSchema CreateSchema(Guid id, ref IList<string> messages)
         {
-            columns = new List<Column>();
-            if (schema.Type != JSchemaType.Array)
+            try
             {
-                messages.Add("File must be a JSON array with first element as JSON schema");
-                return false;
-            }
-            var itemSchema = schema.Items;
-            if (itemSchema.Count != 1 || itemSchema[0].Type != JSchemaType.Object)
-            {
-                messages.Add("Only one type of user objects is allowed");
-                return false;
-            }
-            foreach (var property in itemSchema[0].Properties)
-            {
-                var typeName = property.Value.Type;
-                if (!NameToType.TryGetValue(typeName, out UserDataType type))
+                using (var access = new DataAccess())
                 {
-                    messages.Add("Type '" + typeName + "' is not allowed");
-                    return false;
-                }
-                else
-                {
-                    Column column = new Column
+                    var columns = access.Columns.Get(c => c.Layer.Id == id).ToList();
+                    if (columns == null || columns.Count() == 0)
                     {
-                        Layer = layer,
-                        Id = Guid.NewGuid(),
-                        Name = property.Key,
-                        DataType = type
-                    };
-                    columns.Add(column);
+                        return null;
+                    }
+
+                    string schemaString = @"{'type':'array', 'items': {'type': 'object', 'properties': {";
+                    foreach (var column in columns)
+                    {
+                        schemaString += string.Format("'{0}':{{'type':'{1}'}},", column.Name, UserTypeToJsonType[column.DataType]);
+                    }
+                    schemaString += "}}}";
+
+                    JSchema schema = JSchema.Parse(schemaString);
+                    return schema;
                 }
             }
-            return CheckColumns(columns, ref messages);
+            catch (Exception ex)
+            {
+                messages.Add(ex.Message);
+                return null;
+            }
         }
 
-        private bool CheckColumns(IList<Column> columns, ref IList<string> messages)
-        {
-            if (columns.GroupBy(c => c.Name).Select(c => c.First()).Count() != columns.Count())
-            {
-                messages.Add("All columns must have unique name");
-                return false;
-            }
-            var longitude = columns.FirstOrDefault(c => c.Name == "longitude");
-            if (longitude == null)
-            {
-                messages.Add("There is no longitude column");
-                return false;
-            }
-            else
-            {
-                longitude.DataType = UserDataType.LONGITUDE;
-            }
-            var latitude = columns.FirstOrDefault(c => c.Name == "latitude");
-            if (latitude == null)
-            {
-                messages.Add("There is no latitude column");
-                return false;
-            }
-            else
-            {
-                latitude.DataType = UserDataType.LATITUDE;
-            }
-            return true;
-        }
         private void StoreData(JArray array, Layer layer)
         {
             List<Entities.Data> data = new List<Entities.Data>();

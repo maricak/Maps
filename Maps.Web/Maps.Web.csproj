@@ -446,11 +446,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ColumnController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LayerController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MapController.cs" />
+    <Compile Include="Controllers\SchemaController.cs" />
     <Compile Include="Extensions\AjaxOnly.cs" />
     <Compile Include="Extensions\IIdentityExtensions.cs" />
     <Compile Include="Global.asax.cs">
@@ -591,6 +593,9 @@
     <Content Include="Views\Home\ServerError.cshtml" />
     <Content Include="Views\Map\Tabs.cshtml" />
     <Content Include="Views\Data\HorizontalBarChart.cshtml" />
+    <Content Include="Views\Schema\Create.cshtml" />
+    <Content Include="Views\Schema\DisplayForm.cshtml" />
+    <Content Include="Views\Layer\LoadData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

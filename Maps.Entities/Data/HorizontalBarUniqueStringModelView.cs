@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace Maps.Entities
 {
@@ -16,7 +14,7 @@ namespace Maps.Entities
         public Guid ColumnId { get; set; }
         public string ColumnName { get; set; }
 
-        public HorizontalBarUniqueStringModelView(ChartColumnViewModel column, IList<DetailsDataViewModel> data)
+        public HorizontalBarUniqueStringModelView(ChartColumnViewModel column, ICollection<Data> data)
         {
             ColumnName = column.Name;
             ColumnId = column.Id;

@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,6 +16,8 @@ namespace Maps.Entities
         public string Name { get; set; }
 
         public UserDataType DataType { get; set; }
+
+        public bool HasChart { get; set; }
 
         public virtual Layer Layer { get; set; }
     }

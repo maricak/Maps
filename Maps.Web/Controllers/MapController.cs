@@ -78,7 +78,7 @@ namespace Maps.Controllers
                 }
                 using (var access = new DataAccess())
                 {
-                    Map map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers, Layers.Data").SingleOrDefault();
+                    Map map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers").SingleOrDefault();
                     if (map == null)
                     {
                         return HttpNotFound();

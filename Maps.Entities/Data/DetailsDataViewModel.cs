@@ -18,7 +18,6 @@ namespace Maps.Entities
 
         public JObject Values { get; set; }
 
-
         public DetailsDataViewModel(Data data)
         {
             Id = data.Id;

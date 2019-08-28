@@ -272,7 +272,7 @@ namespace Maps.Controllers
         [AjaxOnly]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LoadData([Bind(Include = "Id,DataFile")]DetailsCollapseLayerViewModel model)
+        public ActionResult LoadData([Bind(Include = "LayerId,DataFile")]LoadDataViewModel model)
         {
             try
             {
@@ -280,11 +280,11 @@ namespace Maps.Controllers
                 {
                     using (var access = new DataAccess())
                     {
-                        var layer = access.Layers.GetByID(model.Id);
+                        var layer = access.Layers.Get(l => l.Id == model.LayerId, includeProperties: "Map,Columns").SingleOrDefault();
                         if (layer == null)
                         {
                             ModelState.AddModelError("", "Layer does not exists.");
-                            return PartialView("DetailsCollapse", model);
+                            return PartialView(model);
                         }
                         if (layer.Map.User.Id != User.Identity.GetUser().Id)
                         {
@@ -293,7 +293,7 @@ namespace Maps.Controllers
                         if (layer.HasData)
                         {
                             ModelState.AddModelError("", "Layer already has data.");
-                            return PartialView("DetailsCollapse", model);
+                            return PartialView(model);
                         }
                         var extension = Path.GetExtension(model.DataFile.FileName);
                         if (extension == ".json")
@@ -302,10 +302,13 @@ namespace Maps.Controllers
                             JsonDataReader reader = new JsonDataReader();
                             if (reader.LoadFile(model.DataFile.InputStream, layer, ref messages))
                             {
-                                model.HasData = true;
+                                layer.HasData = true;
                                 access.Layers.Update(layer);
                                 access.Save();
                                 ModelState.AddModelError("", "Successful data load!");
+                                return PartialView(model);
+
+                                // TODO: return filter info
                             }
                             foreach (var message in messages)
                             {
@@ -323,7 +326,7 @@ namespace Maps.Controllers
             {
                 ModelState.AddModelError("", ex);
             }
-            return PartialView("DetailsCollapse", model);
+            return PartialView(model);
         }
 
         [AjaxOnly]
@@ -333,7 +336,7 @@ namespace Maps.Controllers
             {
                 using (var access = new DataAccess())
                 {
-                    var map = access.Maps.Get(m => m.Id == mapId, includeProperties: "Layers").FirstOrDefault();
+                    var map = access.Maps.Get(m => m.Id == mapId, includeProperties: "Layers").SingleOrDefault();
                     if (map == null)
                     {
                         return PartialView("../Home/BadRequest");
@@ -364,7 +367,7 @@ namespace Maps.Controllers
             {
                 using (var access = new DataAccess())
                 {
-                    var map = access.Maps.Get(m => m.Id == mapId, includeProperties: "Layers").FirstOrDefault();
+                    var map = access.Maps.Get(m => m.Id == mapId, includeProperties: "Layers").SingleOrDefault();
                     if (map == null)
                     {
                         return PartialView("../Home/BadRequest");
