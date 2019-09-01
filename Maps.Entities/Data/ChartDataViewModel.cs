@@ -28,8 +28,7 @@ namespace Maps.Entities
                     {
                         var c = new ChartColumnViewModel(column);
                         Columns.Add(c);
-                        if (column.HasChart &&
-                            (column.DataType == UserDataType.STRING || column.DataType == UserDataType.NUMBER))
+                        if (column.HasChart)
                         {
                             ChartModels.Add(column.Name, new HorizontalBarUniqueStringModelView(c, layer.Data));
                         }

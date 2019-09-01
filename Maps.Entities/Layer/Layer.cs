@@ -33,6 +33,7 @@ namespace Maps.Entities
         public Layer()
         {
             Icon = "red-dot";
+            IsVisible = true;
         }
     }
 }

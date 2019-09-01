@@ -25,9 +25,20 @@
 <div class="m-2">
     @if (Model.HasData)
     {
-        foreach (var item in @Model.ChartModels)
+        if (Model.ChartModels.Count() == 0)
         {
-            @Html.Partial("HorizontalBarChart", item.Value)
+            <div class="card">
+                <div class="card-header">
+                    Layer <strong>@Model.LayerName</strong> does not have data for charts.
+                </div>
+            </div>
+        }
+        else
+        {
+            foreach (var item in @Model.ChartModels)
+            {
+                @Html.Partial("HorizontalBarChart", item.Value)
+            }
         }
     }
     else
