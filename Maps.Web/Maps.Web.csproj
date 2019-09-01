@@ -596,9 +596,12 @@
     <Content Include="Views\Schema\Create.cshtml" />
     <Content Include="Views\Schema\DisplayForm.cshtml" />
     <Content Include="Views\Layer\LoadData.cshtml" />
+    <Content Include="Views\Map\DisplayMap.cshtml" />
+    <Content Include="Views\Layer\SelectIcon.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Images\Icons\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

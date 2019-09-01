@@ -99,6 +99,8 @@
     <Compile Include="Column\ChartColumnViewModel.cs" />
     <Compile Include="Column\Column.cs" />
     <Compile Include="Column\CreateColumnViewModel.cs" />
+    <Compile Include="Layer\SelectIconLayerViewModel.cs" />
+    <Compile Include="Map\DisplayMapViewModel.cs" />
     <Compile Include="Schema\CreateSchemaViewModel.cs" />
     <Compile Include="Data\Data.cs" />
     <Compile Include="Data\DetailsDataViewModel.cs" />

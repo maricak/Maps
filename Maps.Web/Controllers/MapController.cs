@@ -269,5 +269,38 @@ namespace Maps.Controllers
             }
             return PartialView("DetailsListItem", model);
         }
+
+        [ChildActionOnly]
+        public ActionResult DisplayMap(Guid? id)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    return PartialView("../Home/BadRequest");
+                }
+                using (var access = new DataAccess())
+                {
+                    var map = access.Maps.Get(m => m.Id == id, includeProperties:"Layers,Layers.Data,Layers.Columns").SingleOrDefault();
+                    if (map == null)
+                    {
+                        ModelState.AddModelError("", "Map does not exists.");
+                    }
+                    else if (map.User.Id != User.Identity.GetUser().Id)
+                    {
+                        return PartialView("../Home/Forbidden");
+                    }
+                    else
+                    {
+                        return PartialView(new DisplayMapViewModel(map));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex);
+            }
+            return PartialView();
+        }
     }
 }

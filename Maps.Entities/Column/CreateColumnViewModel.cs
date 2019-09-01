@@ -11,7 +11,7 @@ namespace Maps.Entities
         [Display(Name = "Data type")]
         public UserDataType DataType { get; set; }
 
-        [Display(Name = "Chart?")]
+        [Display(Name = "Filter?")]
         public bool Chart { get; set; }
 
         public CreateColumnViewModel() { }

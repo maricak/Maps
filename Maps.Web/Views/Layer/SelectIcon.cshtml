@@ -1,0 +1,20 @@
+﻿@model Maps.Entities.SelectIconLayerViewModel
+
+<div class="btn-group" id="@string.Concat("selectIcon", Model.Id)">
+    @if (!Html.ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    }
+
+    <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" style="cursor:pointer">
+        <img src="@string.Concat("/Content/Images/Icons/", @Model.Icon,".png")" /> @Model.Icon
+    </a>
+    <ul class="dropdown-menu">
+        @foreach (var icon in Model.Icons)
+        {
+            <li name="@icon" onclick="updateIcon('@Model.Id', '@icon')">
+                <img src="@string.Concat("/Content/Images/Icons/", @icon,".png")" name="@icon" /> @icon
+            </li>
+        }
+    </ul>
+</div>

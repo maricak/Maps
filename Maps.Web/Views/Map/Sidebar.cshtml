@@ -40,4 +40,26 @@
             });
         });
     });
+
+    $(".dropdown-menu li").mouseenter(function () {
+        $(this).addClass("bg-light");
+        $(this).css("cursor", "pointer")
+    });
+    $(".dropdown-menu li").mouseleave(function () {
+        $(this).removeClass("bg-light");
+        $(this).css("cursor", "")
+    });
+
+    function updateIcon(layerId, icon) {
+        $.ajax({
+            type: "post",
+            url: "../../Layer/SelectIcon",
+            data: {
+                Id: layerId,
+                Icon: icon
+            }
+        }).done(function (response) {
+            $('#selectIcon' + layerId).replaceWith(response);
+        });
+    }
 </script>

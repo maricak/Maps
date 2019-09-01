@@ -66,7 +66,12 @@ namespace Maps.Utils
                     {
                         schemaString += string.Format("'{0}':{{'type':'{1}'}},", column.Name, UserTypeToJsonType[column.DataType]);
                     }
-                    schemaString += "}}}";
+                    schemaString += "},'required':[";
+                    foreach(var column in columns)
+                    {
+                        schemaString += string.Format("'{0}',", column.Name);                            
+                    }
+                    schemaString += "]}}";
 
                     JSchema schema = JSchema.Parse(schemaString);
                     return schema;

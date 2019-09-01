@@ -334,12 +334,16 @@ namespace Maps.Controllers
         {
             try
             {
+                if (mapId == null)
+                {
+                    return PartialView("../Home/BadRequest");
+                }
                 using (var access = new DataAccess())
                 {
                     var map = access.Maps.Get(m => m.Id == mapId, includeProperties: "Layers").SingleOrDefault();
                     if (map == null)
                     {
-                        return PartialView("../Home/BadRequest");
+                        return PartialView("../Home/NotFound");
                     }
                     if (map.User.Id != User.Identity.GetUser().Id)
                     {
@@ -365,12 +369,16 @@ namespace Maps.Controllers
         {
             try
             {
+                if (mapId == null)
+                {
+                    return PartialView("../Home/BadRequest");
+                }
                 using (var access = new DataAccess())
                 {
                     var map = access.Maps.Get(m => m.Id == mapId, includeProperties: "Layers").SingleOrDefault();
                     if (map == null)
                     {
-                        return PartialView("../Home/BadRequest");
+                        return PartialView("../Home/NotFound");
                     }
                     if (map.User.Id != User.Identity.GetUser().Id)
                     {
@@ -385,6 +393,60 @@ namespace Maps.Controllers
                 }
             }
             catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex);
+            }
+            return PartialView();
+        }
+
+        [ChildActionOnly]
+        public ActionResult SelectIcon(Guid? id)
+        {
+            try
+            {
+                if(id == null)
+                {
+                    return PartialView("../Home/BadRequest");
+                }
+                using(var access = new DataAccess())
+                {
+                    var layer = access.Layers.GetByID(id);
+                    if(layer == null)
+                    {
+                        return PartialView("../Home/NotFound");
+                    }
+                    return PartialView(new SelectIconLayerViewModel(layer));
+                }
+            } catch(Exception ex)
+            {
+                ModelState.AddModelError("", ex);
+            }
+            return PartialView();
+        }
+
+        [AjaxOnly]
+        [HttpPost]
+        public ActionResult SelectIcon([Bind(Include ="Icon,Id")]SelectIconLayerViewModel model)
+        {
+            try
+            {
+                if(ModelState.IsValid)
+                {
+                    using(var access = new DataAccess())
+                    {
+                        var layer = access.Layers.GetByID(model.Id);
+                        if(layer == null)
+                        {
+                            return PartialView("../Home/NotFound");
+                        }
+                        layer.Icon = model.Icon;
+                        access.Layers.Update(layer);
+                        access.Save();
+                        return PartialView(model);
+                    }
+                }
+            }
+            catch(Exception ex)
             {
                 ModelState.AddModelError("", ex);
             }

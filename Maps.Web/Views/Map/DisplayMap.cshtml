@@ -1,0 +1,52 @@
+﻿@model Maps.Entities.DisplayMapViewModel
+
+@*<div class="map-container w-100 h-100">
+    </div>*@
+<div id="@string.Concat("googlemap", Model.Id)" class="map w-100 h-100"></div>
+
+<script>
+    function getContent(data) {
+        var c = '<table class="table table-striped table-bordered table-sm">';
+        for (var key in data) {
+            c = c.concat('<tr><th>' + key + '</th><td>' + data[key] + '</td></tr>');
+        }
+        c = c.concat('</tr></table>')
+        return c;
+    }
+
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('googlemap' + '@Model.Id'), { zoom: 8 });
+        var bounds = new google.maps.LatLngBounds();
+        var layers = @Html.Raw(Model.Layers);
+        for (var i = 0; i < layers.length; i++) {
+            var layer = layers[i];
+            var markers = [];
+            var windows = [];
+            for(var j = 0; j < layer.data.length; j++) {
+                var data = layer.data[j];
+                var marker = new google.maps.Marker({ position: {lng:data[layer.lng], lat:data[layer.lat]}, map: map });
+                if(layer.icon) {
+                    marker.setIcon('/Content/Images/Icons/' + layer.icon + '.png');
+                }
+                bounds.extend(marker.position);
+                markers.push(marker);
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: getContent(data),
+                });
+                windows.push(infowindow);
+            }
+            markers.forEach((marker, index) => {
+                var window = windows[index];
+                marker.addListener('click', function () {
+                    window.open(map, marker);
+                });
+            });
+        }
+        map.setCenter(bounds.getCenter());
+        map.fitBounds(bounds);
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWR3laZI1dX9pVrFjK2R9vA8ijTKy9zzg&callback=initMap">
+</script>

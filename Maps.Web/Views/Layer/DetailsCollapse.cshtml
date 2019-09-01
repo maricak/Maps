@@ -5,7 +5,8 @@
         @if (Model.HasData)
         {
             @Model.Id
-            // TODO: filter info
+            @Html.Action("SelectIcon", "Layer", new { id = Model.Id})
+            @*@Html.Partial("../Layer/SelectIcon", new Maps.Entities.SelectIconLayerViewModel(Model.Id))*@
         }
         else if (Model.HasColumns)
         {

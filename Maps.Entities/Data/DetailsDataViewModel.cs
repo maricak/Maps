@@ -6,22 +6,15 @@ namespace Maps.Entities
 {
     public class DetailsDataViewModel
     {
-        public Guid Id { get; set; }
-
-        public virtual Layer Layer { get; set; }
+       public JObject Values { get; set; }
 
         public string Values_
         {
-            get { return Values != null ? JsonConvert.SerializeObject(Values) : null; }
-            set { Values = JsonConvert.DeserializeObject<JObject>(value); }
+            get; set;
         }
 
-        public JObject Values { get; set; }
-
         public DetailsDataViewModel(Data data)
-        {
-            Id = data.Id;
-            Layer = data.Layer;
+        {          
             Values = data.Values;
         }
     }
