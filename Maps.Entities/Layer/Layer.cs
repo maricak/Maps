@@ -19,11 +19,15 @@ namespace Maps.Entities
         public string Icon { get; set; }
 
         public virtual Map Map { get; set; }
+
         public bool HasData { get; set; }
 
         public bool HasColumns { get; set; }
 
+        public bool IsVisible { get; set; }
+
         public ICollection<Data> Data { get; set; }
+
         public ICollection<Column> Columns { get; set; }
 
         public Layer()

@@ -1,0 +1,25 @@
+﻿@model Maps.Entities.VisibilityLayerViewModel
+
+<ul class="list-group list-group-flush" id="@string.Concat("layerVisibility", Model.Id)">
+
+    @if (!Html.ViewData.ModelState.IsValid)
+    {
+        <li class="list-group-item">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        </li>
+    }
+    <li class="list-group-item p-0 pl-3">
+        <span class="pt-2 font-weight-bold">
+            Visibile:
+        </span>
+        @Html.HiddenFor(m => m.Id)
+        @if (Model.IsVisible)
+        {
+            <input type="checkbox" checked="checked" id="IsVisible" name="IsVisible" onchange="updateVisibility('@Model.Id', this.checked)" />
+        }
+        else
+        {
+            <input type="checkbox" id="IsVisible" name="IsVisible" onchange="updateVisibility('@Model.Id', this.checked)" />
+        }
+    </li>
+</ul>

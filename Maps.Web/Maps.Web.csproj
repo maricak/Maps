@@ -599,6 +599,7 @@
     <Content Include="Views\Map\DisplayMap.cshtml" />
     <Content Include="Views\Layer\SelectIcon.cshtml" />
     <Content Include="Views\Layer\Filter.cshtml" />
+    <Content Include="Views\Layer\SetVisibility.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -63,4 +63,19 @@
             updateMap();
         });
     }
+
+    
+    function updateVisibility(layerId, visible) {
+        $.ajax({
+            type: "post",
+            url: "../../Layer/SetVisibility",
+            data: {
+                Id: layerId,
+                IsVisible: visible
+            }
+        }).done(function (response) {
+            $('#layerVisibility' + layerId).replaceWith(response);
+            updateMap();
+        });
+    }
 </script>

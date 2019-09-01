@@ -450,5 +450,35 @@ namespace Maps.Controllers
             }
             return PartialView();
         }
+
+
+        [AjaxOnly]
+        [HttpPost]
+        public ActionResult SetVisibility([Bind(Include = "IsVisible,Id")]VisibilityLayerViewModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (var access = new DataAccess())
+                    {
+                        var layer = access.Layers.GetByID(model.Id);
+                        if (layer == null)
+                        {
+                            return PartialView("../Home/NotFound");
+                        }
+                        layer.IsVisible = model.IsVisible;
+                        access.Layers.Update(layer);
+                        access.Save();
+                        return PartialView(model);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex);
+            }
+            return PartialView();
+        }
     }
 }

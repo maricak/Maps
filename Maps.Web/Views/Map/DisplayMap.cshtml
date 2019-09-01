@@ -23,6 +23,10 @@
 
         for (var i = 0; i < layers.length; i++) {
             var layer = layers[i];
+            if (!layer["visible"]) {
+                console.log("continue");
+                continue;
+            }
             var markers = [];
             var windows = [];
             for (var j = 0; j < layer.data.length; j++) {

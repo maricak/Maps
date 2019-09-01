@@ -27,7 +27,8 @@ namespace Maps.Entities
                         ["name"] = layer.Name, 
                         ["lat"] = layer.Columns.Where(c => c.DataType == UserDataType.LATITUDE).SingleOrDefault().Name,
                         ["lng"] = layer.Columns.Where(c => c.DataType == UserDataType.LONGITUDE).SingleOrDefault().Name,
-                        ["icon"] = layer.Icon ?? ""
+                        ["icon"] = layer.Icon ?? "",
+                        ["visible"] = layer.IsVisible
                     };
                     var jsonData = new JArray();
                     if (layer.Data != null)

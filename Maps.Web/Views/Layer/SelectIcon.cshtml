@@ -1,7 +1,6 @@
 ﻿@model Maps.Entities.SelectIconLayerViewModel
 
 <ul class="list-group list-group-flush" id="@string.Concat("selectIcon", Model.Id)">
-
     @if (!Html.ViewData.ModelState.IsValid)
     {
         <li class="list-group-item">
@@ -9,7 +8,7 @@
         </li>
     }
     <li class="list-group-item p-0 pl-3">
-        <span class="pt-2">
+        <span class="pt-2 font-weight-bold">
             Select icon:
         </span>
         <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" style="cursor:pointer">
