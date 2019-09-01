@@ -280,7 +280,7 @@ namespace Maps.Controllers
                 }
                 using (var access = new DataAccess())
                 {
-                    var map = access.Maps.Get(m => m.Id == id, includeProperties:"Layers,Layers.Data,Layers.Columns").SingleOrDefault();
+                    var map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers,Layers.Data,Layers.Columns").SingleOrDefault();
                     if (map == null)
                     {
                         ModelState.AddModelError("", "Map does not exists.");

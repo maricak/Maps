@@ -402,20 +402,21 @@ namespace Maps.Controllers
         {
             try
             {
-                if(id == null)
+                if (id == null)
                 {
                     return PartialView("../Home/BadRequest");
                 }
-                using(var access = new DataAccess())
+                using (var access = new DataAccess())
                 {
                     var layer = access.Layers.GetByID(id);
-                    if(layer == null)
+                    if (layer == null)
                     {
                         return PartialView("../Home/NotFound");
                     }
                     return PartialView(new FilterLayerViewModel(layer));
                 }
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 ModelState.AddModelError("", ex);
             }
@@ -424,16 +425,16 @@ namespace Maps.Controllers
 
         [AjaxOnly]
         [HttpPost]
-        public ActionResult SelectIcon([Bind(Include ="Icon,Id")]SelectIconLayerViewModel model)
+        public ActionResult SelectIcon([Bind(Include = "Icon,Id")]SelectIconLayerViewModel model)
         {
             try
             {
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
-                    using(var access = new DataAccess())
+                    using (var access = new DataAccess())
                     {
                         var layer = access.Layers.GetByID(model.Id);
-                        if(layer == null)
+                        if (layer == null)
                         {
                             return PartialView("../Home/NotFound");
                         }
@@ -444,7 +445,7 @@ namespace Maps.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ModelState.AddModelError("", ex);
             }

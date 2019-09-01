@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using Newtonsoft.Json.Linq;
 
 namespace Maps.Entities
 {
     public class DetailsDataViewModel
     {
-       public JObject Values { get; set; }
+        public JObject Values { get; set; }
 
         public string Values_
         {
@@ -14,7 +12,7 @@ namespace Maps.Entities
         }
 
         public DetailsDataViewModel(Data data)
-        {          
+        {
             Values = data.Values;
         }
     }

@@ -22,14 +22,12 @@ namespace Maps.Entities
                 HasData = layer.HasData;
                 Columns = new List<ChartColumnViewModel>();
                 ChartModels = new Dictionary<string, HorizontalBarUniqueStringModelView>();
-                if (layer.Data != null)
+                if (layer.HasData && layer.Data != null)
                 {
-
                     foreach (var column in layer.Columns)
                     {
                         var c = new ChartColumnViewModel(column);
                         Columns.Add(c);
-
                         if (column.HasChart &&
                             (column.DataType == UserDataType.STRING || column.DataType == UserDataType.NUMBER))
                         {

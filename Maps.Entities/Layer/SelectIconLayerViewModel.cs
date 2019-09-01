@@ -30,7 +30,7 @@ namespace Maps.Entities
             Icons = ICON_NAMES;
 
             Id = layer.Id;
-            Icon = layer.Icon;                
+            Icon = layer.Icon;
         }
     }
 }

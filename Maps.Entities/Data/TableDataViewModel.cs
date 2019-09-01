@@ -20,7 +20,7 @@ namespace Maps.Entities
                 LayerName = layer.Name;
                 HasData = layer.HasData;
                 Data = new List<DetailsDataViewModel>();
-                if (layer.Data != null)
+                if (layer.HasData && layer.Data != null)
                 {
                     foreach (var data in layer.Data)
                     {
