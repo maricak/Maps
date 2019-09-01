@@ -47,6 +47,19 @@
 
 
 <script>
+    function updateMap() {
+        $.ajax({
+            type: "get",
+            url: "../../Map/DisplayMap",
+            data: {
+                id: '@Model.Id'
+            }
+        }).done(function (msg) {
+            $("#nav-map").html(msg);
+            initMap();
+        });
+    }
+
     function tableDropdownLinkClick() {
         var request = $.ajax({
             type: "get",

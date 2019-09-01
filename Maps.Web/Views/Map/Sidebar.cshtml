@@ -60,6 +60,7 @@
             }
         }).done(function (response) {
             $('#selectIcon' + layerId).replaceWith(response);
+            updateMap();
         });
     }
 </script>

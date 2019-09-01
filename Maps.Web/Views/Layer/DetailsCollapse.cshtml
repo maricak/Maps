@@ -1,27 +1,23 @@
 ﻿@model Maps.Entities.DetailsCollapseLayerViewModel
 
 <div id="@string.Concat("collapse", Model.Id)" class="collapse card" aria-labelledby="@string.Concat("heading", Model.Id)">
-    <div class="card-body">
-        @if (Model.HasData)
-        {
-            @Model.Id
-            @Html.Action("SelectIcon", "Layer", new { id = Model.Id})
-            @*@Html.Partial("../Layer/SelectIcon", new Maps.Entities.SelectIconLayerViewModel(Model.Id))*@
-        }
-        else if (Model.HasColumns)
-        {
-            <h5>Load data</h5>
-            <div id="@string.Concat("schema", Model.Id)">
-                @Html.Partial("../Layer/LoadData", new Maps.Entities.LoadDataViewModel(Model.Id))
-            </div>
-        }
-        else
-        {
-            <h5>Load data</h5>
-            <div id="@string.Concat("schema", Model.Id)">
-                @Html.Partial("../Schema/DisplayForm", new Maps.Entities.FormSchemaViewModel(Model.Id))
-            </div>
-        }
-    </div>
+    @if (Model.HasData)
+    {
+        @Html.Action("Filter", "Layer", new { id = Model.Id })
+    }
+    else if (Model.HasColumns)
+    {
+        <div id="@string.Concat("schema", Model.Id)">
+            @Html.Partial("../Layer/LoadData", new Maps.Entities.LoadDataViewModel(Model.Id))
+
+        </div>
+    }
+    else
+    {
+        <div id="@string.Concat("schema", Model.Id)">
+            @Html.Partial("../Schema/DisplayForm", new Maps.Entities.FormSchemaViewModel(Model.Id))
+        </div>
+
+    }
 </div>
 

@@ -20,7 +20,7 @@ namespace Maps.Entities
             Layers = new JArray();
             foreach (var layer in map.Layers)
             {
-                if (layer != null)
+                if (layer != null && layer.HasData)
                 {
                     var jsonLayer = new JObject
                     {

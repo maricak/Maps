@@ -306,9 +306,8 @@ namespace Maps.Controllers
                                 access.Layers.Update(layer);
                                 access.Save();
                                 ModelState.AddModelError("", "Successful data load!");
-                                return PartialView(model);
 
-                                // TODO: return filter info
+                                return RedirectToAction("Filter", new { id = model.LayerId });
                             }
                             foreach (var message in messages)
                             {
@@ -399,8 +398,7 @@ namespace Maps.Controllers
             return PartialView();
         }
 
-        [ChildActionOnly]
-        public ActionResult SelectIcon(Guid? id)
+        public ActionResult Filter(Guid? id)
         {
             try
             {
@@ -415,7 +413,7 @@ namespace Maps.Controllers
                     {
                         return PartialView("../Home/NotFound");
                     }
-                    return PartialView(new SelectIconLayerViewModel(layer));
+                    return PartialView(new FilterLayerViewModel(layer));
                 }
             } catch(Exception ex)
             {

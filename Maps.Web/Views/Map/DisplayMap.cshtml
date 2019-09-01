@@ -15,14 +15,18 @@
     }
 
     function initMap() {
-        var map = new google.maps.Map(document.getElementById('googlemap' + '@Model.Id'), { zoom: 8 });
+        var map = new google.maps.Map(document.getElementById('googlemap' + '@Model.Id'), { zoom: 0});
         var bounds = new google.maps.LatLngBounds();
         var layers = @Html.Raw(Model.Layers);
+
+        var hasData = false;
+
         for (var i = 0; i < layers.length; i++) {
             var layer = layers[i];
             var markers = [];
             var windows = [];
-            for(var j = 0; j < layer.data.length; j++) {
+            for (var j = 0; j < layer.data.length; j++) {
+                hasData = true;
                 var data = layer.data[j];
                 var marker = new google.maps.Marker({ position: {lng:data[layer.lng], lat:data[layer.lat]}, map: map });
                 if(layer.icon) {
@@ -43,10 +47,12 @@
                 });
             });
         }
-        map.setCenter(bounds.getCenter());
-        map.fitBounds(bounds);
+        if (hasData) {
+            map.setCenter(bounds.getCenter());
+            map.fitBounds(bounds);
+        } else {
+            map.setCenter({ lat: 40, lng: 0 });
+            map.setZoom(2);
+        }
     }
-</script>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWR3laZI1dX9pVrFjK2R9vA8ijTKy9zzg&callback=initMap">
 </script>

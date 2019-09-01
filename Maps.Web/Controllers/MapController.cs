@@ -270,7 +270,6 @@ namespace Maps.Controllers
             return PartialView("DetailsListItem", model);
         }
 
-        [ChildActionOnly]
         public ActionResult DisplayMap(Guid? id)
         {
             try
