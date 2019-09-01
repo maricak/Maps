@@ -20,7 +20,7 @@ namespace Maps.Entities
             Layers = new JArray();
             foreach (var layer in map.Layers)
             {
-                if (layer != null && layer.HasData)
+                if (layer != null && layer.HasData && layer.IsVisible)
                 {
                     var jsonLayer = new JObject
                     {
@@ -28,7 +28,6 @@ namespace Maps.Entities
                         ["lat"] = layer.Columns.Where(c => c.DataType == UserDataType.LATITUDE).SingleOrDefault().Name,
                         ["lng"] = layer.Columns.Where(c => c.DataType == UserDataType.LONGITUDE).SingleOrDefault().Name,
                         ["icon"] = layer.Icon ?? "",
-                        ["visible"] = layer.IsVisible
                     };
                     var jsonData = new JArray();
                     if (layer.Data != null)
