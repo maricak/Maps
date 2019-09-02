@@ -1,4 +1,4 @@
-﻿@model Maps.Entities.DetailsListItemMapViewModel
+﻿@model Maps.Entities.ListItemMapViewModel
 
 <div class="card" id="@string.Concat("map", Model.Id)">
     @using (Ajax.BeginForm("Delete", "Map", null, new AjaxOptions { HttpMethod = "post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = string.Concat("map", Model.Id) }))

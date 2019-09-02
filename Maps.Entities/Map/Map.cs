@@ -18,6 +18,8 @@ namespace Maps.Entities
         [DataType(DataType.DateTime)]
         public DateTime CreationTime { get; set; }
 
+        public bool IsPublic { get; set; }
+
         public ICollection<Layer> Layers { get; set; }
 
         public virtual User User { get; set; }

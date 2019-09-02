@@ -12,6 +12,8 @@ namespace Maps.Entities
 
         public List<DropdownItemLayerViewModel> DropdownLayerItems { get; set; }
 
+        public PublicMapViewModel SetPublic { get; set; }
+
         public DetailsMapViewModel()
         {
             Layers = new List<DetailsLayerViewModel>();
@@ -22,6 +24,7 @@ namespace Maps.Entities
         {
             Id = map.Id;
             Name = map.Name;
+            SetPublic = new PublicMapViewModel(map);
             Layers = new List<DetailsLayerViewModel>();
             DropdownLayerItems = new List<DropdownItemLayerViewModel>();
 

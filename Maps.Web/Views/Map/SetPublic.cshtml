@@ -1,0 +1,20 @@
+﻿@model Maps.Entities.PublicMapViewModel
+
+<li class="nav-item ml-auto" id="@string.Concat("mapPublic", Model.Id)">
+    <div class="nav-link">
+        @if (!Html.ViewData.ModelState.IsValid)
+        {
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        }
+        Public:
+        @Html.HiddenFor(m => m.Id)
+        @if (Model.IsPublic)
+        {
+            <input type="checkbox" checked="checked" id="IsPublic" name="IsPublic" onchange="updatePublic('@Model.Id', this.checked)" />
+        }
+        else
+        {
+            <input type="checkbox" id="IsPublic" name="IsPublic" onchange="updatePublic('@Model.Id', this.checked)" />
+        }
+    </div>
+</li>

@@ -128,6 +128,10 @@
     <Compile Include="Migrations\201909011727070_AddLayerIsVisible.Designer.cs">
       <DependentUpon>201909011727070_AddLayerIsVisible.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909020622438_AddMapIsPublic.cs" />
+    <Compile Include="Migrations\201909020622438_AddMapIsPublic.Designer.cs">
+      <DependentUpon>201909020622438_AddMapIsPublic.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
@@ -178,6 +182,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909011727070_AddLayerIsVisible.resx">
       <DependentUpon>201909011727070_AddLayerIsVisible.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909020622438_AddMapIsPublic.resx">
+      <DependentUpon>201909020622438_AddMapIsPublic.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

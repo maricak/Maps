@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<Maps.Entities.DetailsListItemMapViewModel>
+﻿@model PagedList.IPagedList<Maps.Entities.ListItemMapViewModel>
 @using PagedList.Mvc;
 
 @{
@@ -19,7 +19,7 @@
         @Html.Partial("AddMap", new ViewDataDictionary())
         @foreach (var item in Model)
         {
-            @Html.Partial("DetailsListItem", item)
+            @Html.Partial("ListItem", item)
         }
         @if (@Model.PageCount > 1)
         {

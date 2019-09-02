@@ -570,7 +570,7 @@
     <Content Include="Views\Layer\Create.cshtml" />
     <Content Include="Views\Layer\Details.cshtml" />
     <Content Include="Views\Layer\Edit.cshtml" />
-    <Content Include="Views\Map\DetailsListItem.cshtml" />
+    <Content Include="Views\Map\ListItem.cshtml" />
     <Content Include="Views\Map\AddMap.cshtml" />
     <Content Include="Views\Layer\AddLayer.cshtml" />
     <Content Include="Views\Home\Forbidden.cshtml" />
@@ -600,6 +600,7 @@
     <Content Include="Views\Layer\SelectIcon.cshtml" />
     <Content Include="Views\Layer\Filter.cshtml" />
     <Content Include="Views\Layer\SetVisibility.cshtml" />
+    <Content Include="Views\Map\SetPublic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

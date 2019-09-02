@@ -23,10 +23,10 @@ namespace Maps.Controllers
                 using (var access = new DataAccess())
                 {
                     var maps = access.Maps.Get(m => m.User.Id.Equals(userId), orderBy: m => m.OrderByDescending(i => i.CreationTime));
-                    List<DetailsListItemMapViewModel> models = new List<DetailsListItemMapViewModel>();
+                    List<ListItemMapViewModel> models = new List<ListItemMapViewModel>();
                     foreach (var map in maps.ToList())
                     {
-                        models.Add(new DetailsListItemMapViewModel(map));
+                        models.Add(new ListItemMapViewModel(map));
                     }
                     return View(models.ToPagedList(page ?? 1, PAGE_SIZE));
                 }
@@ -39,7 +39,7 @@ namespace Maps.Controllers
         }
 
         [AjaxOnly]
-        public ActionResult DetailsListItem(Guid? id)
+        public ActionResult ListItem(Guid? id)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace Maps.Controllers
                     {
                         return PartialView("../Home/Forbidden");
                     }
-                    return PartialView(new DetailsListItemMapViewModel(map));
+                    return PartialView(new ListItemMapViewModel(map));
                 }
             }
             catch (Exception ex)
@@ -146,7 +146,7 @@ namespace Maps.Controllers
                         {
                             access.Maps.Insert(map);
                             access.Save();
-                            return PartialView("AddMap", new DetailsListItemMapViewModel(map));
+                            return PartialView("AddMap", new ListItemMapViewModel(map));
                         }
                     }
                 }
@@ -221,7 +221,7 @@ namespace Maps.Controllers
                             map.Name = model.Name;
                             access.Maps.Update(map);
                             access.Save();
-                            return PartialView("DetailsListItem", new DetailsListItemMapViewModel(map));
+                            return PartialView("DetailsListItem", new ListItemMapViewModel(map));
                         }
                     }
                 }
@@ -267,7 +267,7 @@ namespace Maps.Controllers
             {
                 ModelState.AddModelError("", ex);
             }
-            return PartialView("DetailsListItem", model);
+            return PartialView("ListItem", model);
         }
 
         public ActionResult DisplayMap(Guid? id)
@@ -292,6 +292,35 @@ namespace Maps.Controllers
                     else
                     {
                         return PartialView(new DisplayMapViewModel(map));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex);
+            }
+            return PartialView();
+        }
+
+        [AjaxOnly]
+        [HttpPost]
+        public ActionResult SetPublic([Bind(Include = "IsPublic,Id")]PublicMapViewModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (var access = new DataAccess())
+                    {
+                        var map = access.Maps.GetByID(model.Id);
+                        if (map == null)
+                        {
+                            return PartialView("../Home/NotFound");
+                        }
+                        map.IsPublic= model.IsPublic;
+                        access.Maps.Update(map);
+                        access.Save();
+                        return PartialView(model);
                     }
                 }
             }

@@ -64,7 +64,6 @@
             updateMap();
         });
     }
-
     
     function updateVisibility(layerId, visible) {
         $.ajax({
@@ -77,6 +76,19 @@
         }).done(function (response) {
             $('#layerVisibility' + layerId).replaceWith(response);
             updateMap();
+        });
+    }
+
+    function updatePublic(mapId, public) {
+        $.ajax({
+            type: "post",
+            url: "../SetPublic",
+            data: {
+                Id: mapId,
+                IsPublic: public
+            }
+        }).done(function (response) {
+            $('#mapPublic' + mapId).replaceWith(response);
         });
     }
 </script>

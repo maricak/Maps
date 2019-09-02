@@ -33,11 +33,12 @@
                         @Html.Partial("../Layer/ChartDropdown", Model.DropdownLayerItems)
                     </div>
                 </li>
+                @Html.Partial("SetPublic", Model.SetPublic)
             </ul>
         </nav>
         <div class="tab-content">
             <div class="tab-pane fade show active" id="nav-map" role="tabpanel" aria-labelledby="nav-map-tab">
-                @Html.Action("DisplayMap", "Map", new { id = Model.Id })               
+                @Html.Action("DisplayMap", "Map", new { id = Model.Id })
             </div>
             <div class="tab-pane fade" id="nav-table" role="tabpanel" aria-labelledby="nav-table-tab"></div>
             <div class="tab-pane fade" id="nav-chart" role="tabpanel" aria-labelledby="nav-chart-tab"></div>
@@ -90,6 +91,10 @@
         console.log(id);
         $('#collapse' + id).collapse('show')
     }
+</script>
+
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWR3laZI1dX9pVrFjK2R9vA8ijTKy9zzg&callback=updateMap">
 </script>
 
 
