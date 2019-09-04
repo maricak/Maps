@@ -102,6 +102,8 @@
     <Compile Include="Layer\VisibilityLayerViewModel.cs" />
     <Compile Include="Layer\FilterLayerViewModel.cs" />
     <Compile Include="Layer\SelectIconLayerViewModel.cs" />
+    <Compile Include="Map\CopyMapViewModel.cs" />
+    <Compile Include="Map\ViewMapViewModel.cs" />
     <Compile Include="Map\DisplayMapViewModel.cs" />
     <Compile Include="Map\PublicMapViewModel.cs" />
     <Compile Include="Schema\CreateSchemaViewModel.cs" />

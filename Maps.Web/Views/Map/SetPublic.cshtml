@@ -1,20 +1,26 @@
 ﻿@model Maps.Entities.PublicMapViewModel
 
 <li class="nav-item ml-auto" id="@string.Concat("mapPublic", Model.Id)">
-    <div class="nav-link">
+    <div class="nav-link p-0">
         @if (!Html.ViewData.ModelState.IsValid)
         {
             @Html.ValidationSummary(false, "", new { @class = "text-danger" })
         }
-        Public:
         @Html.HiddenFor(m => m.Id)
         @if (Model.IsPublic)
         {
-            <input type="checkbox" checked="checked" id="IsPublic" name="IsPublic" onchange="updatePublic('@Model.Id', this.checked)" />
+            @Html.ActionLink("Share this link", "View", "Map", new { id = Model.Id }, new { @class = "btn btn-link" })
+            <span class="btn btn-link mr-2">
+                Public:
+                <input type="checkbox" checked="checked" id="IsPublic" name="IsPublic" onchange="updatePublic('@Model.Id', this.checked)" />
+            </span>
         }
         else
         {
-            <input type="checkbox" id="IsPublic" name="IsPublic" onchange="updatePublic('@Model.Id', this.checked)" />
+            <span class="btn btn-link  mr-2">
+                Public:
+                <input type="checkbox" id="IsPublic" name="IsPublic" onchange="updatePublic('@Model.Id', this.checked)" />
+            </span>
         }
     </div>
 </li>

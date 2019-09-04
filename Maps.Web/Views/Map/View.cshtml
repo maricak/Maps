@@ -1,0 +1,24 @@
+﻿@model Maps.Entities.ViewMapViewModel
+
+@if (!Html.ViewData.ModelState.IsValid)
+{
+    <div class="row bg-white">
+        <div class="col card">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        </div>
+    </div>
+}
+
+<div id="copy">
+    @Html.Partial("Copy", new Maps.Entities.CopyMapViewModel(Model.Id))
+</div>
+
+<div class="row h-100 bg-white">
+    <div class="col border p-0">
+        @Html.Action("DisplayMap", "Map", new { id = Model.Id })
+    </div>
+</div>
+
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWR3laZI1dX9pVrFjK2R9vA8ijTKy9zzg&callback=initMap">
+</script>

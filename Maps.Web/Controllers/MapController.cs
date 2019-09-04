@@ -13,10 +13,12 @@ namespace Maps.Controllers
     public class MapController : Controller
     {
         private const int PAGE_SIZE = 10;
+        readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public ActionResult Index(int? page)
         {
+            logger.InfoFormat("page={0}", page);
             try
             {
                 var userId = User.Identity.GetUser().Id;
@@ -285,7 +287,7 @@ namespace Maps.Controllers
                     {
                         ModelState.AddModelError("", "Map does not exists.");
                     }
-                    else if (map.User.Id != User.Identity.GetUser().Id)
+                    else if (map.User.Id != User.Identity.GetUser().Id && !map.IsPublic)
                     {
                         return PartialView("../Home/Forbidden");
                     }
@@ -317,7 +319,7 @@ namespace Maps.Controllers
                         {
                             return PartialView("../Home/NotFound");
                         }
-                        map.IsPublic= model.IsPublic;
+                        map.IsPublic = model.IsPublic;
                         access.Maps.Update(map);
                         access.Save();
                         return PartialView(model);
@@ -327,6 +329,128 @@ namespace Maps.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex);
+            }
+            return PartialView();
+        }
+
+        public ActionResult View(Guid? id)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                using (var access = new DataAccess())
+                {
+                    Map map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers").SingleOrDefault();
+                    if (map == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    if (!map.IsPublic)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(new ViewMapViewModel(map));
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex);
+            }
+            return View();
+        }
+
+        [AjaxOnly]
+        [HttpPost]
+        public ActionResult Copy([Bind(Include = "Id")]CopyMapViewModel model)
+        {
+            var newMapId = Guid.NewGuid();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (var access = new DataAccess())
+                    {
+                        var map = access.Maps.Get(m => m.Id == model.Id, includeProperties: "Layers,Layers.Columns,Layers.Data").SingleOrDefault();
+                        if (map == null)
+                        {
+                            return PartialView("../Home/NotFound");
+                        }
+                        var userId = User.Identity.GetUser().Id;
+                        var user = access.Users.GetByID(userId);
+                        if (user == null)
+                        {
+                            return PartialView("../Home/BadRequest");
+                        }
+                        Map newMap = new Map()
+                        {
+                            Id = newMapId,
+                            CreationTime = DateTime.UtcNow,
+                            Name = string.Concat("map", newMapId),
+                            User = user,
+                        };
+                        access.Maps.Insert(newMap);
+                        foreach (var layer in map.Layers)
+                        {
+                            Layer newLayer = new Layer()
+                            {
+                                Id = Guid.NewGuid(),
+                                Map = newMap,
+                                HasColumns = layer.HasColumns,
+                                HasData = layer.HasData,
+                                IsVisible = layer.IsVisible,
+                                Name = layer.Name,
+                                Icon = layer.Icon
+                            };
+                            access.Layers.Insert(newLayer);
+                            foreach (var column in layer.Columns)
+                            {
+                                Column newColumn = new Column()
+                                {
+                                    Id = Guid.NewGuid(),
+                                    DataType = column.DataType,
+                                    HasChart = column.HasChart,
+                                    Layer = newLayer,
+                                    Name = column.Name
+                                };
+                                access.Columns.Insert(newColumn);
+                            }
+                            access.Save();
+                            var dataList = new List<Entities.Data>();
+                            foreach (var data in layer.Data)
+                            {
+                                Entities.Data newData = new Entities.Data()
+                                {
+                                    Id = Guid.NewGuid(),
+                                    Layer = newLayer,
+                                    Values = data.Values
+                                };
+                                dataList.Add(newData);
+                            }
+                            access.Data.BulkInsert(dataList);
+                            access.Save();
+                        }
+                        ModelState.AddModelError("", "Successful copy!");
+                        return PartialView();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex);
+                try
+                {
+                    using (var access = new DataAccess())
+                    {
+                        access.Maps.Delete(newMapId);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    ModelState.AddModelError("", exc);
+                }
             }
             return PartialView();
         }
