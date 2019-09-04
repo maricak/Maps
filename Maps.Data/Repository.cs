@@ -6,7 +6,11 @@ using System.Linq.Expressions;
 
 namespace Maps.Data
 {
-
+    /// <summary>
+    /// Template class the represents one Table in the database and 
+    /// has basic methods for data manipulation.
+    /// </summary>
+    /// <typeparam name="TEntity">Type of table entity</typeparam>
     public class Repository<TEntity> where TEntity : class
     {
         internal MapsDbContext context;
@@ -18,6 +22,13 @@ namespace Maps.Data
             dbSet = context.Set<TEntity>();
         }
 
+        /// <summary>
+        /// Returns entitys that meet filter requirements.
+        /// </summary>
+        /// <param name="filter">Returned entities will meet these requirements.</param>
+        /// <param name="orderBy">Order of the returned entities</param>
+        /// <param name="includeProperties">Related entities to be included in the query result</param>
+        /// <returns>List od entity entities.</returns>
         public virtual IEnumerable<TEntity> Get(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
@@ -46,6 +57,11 @@ namespace Maps.Data
             }
         }
 
+        /// <summary>
+        /// Returns entity from the database with the given primary key.
+        /// </summary>
+        /// <param name="id">Primary key of the entity.</param>
+        /// <returns>Found entity or null.</returns>
         public virtual TEntity GetByID(object id)
         {
             if (id != null)
@@ -55,6 +71,10 @@ namespace Maps.Data
             return null;
         }
 
+        /// <summary>
+        /// Inserts new entities in corresponding dbSet
+        /// </summary>
+        /// <param name="entity">New entity to be added to the dbSet.</param>
         public virtual void Insert(TEntity entity)
         {
             if (entity != null)
@@ -63,6 +83,10 @@ namespace Maps.Data
             }
         }
 
+        /// <summary>
+        /// Inserts list of entities in the corresponding dbSet.
+        /// </summary>
+        /// <param name="entities">List of entities to be added to the dbSet.</param>
         public virtual void BulkInsert(IList<TEntity> entities)
         {
             if (entities != null && entities.Count != 0)
@@ -71,6 +95,10 @@ namespace Maps.Data
             }
         }
 
+        /// <summary>
+        /// Deletes entity with the given id.
+        /// </summary>
+        /// <param name="id">Id of the entity to be deleted.</param>
         public virtual void Delete(object id)
         {
             TEntity entityToDelete = dbSet.Find(id);
@@ -80,6 +108,10 @@ namespace Maps.Data
             }
         }
 
+        /// <summary>
+        /// Deltes given entity.
+        /// </summary>
+        /// <param name="entityToDelete">Entity to be deleted.</param>
         public virtual void Delete(TEntity entityToDelete)
         {
             if (entityToDelete != null)
@@ -92,6 +124,10 @@ namespace Maps.Data
             }
         }
 
+        /// <summary>
+        /// Updates given entity in the database.
+        /// </summary>
+        /// <param name="entityToUpdate">entity to be updated.</param>
         public virtual void Update(TEntity entityToUpdate)
         {
             if (entityToUpdate != null)

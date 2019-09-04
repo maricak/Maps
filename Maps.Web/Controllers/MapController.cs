@@ -223,7 +223,7 @@ namespace Maps.Controllers
                             map.Name = model.Name;
                             access.Maps.Update(map);
                             access.Save();
-                            return PartialView("DetailsListItem", new ListItemMapViewModel(map));
+                            return PartialView("ListItem", new ListItemMapViewModel(map));
                         }
                     }
                 }

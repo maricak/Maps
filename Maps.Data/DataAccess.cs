@@ -3,10 +3,14 @@ using System;
 
 namespace Maps.Data
 {
+    /// <summary>
+    /// Provides access to the database through the corresponding repositories. 
+    /// </summary>
     public class DataAccess : IDisposable
     {
         private readonly MapsDbContext context = new MapsDbContext();
 
+        #region Repositories
         public Repository<Map> Maps
         {
             get
@@ -35,7 +39,6 @@ namespace Maps.Data
                 return new Repository<Column>(context);
             }
         }
-
         public Repository<Entities.Data> Data
         {
             get
@@ -43,7 +46,11 @@ namespace Maps.Data
                 return new Repository<Entities.Data>(context);
             }
         }
+        #endregion
 
+        /// <summary>
+        /// Saves all changes made to the database entities.
+        /// </summary>
         public void Save()
         {
             context.BatchSaveChanges();

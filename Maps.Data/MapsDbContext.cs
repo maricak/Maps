@@ -4,12 +4,13 @@ using System.Data.Entity;
 
 namespace Maps.Data
 {
+    /// <summary>
+    /// Database context that maps C# objects rows in the database.
+    /// </summary>
     public class MapsDbContext : IdentityDbContext<User>
     {
         public MapsDbContext()
-            : base("MapsConnection", throwIfV1Schema: false)
-        {
-        }
+            : base("MapsConnection", throwIfV1Schema: false) { }
 
         public static MapsDbContext Create()
         {
@@ -29,6 +30,7 @@ namespace Maps.Data
             modelBuilder.Entity<Entities.Data>()
                 .Property(d => d.Values_).HasColumnName("Values");
 
+            // OnDeleteCascade setup
             modelBuilder.Entity<Layer>()
               .HasOptional(l => l.Map)
               .WithMany(m => m.Layers)
@@ -45,9 +47,11 @@ namespace Maps.Data
               .WillCascadeOnDelete(true);
         }
 
+        #region Dbsets
         public virtual DbSet<Map> Maps { get; set; }
         public virtual DbSet<Layer> Layers { get; set; }
         public virtual DbSet<Column> Columns { get; set; }
         public virtual DbSet<Entities.Data> Data { get; set; }
+        #endregion
     }
 }
