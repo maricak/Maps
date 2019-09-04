@@ -2,9 +2,12 @@
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel for the information about given layer 
+    /// in the sidebar inside its header.
+    /// </summary>
     public class DetailsHeaderLayerViewModel
     {
-        public Guid MapId { get; set; }
         public Guid Id { get; set; }
         public string Name { get; set; }
 
@@ -13,10 +16,6 @@ namespace Maps.Entities
         {
             if (layer != null)
             {
-                if (layer.Map != null)
-                {
-                    MapId = layer.Map.Id;
-                }
                 Id = layer.Id;
                 Name = layer.Name;
             }

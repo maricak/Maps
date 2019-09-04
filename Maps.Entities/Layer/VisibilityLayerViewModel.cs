@@ -2,6 +2,10 @@
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel used for changing visibility on a 
+    /// map of the given layer.
+    /// </summary>
     public class VisibilityLayerViewModel
     {
         public Guid Id { get; set; }
@@ -11,8 +15,11 @@ namespace Maps.Entities
         public VisibilityLayerViewModel() { }
         public VisibilityLayerViewModel(Layer layer)
         {
-            Id = layer.Id;
-            IsVisible = layer.IsVisible;
+            if (layer != null)
+            {
+                Id = layer.Id;
+                IsVisible = layer.IsVisible;
+            }
         }
     }
 }

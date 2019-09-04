@@ -40,7 +40,8 @@ namespace Maps.Controllers
             {
                 ModelState.AddModelError("", ex);
             }
-            return PartialView(new DetailsLayerViewModel(mapId));
+            // TODO: zato je ovde isao mapId
+            return PartialView(new DetailsLayerViewModel());
         }
 
         [AjaxOnly]
@@ -236,7 +237,7 @@ namespace Maps.Controllers
         [AjaxOnly]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete([Bind(Include = "Id,MapId,Name")] DetailsHeaderLayerViewModel model)
+        public ActionResult Delete([Bind(Include = "Id,Name")] DetailsHeaderLayerViewModel model)
         {
             try
             {

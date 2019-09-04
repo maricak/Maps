@@ -5,6 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// entity that represents one row in Layer table.
+    /// </summary>
     [Table("Layer")]
 
     public class Layer
@@ -18,6 +21,9 @@ namespace Maps.Entities
         [StringLength(150)]
         public string Icon { get; set; }
 
+        /// <summary>
+        /// Layer has a map it belongs to.
+        /// </summary>
         public virtual Map Map { get; set; }
 
         public bool HasData { get; set; }
@@ -26,8 +32,14 @@ namespace Maps.Entities
 
         public bool IsVisible { get; set; }
 
+        /// <summary>
+        /// Layer has a collection of its data.
+        /// </summary>
         public ICollection<Data> Data { get; set; }
 
+        /// <summary>
+        /// Layer has a collection of its columns.
+        /// </summary>
         public ICollection<Column> Columns { get; set; }
 
         public Layer()

@@ -2,6 +2,10 @@
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// List of layers in the dropdown lists for displaying Data 
+    /// table and charts.
+    /// </summary>
     public class DropdownItemLayerViewModel
     {
         public Guid Id { get; set; }

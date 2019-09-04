@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel for editing map's name.
+    /// </summary>
     public class EditMapViewModel
     {
         public Guid Id { get; set; }
@@ -16,9 +19,12 @@ namespace Maps.Entities
         public EditMapViewModel() { }
         public EditMapViewModel(Map map)
         {
-            Id = map.Id;
-            Name = map.Name;
-            CreationTime = map.CreationTime;
+            if (map != null)
+            {
+                Id = map.Id;
+                Name = map.Name;
+                CreationTime = map.CreationTime;
+            }
         }
     }
 }

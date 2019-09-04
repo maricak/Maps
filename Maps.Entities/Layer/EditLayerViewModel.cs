@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel for editing name of the given layer.
+    /// </summary>
     public class EditLayerViewModel
     {
         public Guid Id { get; set; }
@@ -11,12 +14,14 @@ namespace Maps.Entities
         [StringLength(50, ErrorMessage = "Name must be less than {1} characters.")]
         public string Name { get; set; }
 
-
         public EditLayerViewModel() { }
         public EditLayerViewModel(Layer layer)
         {
-            Id = layer.Id;
-            Name = layer.Name;
+            if (layer != null)
+            {
+                Id = layer.Id;
+                Name = layer.Name;
+            }
         }
     }
 }

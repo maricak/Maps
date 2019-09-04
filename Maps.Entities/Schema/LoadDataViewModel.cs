@@ -3,6 +3,9 @@ using System.Web;
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel for loading data to the layer from the input file.
+    /// </summary>
     public class LoadDataViewModel
     {
         public Guid LayerId { get; set; }

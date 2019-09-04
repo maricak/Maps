@@ -1,5 +1,9 @@
 ﻿namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel for displaying all data regarding the filtering 
+    /// inside a given layer: icon change, visibility change...
+    /// </summary>
     public class FilterLayerViewModel
     {
         public SelectIconLayerViewModel SelectIcon { get; set; }

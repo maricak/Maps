@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel for createing new layer for the given map.
+    /// </summary>
     public class CreateLayerViewModel
     {
         [Required(ErrorMessage = "Map ID is required.")]

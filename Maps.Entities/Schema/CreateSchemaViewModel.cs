@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel for input of schema(information about columns) for a given 
+    /// layer and number of columns.
+    /// </summary>
     public class CreateSchemaViewModel
     {
         public Guid LayerId { get; set; }

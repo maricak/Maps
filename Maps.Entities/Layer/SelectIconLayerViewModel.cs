@@ -3,8 +3,15 @@ using System.Collections.Generic;
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel for changing icon of the given layer.
+    /// </summary>
     public class SelectIconLayerViewModel
     {
+        /// <summary>
+        /// List of all awailable icons. Item in the list must match 
+        /// name of the icon file.
+        /// </summary>
         public static readonly List<string> ICON_NAMES = new List<string>()
             {
                 "red", "red-dot",
@@ -18,6 +25,10 @@ namespace Maps.Entities
             };
         public Guid Id { get; set; }
         public string Icon { get; set; }
+
+        /// <summary>
+        /// List of all posible icons used to dislay selection.
+        /// </summary>
         public IList<string> Icons { get; set; }
 
         public SelectIconLayerViewModel()
@@ -28,9 +39,11 @@ namespace Maps.Entities
         public SelectIconLayerViewModel(Layer layer)
         {
             Icons = ICON_NAMES;
-
-            Id = layer.Id;
-            Icon = layer.Icon;
+            if (layer != null)
+            {
+                Id = layer.Id;
+                Icon = layer.Icon;
+            }
         }
     }
 }

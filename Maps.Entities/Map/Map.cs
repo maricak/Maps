@@ -5,6 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// Entity that represents one row in Map table.
+    /// </summary>
     [Table("Map")]
     public class Map
     {
@@ -20,8 +23,14 @@ namespace Maps.Entities
 
         public bool IsPublic { get; set; }
 
+        /// <summary>
+        /// Map has a collection of its layers.
+        /// </summary>
         public ICollection<Layer> Layers { get; set; }
 
+        /// <summary>
+        /// Map has a reference to the user it belongs to.
+        /// </summary>
         public virtual User User { get; set; }
     }
 }

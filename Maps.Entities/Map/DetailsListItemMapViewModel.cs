@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel that represents one item in the list of user's maps.
+    /// </summary>
     public class ListItemMapViewModel
     {
         public Guid Id { get; set; }
@@ -13,9 +16,12 @@ namespace Maps.Entities
         public ListItemMapViewModel() { }
         public ListItemMapViewModel(Map map)
         {
-            Id = map.Id;
-            Name = map.Name;
-            CreationTime = map.CreationTime;
+            if (map != null)
+            {
+                Id = map.Id;
+                Name = map.Name;
+                CreationTime = map.CreationTime;
+            }
         }
     }
 }

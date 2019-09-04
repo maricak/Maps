@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel for read-only view of the maps that are 
+    /// public.
+    /// </summary>
     public class ViewMapViewModel
     {
         public Guid Id { get; set; }
@@ -14,8 +18,11 @@ namespace Maps.Entities
 
         public ViewMapViewModel(Map map)
         {
-            Id = map.Id;
-            Name = map.Name;
+            if (map != null)
+            {
+                Id = map.Id;
+                Name = map.Name;
+            }
         }
     }
 }

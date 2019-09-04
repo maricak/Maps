@@ -2,6 +2,9 @@
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel for creating new map withthe given name.
+    /// </summary>
     public class CreateMapViewModel
     {
         [Required(ErrorMessage = "Map name is required.")]

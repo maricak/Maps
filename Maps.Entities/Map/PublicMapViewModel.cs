@@ -2,6 +2,10 @@
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel for changing the IsPublic property 
+    /// of the given map.
+    /// </summary>
     public class PublicMapViewModel
     {
         public Guid Id { get; set; }
@@ -11,8 +15,11 @@ namespace Maps.Entities
         public PublicMapViewModel() { }
         public PublicMapViewModel(Map map)
         {
-            Id = map.Id;
-            IsPublic = map.IsPublic;
+            if (map != null)
+            {
+                Id = map.Id;
+                IsPublic = map.IsPublic;
+            }
         }
     }
 }
