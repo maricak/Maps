@@ -10,27 +10,32 @@ using System.Linq;
 
 namespace Maps.Utils
 {
+    /// <summary>
+    /// Represents a data read from the JSON files.
+    /// </summary>
     public class JsonDataReader : DataReader
     {
         public override bool LoadFile(Stream stream, Layer layer, ref IList<string> messages)
         {
             try
             {
+                // Creates validation schema from the columns of the layer.
                 JSchema schema = CreateSchema(layer.Id, ref messages);
                 if (schema == null)
                 {
                     return false;
                 }
+
                 using (StreamReader file = new StreamReader(stream))
                 using (JsonTextReader reader = new JsonTextReader(file))
                 {
                     JArray array = JToken.ReadFrom(reader) as JArray;
+                    // Check whether the data is valid.
                     if (!array.IsValid(schema, out messages))
                     {
                         return false;
                     }
                     StoreData(array, layer);
-
                     return true;
                 }
             }
@@ -66,13 +71,17 @@ namespace Maps.Utils
                     {
                         schemaString += string.Format("'{0}':{{'type':'{1}'}},", column.Name, UserTypeToJsonType[column.DataType]);
                     }
+
                     schemaString += "},'required':[";
                     foreach (var column in columns)
                     {
                         schemaString += string.Format("'{0}',", column.Name);
                     }
+
                     schemaString += "]}}";
 
+                    // Since properties cannot be set programmatically the schema will be parsed from
+                    // the created string.
                     JSchema schema = JSchema.Parse(schemaString);
                     return schema;
                 }
@@ -95,6 +104,7 @@ namespace Maps.Utils
                     Layer = layer,
                     Values = JObject.Parse(item.ToString())
                 };
+
                 data.Add(d);
             }
 
