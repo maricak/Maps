@@ -10,6 +10,7 @@ namespace Maps.Entities
     public class DisplayMapViewModel
     {
         public Guid Id { get; set; }
+
         public string Name { get; set; }
 
         /// <summary>

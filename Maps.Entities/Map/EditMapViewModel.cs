@@ -17,6 +17,7 @@ namespace Maps.Entities
         public DateTime CreationTime { get; set; }
 
         public EditMapViewModel() { }
+
         public EditMapViewModel(Map map)
         {
             if (map != null)

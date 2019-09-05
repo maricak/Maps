@@ -20,6 +20,4 @@ namespace Maps.Entities
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
-
-
 }

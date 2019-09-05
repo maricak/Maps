@@ -15,6 +15,7 @@ namespace Maps.Entities
         public string Name { get; set; }
 
         public EditLayerViewModel() { }
+
         public EditLayerViewModel(Layer layer)
         {
             if (layer != null)

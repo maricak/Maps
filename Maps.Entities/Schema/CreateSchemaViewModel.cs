@@ -11,6 +11,7 @@ namespace Maps.Entities
     public class CreateSchemaViewModel
     {
         public Guid LayerId { get; set; }
+
         public IList<CreateColumnViewModel> Columns { get; set; }
 
         public CreateSchemaViewModel()

@@ -18,8 +18,8 @@
         <div class="form-inline">
             @Html.EditorFor(model => model.Columns[i].Name, new { htmlAttributes = new { autofocus = "autofocus", @class = "form-control form-control-sm", placeholder = "Column name" } })
             @Html.EnumDropDownListFor(model => model.Columns[i].DataType, new { @class = "custom-select custom-select-sm mx-2" })
-            @Html.LabelFor(model => model.Columns[i].Chart) &nbsp;
-            @Html.EditorFor(model => model.Columns[i].Chart, new { htmlAttributes = new { autofocus = "autofocus", @class = "form-control form-control-sm" } })
+            @Html.LabelFor(model => model.Columns[i].HasChart) &nbsp;
+            @Html.EditorFor(model => model.Columns[i].HasChart, new { htmlAttributes = new { autofocus = "autofocus", @class = "form-control form-control-sm" } })
         </div>
     }
     <div class="text-right">

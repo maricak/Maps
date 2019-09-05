@@ -11,6 +11,7 @@
         public VisibilityLayerViewModel Visibility { get; set; }
 
         public FilterLayerViewModel() { }
+
         public FilterLayerViewModel(Layer layer)
         {
             SelectIcon = new SelectIconLayerViewModel(layer);

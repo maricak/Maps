@@ -13,6 +13,7 @@ namespace Maps.Entities
         public bool IsPublic { get; set; }
 
         public PublicMapViewModel() { }
+
         public PublicMapViewModel(Map map)
         {
             if (map != null)

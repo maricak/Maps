@@ -11,6 +11,7 @@ namespace Maps.Entities
         public Guid Id { get; set; }
 
         public CopyMapViewModel() { }
+
         public CopyMapViewModel(Guid id)
         {
             Id = id;

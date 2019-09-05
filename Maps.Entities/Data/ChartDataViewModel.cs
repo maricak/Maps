@@ -8,7 +8,7 @@ namespace Maps.Entities
         public bool HasData { get; set; }
         public IList<ChartColumnViewModel> Columns { get; set; }
 
-        public IDictionary<string, HorizontalBarUniqueStringModelView> ChartModels { get; set; }
+        public IDictionary<string, HorizontalBarViewModel> ChartModels { get; set; }
 
         public ChartDataViewModel()
         {
@@ -21,7 +21,7 @@ namespace Maps.Entities
                 LayerName = layer.Name;
                 HasData = layer.HasData;
                 Columns = new List<ChartColumnViewModel>();
-                ChartModels = new Dictionary<string, HorizontalBarUniqueStringModelView>();
+                ChartModels = new Dictionary<string, HorizontalBarViewModel>();
                 if (layer.HasData && layer.Data != null)
                 {
                     foreach (var column in layer.Columns)
@@ -30,7 +30,7 @@ namespace Maps.Entities
                         Columns.Add(c);
                         if (column.HasChart)
                         {
-                            ChartModels.Add(column.Name, new HorizontalBarUniqueStringModelView(c, layer.Data));
+                            ChartModels.Add(column.Name, new HorizontalBarViewModel(c, layer.Data));
                         }
                     }
                 }

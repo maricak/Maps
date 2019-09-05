@@ -9,6 +9,7 @@ namespace Maps.Entities
     public class DetailsMapViewModel
     {
         public Guid Id { get; set; }
+
         public string Name { get; set; }
 
         /// <summary>

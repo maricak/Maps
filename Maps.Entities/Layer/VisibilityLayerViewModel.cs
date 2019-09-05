@@ -13,6 +13,7 @@ namespace Maps.Entities
         public bool IsVisible { get; set; }
 
         public VisibilityLayerViewModel() { }
+
         public VisibilityLayerViewModel(Layer layer)
         {
             if (layer != null)

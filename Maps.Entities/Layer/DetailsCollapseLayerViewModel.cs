@@ -11,9 +11,11 @@ namespace Maps.Entities
         public Guid Id { get; set; }
 
         public bool HasData { get; set; }
+
         public bool HasColumns { get; set; }
 
         public DetailsCollapseLayerViewModel() { }
+
         public DetailsCollapseLayerViewModel(Layer layer)
         {
             if (layer != null)

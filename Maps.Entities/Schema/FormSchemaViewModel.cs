@@ -16,6 +16,7 @@ namespace Maps.Entities
         public int NumColumns { get; set; }
 
         public FormSchemaViewModel() { }
+
         public FormSchemaViewModel(Guid layerId)
         {
             LayerId = layerId;

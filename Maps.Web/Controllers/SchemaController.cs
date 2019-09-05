@@ -81,7 +81,7 @@ namespace Maps.Controllers
                                     DataType = column.DataType,
                                     Name = column.Name,
                                     Layer = layer,
-                                    HasChart = column.Chart
+                                    HasChart = column.HasChart
                                 });
                             }
                             access.Columns.BulkInsert(columns);

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Maps.Entities
 {
     /// <summary>
-    /// entity that represents one row in Layer table.
+    /// Entity that represents one row in the Layer table.
     /// </summary>
     [Table("Layer")]
 

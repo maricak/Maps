@@ -5,16 +5,26 @@ using System.Linq;
 
 namespace Maps.Entities
 {
-    public class HorizontalBarUniqueStringModelView
+    /// <summary>
+    /// ModelView that contains data that will be
+    /// displayed in a Horizontal bar chart.
+    /// </summary>
+    public class HorizontalBarViewModel
     {
+        /// <summary>
+        /// Array of labels.
+        /// </summary>
         public JArray LabelArray { get; set; }
 
+        /// <summary>
+        /// Array of number of entities with corresponding label.
+        /// </summary>
         public JArray CountArray { get; set; }
 
         public Guid ColumnId { get; set; }
         public string ColumnName { get; set; }
 
-        public HorizontalBarUniqueStringModelView(ChartColumnViewModel column, ICollection<Data> data)
+        public HorizontalBarViewModel(ChartColumnViewModel column, ICollection<Data> data)
         {
             ColumnName = column.Name;
             ColumnId = column.Id;

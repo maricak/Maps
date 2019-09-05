@@ -2,17 +2,20 @@
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel for displaying layer data in a table.
+    /// </summary>
     public class TableDataViewModel
     {
         public string LayerName { get; set; }
         public bool HasData { get; set; }
         public IList<DetailsDataViewModel> Data { get; set; }
 
-
         public TableDataViewModel()
         {
             Data = new List<DetailsDataViewModel>();
         }
+
         public TableDataViewModel(Layer layer)
         {
             if (layer != null)

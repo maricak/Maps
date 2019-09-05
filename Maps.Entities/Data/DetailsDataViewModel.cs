@@ -2,6 +2,9 @@
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel for displaying one data entity.
+    /// </summary>
     public class DetailsDataViewModel
     {
         public JObject Values { get; set; }

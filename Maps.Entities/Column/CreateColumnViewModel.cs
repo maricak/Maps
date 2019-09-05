@@ -2,6 +2,9 @@
 
 namespace Maps.Entities
 {
+    /// <summary>
+    /// ViewModel for creating single Column entity.
+    /// </summary>
     public class CreateColumnViewModel
     {
         [Required(ErrorMessage = "Column name is required.")]
@@ -11,8 +14,11 @@ namespace Maps.Entities
         [Display(Name = "Data type")]
         public UserDataType DataType { get; set; }
 
+        /// <summary>
+        /// Represents whether this column will have charts and map filter.
+        /// </summary>
         [Display(Name = "Filter?")]
-        public bool Chart { get; set; }
+        public bool HasChart { get; set; }
 
         public CreateColumnViewModel() { }
         public CreateColumnViewModel(Column column)

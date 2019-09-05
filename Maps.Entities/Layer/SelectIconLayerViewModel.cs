@@ -24,6 +24,7 @@ namespace Maps.Entities
                 "pink", "pink-dot"
             };
         public Guid Id { get; set; }
+
         public string Icon { get; set; }
 
         /// <summary>
