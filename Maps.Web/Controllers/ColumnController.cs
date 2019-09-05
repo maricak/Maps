@@ -2,7 +2,7 @@
 
 namespace Maps.Controllers
 {
-    [Authorize(Roles = "User")]
+    [Authorize]
     public class ColumnController : Controller
     {
         //[ChildActionOnly]

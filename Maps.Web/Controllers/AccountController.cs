@@ -144,20 +144,7 @@ namespace Maps.Controllers
                 return View("Error");
             }
             var result = await UserManager.ConfirmEmailAsync(userId, code);
-            if (result.Succeeded)
-            {
-                result = await UserManager.AddToRoleAsync(userId, "User");
-                if (result.Succeeded)
-                {
-                    return View("ConfirmEmail");
-                }
-                else
-                {
-                    var user = await UserManager.FindByIdAsync(userId);
-                    await UserManager.DeleteAsync(user);
-                }
-            }
-            return View("Error");
+            return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
         //
@@ -322,19 +309,7 @@ namespace Maps.Controllers
                 if (result.Succeeded)
                 {
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
-                    if (result.Succeeded)
-                    {
-                        result = await UserManager.AddToRoleAsync(user.Id, "User");
-                        if (result.Succeeded)
-                        {
-                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                            return RedirectToAction("Index", "Map");
-                        }
-                        else
-                        {
-                            await UserManager.DeleteAsync(user);
-                        }
-                    }
+                    return View(result.Succeeded ? "ConfirmEmail" : "Error");
                 }
                 AddErrors(result);
             }

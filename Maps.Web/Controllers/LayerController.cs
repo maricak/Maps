@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace Maps.Controllers
 {
-    [Authorize(Roles = "User")]
+    [Authorize]
 
     public class LayerController : Controller
     {

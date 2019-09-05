@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace Maps.Controllers
 {
+    [Authorize]
     public class DataController : Controller
     {
         [AjaxOnly]

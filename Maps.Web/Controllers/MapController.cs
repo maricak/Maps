@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace Maps.Controllers
 {
-    [Authorize(Roles = "User")]
+    [Authorize]
     public class MapController : Controller
     {
         private const int PAGE_SIZE = 10;
@@ -333,6 +333,7 @@ namespace Maps.Controllers
             return PartialView();
         }
 
+        [AllowAnonymous]
         public ActionResult View(Guid? id)
         {
             try
