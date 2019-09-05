@@ -15,9 +15,7 @@ namespace Maps.Controllers
         private SignInManager signInManager_;
         private UserManager userManager_;
 
-        public AccountController()
-        {
-        }
+        public AccountController() { }
 
         public AccountController(UserManager userManager, SignInManager signInManager)
         {
@@ -27,29 +25,16 @@ namespace Maps.Controllers
 
         public SignInManager SignInManager
         {
-            get
-            {
-                return signInManager_ ?? HttpContext.GetOwinContext().Get<SignInManager>();
-            }
-            private set
-            {
-                signInManager_ = value;
-            }
+            get { return signInManager_ ?? HttpContext.GetOwinContext().Get<SignInManager>(); }
+            private set { signInManager_ = value; }
         }
 
         public UserManager UserManager
         {
-            get
-            {
-                return userManager_ ?? HttpContext.GetOwinContext().GetUserManager<UserManager>();
-            }
-            private set
-            {
-                userManager_ = value;
-            }
+            get { return userManager_ ?? HttpContext.GetOwinContext().GetUserManager<UserManager>(); }
+            private set { userManager_ = value; }
         }
 
-        //
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
@@ -58,7 +43,6 @@ namespace Maps.Controllers
             return View();
         }
 
-        //
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
@@ -92,7 +76,7 @@ namespace Maps.Controllers
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
@@ -100,7 +84,6 @@ namespace Maps.Controllers
             }
         }
 
-        //
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
@@ -108,7 +91,6 @@ namespace Maps.Controllers
             return View();
         }
 
-        //
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
@@ -122,19 +104,17 @@ namespace Maps.Controllers
                 if (result.Succeeded)
                 {
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code }, protocol: Request.Url.Scheme);
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", 
+                        "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
                     return View("ConfirmEmailInfo");
                 }
                 AddErrors(result);
             }
 
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
-        //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
@@ -147,7 +127,6 @@ namespace Maps.Controllers
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
-        //
         // GET: /Account/ForgotPassword
         [AllowAnonymous]
         public ActionResult ForgotPassword()
@@ -155,7 +134,6 @@ namespace Maps.Controllers
             return View();
         }
 
-        //
         // POST: /Account/ForgotPassword
         [HttpPost]
         [AllowAnonymous]
@@ -167,7 +145,6 @@ namespace Maps.Controllers
                 var user = await UserManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
                 }
 
@@ -177,11 +154,9 @@ namespace Maps.Controllers
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
-        //
         // GET: /Account/ForgotPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
@@ -189,7 +164,6 @@ namespace Maps.Controllers
             return View();
         }
 
-        //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
@@ -197,7 +171,6 @@ namespace Maps.Controllers
             return code == null ? View("Error") : View();
         }
 
-        //
         // POST: /Account/ResetPassword
         [HttpPost]
         [AllowAnonymous]
@@ -211,7 +184,6 @@ namespace Maps.Controllers
             var user = await UserManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                // Don't reveal that the user does not exist
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
@@ -223,7 +195,6 @@ namespace Maps.Controllers
             return View();
         }
 
-        //
         // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
@@ -231,18 +202,15 @@ namespace Maps.Controllers
             return View();
         }
 
-        //
         // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
-            // Request a redirect to the external login provider
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
-        //
         // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
@@ -253,7 +221,6 @@ namespace Maps.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Sign in the user with this external login provider if the user already has a login
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
             switch (result)
             {
@@ -276,7 +243,6 @@ namespace Maps.Controllers
             }
         }
 
-        //
         // GET: /Account/ExternalLoginConfirmation
         [AllowAnonymous]
         public ActionResult ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model)
@@ -284,7 +250,6 @@ namespace Maps.Controllers
             return View(model);
         }
 
-        //
         // POST: /Account/ExternalLoginConfirmation
         [HttpPost]
         [AllowAnonymous]
@@ -298,12 +263,12 @@ namespace Maps.Controllers
 
             if (ModelState.IsValid)
             {
-                // Get the information about the user from the external login provider
                 var info = await AuthenticationManager.GetExternalLoginInfoAsync();
                 if (info == null)
                 {
                     return View("ExternalLoginFailure");
                 }
+
                 var user = new User { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
@@ -311,13 +276,13 @@ namespace Maps.Controllers
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     return View(result.Succeeded ? "ConfirmEmail" : "Error");
                 }
+
                 AddErrors(result);
             }
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
 
-        //
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -327,7 +292,6 @@ namespace Maps.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //
         // GET: /Account/ExternalLoginFailure
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
@@ -361,10 +325,7 @@ namespace Maps.Controllers
 
         private IAuthenticationManager AuthenticationManager
         {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
+            get { return HttpContext.GetOwinContext().Authentication; }
         }
 
         private void AddErrors(IdentityResult result)
@@ -381,15 +342,14 @@ namespace Maps.Controllers
             {
                 return Redirect(returnUrl);
             }
+
             return RedirectToAction("Index", "Home");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult
         {
             public ChallengeResult(string provider, string redirectUri)
-                : this(provider, redirectUri, null)
-            {
-            }
+                : this(provider, redirectUri, null) { }
 
             public ChallengeResult(string provider, string redirectUri, string userId)
             {
@@ -409,6 +369,7 @@ namespace Maps.Controllers
                 {
                     properties.Dictionary[XsrfKey] = UserId;
                 }
+
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }

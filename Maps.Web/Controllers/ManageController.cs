@@ -15,9 +15,7 @@ namespace Maps.Controllers
         private SignInManager signInManager_;
         private UserManager userManager_;
 
-        public ManageController()
-        {
-        }
+        public ManageController() { }
 
         public ManageController(UserManager userManager, SignInManager signInManager)
         {
@@ -27,29 +25,16 @@ namespace Maps.Controllers
 
         public SignInManager SignInManager
         {
-            get
-            {
-                return signInManager_ ?? HttpContext.GetOwinContext().Get<SignInManager>();
-            }
-            private set
-            {
-                signInManager_ = value;
-            }
+            get { return signInManager_ ?? HttpContext.GetOwinContext().Get<SignInManager>(); }
+            private set { signInManager_ = value; }
         }
 
         public UserManager UserManager
         {
-            get
-            {
-                return userManager_ ?? HttpContext.GetOwinContext().GetUserManager<UserManager>();
-            }
-            private set
-            {
-                userManager_ = value;
-            }
+            get { return userManager_ ?? HttpContext.GetOwinContext().GetUserManager<UserManager>(); }
+            private set { userManager_ = value; }
         }
 
-        //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
@@ -69,7 +54,6 @@ namespace Maps.Controllers
             return View(model);
         }
 
-        //
         // POST: /Manage/RemoveLogin
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -84,6 +68,7 @@ namespace Maps.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
+
                 message = ManageMessageId.RemoveLoginSuccess;
             }
             else
@@ -93,14 +78,12 @@ namespace Maps.Controllers
             return RedirectToAction("ManageLogins", new { Message = message });
         }
 
-        //
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
         {
             return View();
         }
 
-        //
         // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -110,6 +93,7 @@ namespace Maps.Controllers
             {
                 return View(model);
             }
+
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
@@ -120,18 +104,17 @@ namespace Maps.Controllers
                 }
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
+
             AddErrors(result);
             return View(model);
         }
 
-        //
         // GET: /Manage/SetPassword
         public ActionResult SetPassword()
         {
             return View();
         }
 
-        //
         // POST: /Manage/SetPassword
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -147,16 +130,15 @@ namespace Maps.Controllers
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     }
+
                     return RedirectToAction("Index", new { Message = ManageMessageId.SetPasswordSuccess });
                 }
                 AddErrors(result);
             }
 
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
-        //
         // GET: /Manage/ManageLogins
         public async Task<ActionResult> ManageLogins(ManageMessageId? message)
         {
@@ -169,8 +151,10 @@ namespace Maps.Controllers
             {
                 return View("Error");
             }
+
             var userLogins = await UserManager.GetLoginsAsync(User.Identity.GetUserId());
-            var otherLogins = AuthenticationManager.GetExternalAuthenticationTypes().Where(auth => userLogins.All(ul => auth.AuthenticationType != ul.LoginProvider)).ToList();
+            var otherLogins = AuthenticationManager.GetExternalAuthenticationTypes()
+                .Where(auth => userLogins.All(ul => auth.AuthenticationType != ul.LoginProvider)).ToList();
             ViewBag.ShowRemoveButton = user.PasswordHash != null || userLogins.Count > 1;
             return View(new ManageLoginsViewModel
             {
@@ -179,17 +163,14 @@ namespace Maps.Controllers
             });
         }
 
-        //
         // POST: /Manage/LinkLogin
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LinkLogin(string provider)
         {
-            // Request a redirect to the external login provider to link a login for the current user
             return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"), User.Identity.GetUserId());
         }
 
-        //
         // GET: /Manage/LinkLoginCallback
         public async Task<ActionResult> LinkLoginCallback()
         {
@@ -198,6 +179,7 @@ namespace Maps.Controllers
             {
                 return RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
             }
+
             var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
@@ -219,10 +201,7 @@ namespace Maps.Controllers
 
         private IAuthenticationManager AuthenticationManager
         {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
+            get { return HttpContext.GetOwinContext().Authentication; }
         }
 
         private void AddErrors(IdentityResult result)
@@ -240,6 +219,7 @@ namespace Maps.Controllers
             {
                 return user.PasswordHash != null;
             }
+
             return false;
         }
 
