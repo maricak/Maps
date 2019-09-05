@@ -547,7 +547,7 @@
     <Content Include="Views\Home\ServerError.cshtml" />
     <Content Include="Views\Data\HorizontalBarChart.cshtml" />
     <Content Include="Views\Schema\Create.cshtml" />
-    <Content Include="Views\Schema\DisplayForm.cshtml" />
+    <Content Include="Views\Schema\NumColumnsForm.cshtml" />
     <Content Include="Views\Layer\LoadData.cshtml" />
     <Content Include="Views\Map\DisplayMap.cshtml" />
     <Content Include="Views\Layer\SelectIcon.cshtml" />

@@ -627,6 +627,7 @@ namespace Maps.Controllers
                     ModelState.AddModelError("", Error.ERROR);
                 }
             }
+
             return PartialView(model);
         }
     }

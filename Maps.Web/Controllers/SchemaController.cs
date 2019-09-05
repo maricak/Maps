@@ -11,10 +11,12 @@ namespace Maps.Controllers
     [Authorize]
     public class SchemaController : Controller
     {
+        readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         [AjaxOnly]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DisplayForm([Bind(Include = "LayerId,NumColumns")]FormSchemaViewModel model)
+        public ActionResult NumColumnsForm([Bind(Include = "LayerId,NumColumns")]FormSchemaViewModel model)
         {
             try
             {
@@ -25,20 +27,35 @@ namespace Maps.Controllers
                         Layer layer = access.Layers.Get(l => l.Id == model.LayerId, includeProperties: "Map").SingleOrDefault();
                         if (layer == null)
                         {
-                            return PartialView("../Home/NotFound");
+                            logger.ErrorFormat("NOT_FOUND -- Layer with id={0} not found.", model.LayerId);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                            return PartialView(model);
                         }
+
                         if (layer.Map.User.Id != User.Identity.GetUser().Id)
                         {
-                            return PartialView("../Home/Forbidden");
+                            logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access layer with id={1}.",
+                                User.Identity.GetUser().Id, layer.Id);
+
+                            ModelState.AddModelError("", Error.FORBIDDEN);
+                            return PartialView(model);
                         }
+
                         return PartialView("Create", new CreateSchemaViewModel(model.LayerId, model.NumColumns));
                     }
+                }
+                else
+                {
+                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
+
             return PartialView(model);
         }
 
@@ -56,19 +73,31 @@ namespace Maps.Controllers
                         Layer layer = access.Layers.Get(l => l.Id == model.LayerId, includeProperties: "Map").SingleOrDefault();
                         if (layer == null)
                         {
-                            return PartialView("../Home/NotFound");
+                            logger.ErrorFormat("NOT_FOUND -- Layer with id={0} not found.", model.LayerId);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                            return PartialView(model);
                         }
+
                         if (layer.Map.User.Id != User.Identity.GetUser().Id)
                         {
-                            return PartialView("../Home/Forbidden");
+                            logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access layer with id={1}.",
+                                User.Identity.GetUser().Id, layer.Id);
+
+                            ModelState.AddModelError("", Error.FORBIDDEN);
+                            return PartialView(model);
                         }
+
                         IList<string> messages = new List<string>();
                         if (!SchemaUtils.CheckColumns(model.Columns, ref messages))
                         {
+                            logger.InfoFormat("UserId={0} -- check columns failed", User.Identity.GetUser().Id);
+
                             foreach (var message in messages)
                             {
                                 ModelState.AddModelError("", message);
                             }
+                            return PartialView(model);
                         }
                         else
                         {
@@ -84,6 +113,7 @@ namespace Maps.Controllers
                                     HasChart = column.HasChart
                                 });
                             }
+
                             access.Columns.BulkInsert(columns);
                             layer.HasColumns = true;
                             access.Layers.Update(layer);
@@ -92,11 +122,17 @@ namespace Maps.Controllers
                         }
                     }
                 }
+                else
+                {
+                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
+
             return PartialView(model);
         }
     }

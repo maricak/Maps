@@ -2,7 +2,7 @@
 
 <div class="card-body">
     <h5>Load data</h5>
-    @using (Ajax.BeginForm("DisplayForm", "Schema", null,
+    @using (Ajax.BeginForm("NumColumnsForm", "Schema", null,
                              new AjaxOptions { HttpMethod = "post", UpdateTargetId = string.Concat("schema", Model.LayerId) },
                              new { @class = "inline-form" }))
     {
@@ -15,6 +15,7 @@
             <input type="submit" value="Save" class="btn btn-link" />
         </div>
     }
+
     @if (!Html.ViewData.ModelState.IsValid)
     {
         @Html.ValidationSummary(false, "", new { @class = "text-danger" })
