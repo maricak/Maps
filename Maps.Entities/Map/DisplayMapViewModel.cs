@@ -47,6 +47,7 @@ namespace Maps.Entities
                                 jsonData.Add(data.Values);
                             }
                         }
+
                         jsonLayer["data"] = jsonData;
                         Layers.Add(jsonLayer);
                     }

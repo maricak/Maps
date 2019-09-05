@@ -22,12 +22,12 @@
     }
 </script>
 
-<div class="m-2">
+<div class="ml-2 mr-4">
     @if (Model.HasData)
     {
         if (Model.ChartModels.Count() == 0)
         {
-            <div class="card">
+            <div class="card ml-2">
                 <div class="card-header">
                     Layer <strong>@Model.LayerName</strong> does not have data for charts.
                 </div>
@@ -50,6 +50,3 @@
         </div>
     }
 </div>
-
-
-

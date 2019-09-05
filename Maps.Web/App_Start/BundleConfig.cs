@@ -4,7 +4,6 @@ namespace Maps
 {
     public class BundleConfig
     {
-        // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
@@ -14,10 +13,10 @@ namespace Maps
                         "~/Scripts/jquery.validate.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryunobtrusive").Include(
-                        "~/Scripts/jquery.unobtrusive*"));
+                        "~/Scripts/jquery.unobtrusive-ajax.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
+                        "~/Scripts/modernizr-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/umd/popper*", "~/Scripts/bootstrap.js"));

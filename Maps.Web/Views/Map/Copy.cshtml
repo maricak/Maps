@@ -1,17 +1,14 @@
 ﻿@model Maps.Entities.CopyMapViewModel
 
-@if (!Html.ViewData.ModelState.IsValid)
-{
-    <div class="row bg-white">
-        <div class="col card">
-            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-        </div>
-    </div>
-}
-
 @if (Request.IsAuthenticated)
 {
     <ul class="nav justify-content-end bg-white">
+        @if (!Html.ViewData.ModelState.IsValid)
+        {
+            <li class="nav-item">
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            </li>
+        }
         <li class="nav-item">
             @using (Ajax.BeginForm("Copy", "Map", null,
                 new AjaxOptions { UpdateTargetId = "copy", InsertionMode = InsertionMode.Replace },

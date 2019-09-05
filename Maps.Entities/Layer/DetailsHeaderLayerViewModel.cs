@@ -24,12 +24,12 @@ namespace Maps.Entities
         {
             if (layer != null)
             {
+                Id = layer.Id;
+                Name = layer.Name;
                 if (layer.Map != null)
                 {
                     MapId = layer.Map.Id;
                 }
-                Id = layer.Id;
-                Name = layer.Name;
             }
         }
     }
