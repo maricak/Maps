@@ -4,7 +4,7 @@ namespace Maps.Controllers
 {
     public class HomeController : Controller
     {
-        readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public ActionResult Index()
         {
@@ -13,7 +13,7 @@ namespace Maps.Controllers
                 logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
 
                 return RedirectToAction("Index", "Map");
-            }   
+            }
             else
             {
                 logger.InfoFormat("Not authenticated");

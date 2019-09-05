@@ -12,7 +12,7 @@ namespace Maps.Controllers
     [Authorize]
     public class MapController : Controller
     {
-        readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private const int PAGE_SIZE = 10;
 
@@ -26,9 +26,9 @@ namespace Maps.Controllers
                 var userId = User.Identity.GetUser().Id;
                 using (var access = new DataAccess())
                 {
-                    var maps = access.Maps.Get(m => m.User.Id.Equals(userId), orderBy: m => m.OrderByDescending(i => i.CreationTime));
+                    var maps = access.Maps.Get(m => m.User.Id.Equals(userId), orderBy: m => m.OrderByDescending(i => i.CreationTime)).ToList();
                     List<ListItemMapViewModel> models = new List<ListItemMapViewModel>();
-                    foreach (var map in maps.ToList())
+                    foreach (var map in maps)
                     {
                         models.Add(new ListItemMapViewModel(map));
                     }
@@ -42,7 +42,7 @@ namespace Maps.Controllers
                 ModelState.AddModelError("", Error.ERROR);
             }
 
-            return View();
+            return View(new List<ListItemMapViewModel>());
         }
 
         [AjaxOnly]
@@ -57,30 +57,30 @@ namespace Maps.Controllers
                     logger.ErrorFormat("BAD_REQUEST -- id is null.");
 
                     ModelState.AddModelError("", Error.BAD_REQUEST);
-                    return PartialView(new ListItemMapViewModel());
                 }
-
-                using (var access = new DataAccess())
+                else
                 {
-                    Map map = access.Maps.GetByID(id);
-                    if (map == null)
+                    using (var access = new DataAccess())
                     {
-                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
+                        Map map = access.Maps.GetByID(id);
+                        if (map == null)
+                        {
+                            logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
 
-                        ModelState.AddModelError("", Error.NOT_FOUND);
-                        return PartialView(new ListItemMapViewModel());
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                        }
+                        else if (map.User.Id != User.Identity.GetUser().Id)
+                        {
+                            logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
+                               User.Identity.GetUser().Id, id);
+
+                            ModelState.AddModelError("", Error.FORBIDDEN);
+                        }
+                        else
+                        {
+                            return PartialView(new ListItemMapViewModel(map));
+                        }
                     }
-
-                    if (map.User.Id != User.Identity.GetUser().Id)
-                    {
-                        logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
-                           User.Identity.GetUser().Id, id);
-
-                        ModelState.AddModelError("", Error.FORBIDDEN);
-                        return PartialView(new ListItemMapViewModel());
-                    }
-
-                    return PartialView(new ListItemMapViewModel(map));
                 }
             }
             catch (Exception ex)
@@ -105,27 +105,30 @@ namespace Maps.Controllers
                     ModelState.AddModelError("", Error.BAD_REQUEST);
                     return View(new DetailsMapViewModel());
                 }
-                using (var access = new DataAccess())
+                else
                 {
-                    Map map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers").SingleOrDefault();
-                    if (map == null)
+                    using (var access = new DataAccess())
                     {
-                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
+                        Map map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers").SingleOrDefault();
+                        if (map == null)
+                        {
+                            logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
 
-                        ModelState.AddModelError("", Error.NOT_FOUND);
-                        return View(new DetailsMapViewModel());
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                        }
+                        else if (map.User.Id != User.Identity.GetUser().Id)
+                        {
+                            logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
+                             User.Identity.GetUser().Id, id);
+
+                            ModelState.AddModelError("", Error.FORBIDDEN);
+                            return View(new DetailsMapViewModel());
+                        }
+                        else
+                        {
+                            return View(new DetailsMapViewModel(map));
+                        }
                     }
-
-                    if (map.User.Id != User.Identity.GetUser().Id)
-                    {
-                        logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
-                         User.Identity.GetUser().Id, id);
-
-                        ModelState.AddModelError("", Error.FORBIDDEN);
-                        return View(new DetailsMapViewModel());
-                    }
-
-                    return View(new DetailsMapViewModel(map));
                 }
             }
             catch (Exception ex)
@@ -174,30 +177,30 @@ namespace Maps.Controllers
                             logger.ErrorFormat("NOT_FOUND -- User with id={0} not found.", userId);
 
                             ModelState.AddModelError("", Error.NOT_FOUND);
-                            return PartialView(model);
-                        }
-
-                        Map map = new Map
-                        {
-                            Name = model.Name,
-                            Id = Guid.NewGuid(),
-                            CreationTime = DateTime.UtcNow,
-                            User = user,
-                        };
-
-                        var duplicateMap = access.Maps.Get(m => m.Name.Equals(map.Name) && m.User.Id == userId);
-                        if (duplicateMap.Count() != 0)
-                        {
-                            logger.ErrorFormat("UserId={0} -- Duplicate map name", User.Identity.GetUser().Id);
-
-                            ModelState.AddModelError("", string.Format("Map with name '{0}' already exists.", map.Name));
-                            return PartialView(model);
                         }
                         else
                         {
-                            access.Maps.Insert(map);
-                            access.Save();
-                            return PartialView("AddMap", new ListItemMapViewModel(map));
+                            Map map = new Map
+                            {
+                                Name = model.Name,
+                                Id = Guid.NewGuid(),
+                                CreationTime = DateTime.UtcNow,
+                                User = user,
+                            };
+
+                            var duplicateMap = access.Maps.Get(m => m.Name.Equals(map.Name) && m.User.Id == userId);
+                            if (duplicateMap.Count() != 0)
+                            {
+                                logger.ErrorFormat("UserId={0} -- Duplicate map name", User.Identity.GetUser().Id);
+
+                                ModelState.AddModelError("", string.Format("Map with name '{0}' already exists.", map.Name));
+                            }
+                            else
+                            {
+                                access.Maps.Insert(map);
+                                access.Save();
+                                return PartialView("AddMap", new ListItemMapViewModel(map));
+                            }
                         }
                     }
                 }
@@ -227,30 +230,30 @@ namespace Maps.Controllers
                     logger.ErrorFormat("BAD_REQUEST -- id is null.");
 
                     ModelState.AddModelError("", Error.BAD_REQUEST);
-                    return PartialView(new EditMapViewModel());
                 }
-
-                using (var access = new DataAccess())
+                else
                 {
-                    Map map = access.Maps.GetByID(id);
-                    if (map == null)
+                    using (var access = new DataAccess())
                     {
-                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
+                        Map map = access.Maps.GetByID(id);
+                        if (map == null)
+                        {
+                            logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
 
-                        ModelState.AddModelError("", Error.NOT_FOUND);
-                        return PartialView(new EditMapViewModel());
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                        }
+                        else if (map.User.Id != User.Identity.GetUser().Id)
+                        {
+                            logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
+                               User.Identity.GetUser().Id, id);
+
+                            ModelState.AddModelError("", Error.FORBIDDEN);
+                        }
+                        else
+                        {
+                            return PartialView(new EditMapViewModel(map));
+                        }
                     }
-
-                    if (map.User.Id != User.Identity.GetUser().Id)
-                    {
-                        logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
-                           User.Identity.GetUser().Id, id);
-
-                        ModelState.AddModelError("", Error.FORBIDDEN);
-                        return PartialView(new EditMapViewModel());
-                    }
-
-                    return PartialView(new EditMapViewModel(map));
                 }
             }
             catch (Exception ex)
@@ -258,6 +261,7 @@ namespace Maps.Controllers
                 logger.Fatal("", ex);
                 ModelState.AddModelError("", Error.ERROR);
             }
+
             return PartialView(new EditMapViewModel());
         }
 
@@ -281,7 +285,6 @@ namespace Maps.Controllers
                             logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", model.Id);
 
                             ModelState.AddModelError("", Error.NOT_FOUND);
-                            return PartialView(model);
                         }
                         else if (map.User.Id != userId)
                         {
@@ -289,7 +292,6 @@ namespace Maps.Controllers
                                 User.Identity.GetUser().Id, model.Id);
 
                             ModelState.AddModelError("", Error.FORBIDDEN);
-                            return PartialView(model);
                         }
                         else
                         {
@@ -299,13 +301,14 @@ namespace Maps.Controllers
                                 logger.ErrorFormat("UserId={0} -- Duplicate map name", User.Identity.GetUser().Id);
 
                                 ModelState.AddModelError("", string.Format("Map with name '{0}' already exists.", map.Name));
-                                return PartialView("Edit", model);
                             }
-
-                            map.Name = model.Name;
-                            access.Maps.Update(map);
-                            access.Save();
-                            return PartialView("ListItem", new ListItemMapViewModel(map));
+                            else
+                            {
+                                map.Name = model.Name;
+                                access.Maps.Update(map);
+                                access.Save();
+                                return PartialView("ListItem", new ListItemMapViewModel(map));
+                            }
                         }
                     }
                 }
@@ -342,14 +345,12 @@ namespace Maps.Controllers
                             logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", model.Id);
 
                             ModelState.AddModelError("", Error.NOT_FOUND);
-                            return PartialView("ListItem", model);
                         }
                         else if (map.User.Id != User.Identity.GetUser().Id)
                         {
                             logger.ErrorFormat("UserId={0} -- Duplicate map name", User.Identity.GetUser().Id);
 
                             ModelState.AddModelError("", string.Format("Map with name '{0}' already exists.", map.Name));
-                            return PartialView("ListItem", model);
                         }
                         else
                         {
@@ -384,30 +385,29 @@ namespace Maps.Controllers
                     logger.ErrorFormat("BAD_REQUEST -- id is null.");
 
                     ModelState.AddModelError("", Error.BAD_REQUEST);
-                    return PartialView(new DisplayMapViewModel());
                 }
-
-                using (var access = new DataAccess())
+                else
                 {
-                    var map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers,Layers.Data,Layers.Columns").SingleOrDefault();
-                    if (map == null)
+                    using (var access = new DataAccess())
                     {
-                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
+                        var map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers,Layers.Data,Layers.Columns").SingleOrDefault();
+                        if (map == null)
+                        {
+                            logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
 
-                        ModelState.AddModelError("", Error.NOT_FOUND);
-                        return PartialView(new DisplayMapViewModel());
-                    }
-                    else if (map.User.Id != User.Identity.GetUser().Id && !map.IsPublic)
-                    {
-                        logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
-                                User.Identity.GetUser().Id, id);
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                        }
+                        else if (map.User.Id != User.Identity.GetUser().Id && !map.IsPublic)
+                        {
+                            logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
+                                    User.Identity.GetUser().Id, id);
 
-                        ModelState.AddModelError("", Error.FORBIDDEN);
-                        return PartialView(new DisplayMapViewModel());
-                    }
-                    else
-                    {
-                        return PartialView(new DisplayMapViewModel(map));
+                            ModelState.AddModelError("", Error.FORBIDDEN);
+                        }
+                        else
+                        {
+                            return PartialView(new DisplayMapViewModel(map));
+                        }
                     }
                 }
             }
@@ -438,13 +438,14 @@ namespace Maps.Controllers
                             logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", model.Id);
 
                             ModelState.AddModelError("", Error.NOT_FOUND);
+                        }
+                        else
+                        {
+                            map.IsPublic = model.IsPublic;
+                            access.Maps.Update(map);
+                            access.Save();
                             return PartialView(model);
                         }
-
-                        map.IsPublic = model.IsPublic;
-                        access.Maps.Update(map);
-                        access.Save();
-                        return PartialView(model);
                     }
                 }
                 else
@@ -473,29 +474,29 @@ namespace Maps.Controllers
                     logger.ErrorFormat("BAD_REQUEST -- id is null.");
 
                     ModelState.AddModelError("", Error.BAD_REQUEST);
-                    return View(new ViewMapViewModel());
                 }
-
-                using (var access = new DataAccess())
+                else
                 {
-                    Map map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers").SingleOrDefault();
-                    if (map == null)
+                    using (var access = new DataAccess())
                     {
-                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
+                        Map map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers").SingleOrDefault();
+                        if (map == null)
+                        {
+                            logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
 
-                        ModelState.AddModelError("", Error.NOT_FOUND);
-                        return View(new ViewMapViewModel());
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                        }
+                        else if (!map.IsPublic)
+                        {
+                            logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                        }
+                        else
+                        {
+                            return View(new ViewMapViewModel(map));
+                        }
                     }
-
-                    if (!map.IsPublic)
-                    {
-                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
-
-                        ModelState.AddModelError("", Error.NOT_FOUND);
-                        return View(new ViewMapViewModel());
-                    }
-
-                    return View(new ViewMapViewModel(map));
                 }
             }
             catch (Exception ex)
@@ -524,83 +525,86 @@ namespace Maps.Controllers
                             logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", model.Id);
 
                             ModelState.AddModelError("", Error.NOT_FOUND);
-                            return PartialView(model);
                         }
-
-                        var userId = User.Identity.GetUser().Id;
-                        var user = access.Users.GetByID(userId);
-                        if (user == null)
+                        else
                         {
-                            logger.ErrorFormat("NOT_FOUND -- User with id={0} not found.", userId);
-
-                            ModelState.AddModelError("", Error.NOT_FOUND);
-                            return PartialView(model);
-                        }
-
-                        Map newMap = new Map()
-                        {
-                            Id = newMapId,
-                            CreationTime = DateTime.UtcNow,
-                            Name = string.Concat("map", newMapId),
-                            User = user,
-                        };
-                        access.Maps.Insert(newMap);
-
-                        logger.InfoFormat("UserId={0} -- copy map object from map with id={1} to map with id={2}",
-                            User.Identity.GetUser().Id, map.Id, newMapId); ;
-
-                        foreach (var layer in map.Layers)
-                        {
-                            Layer newLayer = new Layer()
+                            var userId = User.Identity.GetUser().Id;
+                            var user = access.Users.GetByID(userId);
+                            if (user == null)
                             {
-                                Id = Guid.NewGuid(),
-                                Map = newMap,
-                                HasColumns = layer.HasColumns,
-                                HasData = layer.HasData,
-                                IsVisible = layer.IsVisible,
-                                Name = layer.Name,
-                                Icon = layer.Icon
-                            };
-                            access.Layers.Insert(newLayer);
-                            foreach (var column in layer.Columns)
-                            {
-                                Column newColumn = new Column()
-                                {
-                                    Id = Guid.NewGuid(),
-                                    DataType = column.DataType,
-                                    HasChart = column.HasChart,
-                                    Layer = newLayer,
-                                    Name = column.Name
-                                };
-                                access.Columns.Insert(newColumn);
+                                logger.ErrorFormat("NOT_FOUND -- User with id={0} not found.", userId);
+
+                                ModelState.AddModelError("", Error.NOT_FOUND);
                             }
-
-                            access.Save();
-
-                            logger.InfoFormat("UserId={0} -- copy layer with id={1} with columns from map with id={2} to map with id={3}",
-                                User.Identity.GetUser().Id, layer.Id, map.Id, newMapId);
-
-                            var dataList = new List<Entities.Data>();
-                            foreach (var data in layer.Data)
+                            else
                             {
-                                Entities.Data newData = new Entities.Data()
+
+                                Map newMap = new Map()
                                 {
-                                    Id = Guid.NewGuid(),
-                                    Layer = newLayer,
-                                    Values = data.Values
+                                    Id = newMapId,
+                                    CreationTime = DateTime.UtcNow,
+                                    Name = string.Concat("map", newMapId),
+                                    User = user,
                                 };
-                                dataList.Add(newData);
+                                access.Maps.Insert(newMap);
+
+                                logger.InfoFormat("UserId={0} -- copy map object from map with id={1} to map with id={2}",
+                                    User.Identity.GetUser().Id, map.Id, newMapId); ;
+
+                                foreach (var layer in map.Layers)
+                                {
+                                    Layer newLayer = new Layer()
+                                    {
+                                        Id = Guid.NewGuid(),
+                                        Map = newMap,
+                                        HasColumns = layer.HasColumns,
+                                        HasData = layer.HasData,
+                                        IsVisible = layer.IsVisible,
+                                        Name = layer.Name,
+                                        Icon = layer.Icon
+                                    };
+                                    access.Layers.Insert(newLayer);
+                                    foreach (var column in layer.Columns)
+                                    {
+                                        Column newColumn = new Column()
+                                        {
+                                            Id = Guid.NewGuid(),
+                                            DataType = column.DataType,
+                                            HasChart = column.HasChart,
+                                            Layer = newLayer,
+                                            Name = column.Name
+                                        };
+                                        access.Columns.Insert(newColumn);
+                                    }
+
+                                    access.Save();
+
+                                    logger.InfoFormat("UserId={0} -- copy layer with id={1} with columns from map with id={2} to map with id={3}",
+                                        User.Identity.GetUser().Id, layer.Id, map.Id, newMapId);
+
+                                    var dataList = new List<Entities.Data>();
+                                    foreach (var data in layer.Data)
+                                    {
+                                        Entities.Data newData = new Entities.Data()
+                                        {
+                                            Id = Guid.NewGuid(),
+                                            Layer = newLayer,
+                                            Values = data.Values
+                                        };
+                                        dataList.Add(newData);
+                                    }
+
+                                    access.Data.BulkInsert(dataList);
+                                    access.Save();
+
+                                    logger.InfoFormat("UserId={0} -- copy data from layer with id={1} to layer with id={2}",
+                                        User.Identity.GetUser().Id, layer.Id, newLayer.Id);
+                                }
+
+                                ModelState.AddModelError("", "Successful copy!");
+                                return PartialView(model);
                             }
-
-                            access.Data.BulkInsert(dataList);
-                            access.Save();
-
-                            logger.InfoFormat("UserId={0} -- copy data from layer with id={1} to layer with id={2}",
-                                User.Identity.GetUser().Id, layer.Id, newLayer.Id);
                         }
-
-                        ModelState.AddModelError("", "Successful copy!");
-                        return PartialView(model);
                     }
                 }
                 else

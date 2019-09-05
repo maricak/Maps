@@ -11,7 +11,7 @@ namespace Maps.Controllers
     [Authorize]
     public class SchemaController : Controller
     {
-        readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         [AjaxOnly]
         [HttpPost]
@@ -30,19 +30,18 @@ namespace Maps.Controllers
                             logger.ErrorFormat("NOT_FOUND -- Layer with id={0} not found.", model.LayerId);
 
                             ModelState.AddModelError("", Error.NOT_FOUND);
-                            return PartialView(model);
                         }
-
-                        if (layer.Map.User.Id != User.Identity.GetUser().Id)
+                        else if (layer.Map.User.Id != User.Identity.GetUser().Id)
                         {
                             logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access layer with id={1}.",
                                 User.Identity.GetUser().Id, layer.Id);
 
                             ModelState.AddModelError("", Error.FORBIDDEN);
-                            return PartialView(model);
                         }
-
-                        return PartialView("Create", new CreateSchemaViewModel(model.LayerId, model.NumColumns));
+                        else
+                        {
+                            return PartialView("Create", new CreateSchemaViewModel(model.LayerId, model.NumColumns));
+                        }
                     }
                 }
                 else
@@ -76,49 +75,47 @@ namespace Maps.Controllers
                             logger.ErrorFormat("NOT_FOUND -- Layer with id={0} not found.", model.LayerId);
 
                             ModelState.AddModelError("", Error.NOT_FOUND);
-                            return PartialView(model);
                         }
-
-                        if (layer.Map.User.Id != User.Identity.GetUser().Id)
+                        else if (layer.Map.User.Id != User.Identity.GetUser().Id)
                         {
                             logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access layer with id={1}.",
                                 User.Identity.GetUser().Id, layer.Id);
 
                             ModelState.AddModelError("", Error.FORBIDDEN);
-                            return PartialView(model);
-                        }
-
-                        IList<string> messages = new List<string>();
-                        if (!SchemaUtils.CheckColumns(model.Columns, ref messages))
-                        {
-                            logger.InfoFormat("UserId={0} -- check columns failed", User.Identity.GetUser().Id);
-
-                            foreach (var message in messages)
-                            {
-                                ModelState.AddModelError("", message);
-                            }
-                            return PartialView(model);
                         }
                         else
                         {
-                            IList<Column> columns = new List<Column>();
-                            foreach (var column in model.Columns)
+                            IList<string> messages = new List<string>();
+                            if (!SchemaUtils.CheckColumns(model.Columns, ref messages))
                             {
-                                columns.Add(new Column()
-                                {
-                                    Id = Guid.NewGuid(),
-                                    DataType = column.DataType,
-                                    Name = column.Name,
-                                    Layer = layer,
-                                    HasChart = column.HasChart
-                                });
-                            }
+                                logger.InfoFormat("UserId={0} -- check columns failed", User.Identity.GetUser().Id);
 
-                            access.Columns.BulkInsert(columns);
-                            layer.HasColumns = true;
-                            access.Layers.Update(layer);
-                            access.Save();
-                            return PartialView("../Layer/LoadData", new LoadDataViewModel(layer.Id));
+                                foreach (var message in messages)
+                                {
+                                    ModelState.AddModelError("", message);
+                                }
+                            }
+                            else
+                            {
+                                IList<Column> columns = new List<Column>();
+                                foreach (var column in model.Columns)
+                                {
+                                    columns.Add(new Column()
+                                    {
+                                        Id = Guid.NewGuid(),
+                                        DataType = column.DataType,
+                                        Name = column.Name,
+                                        Layer = layer,
+                                        HasChart = column.HasChart
+                                    });
+                                }
+
+                                access.Columns.BulkInsert(columns);
+                                layer.HasColumns = true;
+                                access.Layers.Update(layer);
+                                access.Save();
+                                return PartialView("../Layer/LoadData", new LoadDataViewModel(layer.Id));
+                            }
                         }
                     }
                 }
