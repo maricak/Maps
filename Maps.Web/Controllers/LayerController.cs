@@ -13,65 +13,98 @@ namespace Maps.Controllers
 
     public class LayerController : Controller
     {
+        readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         [AjaxOnly]
-        public ActionResult AddLayer(Guid mapId)
+        public ActionResult AddLayer(Guid? mapId)
         {
             try
             {
+                logger.InfoFormat("UserId={0} -- mapId={1}", User.Identity.GetUser().Id, mapId);
+
                 if (mapId == null)
                 {
-                    return PartialView("../Home/BadRequest");
+                    logger.ErrorFormat("BAD_REQUEST -- mapId is null.");
+
+                    ModelState.AddModelError("", Error.BAD_REQUEST);
+                    return View(new DetailsLayerViewModel());
                 }
+
                 using (var access = new DataAccess())
                 {
                     var map = access.Maps.GetByID(mapId);
                     if (map == null)
                     {
-                        ModelState.AddModelError("", "Map does not exists.");
-                        return PartialView();
+                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", mapId);
+
+                        ModelState.AddModelError("", Error.NOT_FOUND);
+                        return View(new DetailsLayerViewModel());
                     }
                     else if (map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return PartialView("../Home/Forbidden");
+                        logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
+                                  User.Identity.GetUser().Id, mapId);
+
+                        ModelState.AddModelError("", Error.FORBIDDEN);
+                        return View(new DetailsLayerViewModel());
                     }
+
+                    return PartialView(new DetailsLayerViewModel(mapId.Value));
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
-            // TODO: zato je ovde isao mapId
-            return PartialView(new DetailsLayerViewModel());
+
+            return View(new DetailsLayerViewModel());
         }
 
         [AjaxOnly]
-        public ActionResult Create(Guid mapId)
+        public ActionResult Create(Guid? mapId)
         {
             try
             {
+                logger.InfoFormat("UserId={0} -- mapId={1}", User.Identity.GetUser().Id, mapId);
+
                 if (mapId == null)
                 {
-                    return PartialView("../Home/BadRequest");
+                    logger.ErrorFormat("BAD_REQUEST -- mapId is null.");
+
+                    ModelState.AddModelError("", Error.BAD_REQUEST);
+                    return View(new CreateLayerViewModel());
                 }
+
                 using (var access = new DataAccess())
                 {
                     var map = access.Maps.GetByID(mapId);
                     if (map == null)
                     {
-                        ModelState.AddModelError("", "Map does not exists.");
-                        return PartialView();
+                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", mapId);
+
+                        ModelState.AddModelError("", Error.NOT_FOUND);
+                        return View(new CreateLayerViewModel());
                     }
                     else if (map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return PartialView("../Home/Forbidden");
+                        logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
+                                  User.Identity.GetUser().Id, mapId);
+
+                        ModelState.AddModelError("", Error.FORBIDDEN);
+                        return View(new CreateLayerViewModel());
                     }
+
+                    return PartialView(new CreateLayerViewModel(mapId.Value));
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
-            return PartialView(new CreateLayerViewModel(mapId));
+
+            return View(new CreateLayerViewModel());
         }
 
         [AjaxOnly]
@@ -79,28 +112,40 @@ namespace Maps.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "MapId,Name")] CreateLayerViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
+                if (ModelState.IsValid)
                 {
                     var mapId = model.MapId;
                     if (mapId == null)
                     {
-                        ModelState.AddModelError("", "Map id cannot be empty.");
+                        logger.ErrorFormat("BAD_REQUEST -- mapId is null.");
+
+                        ModelState.AddModelError("", Error.BAD_REQUEST);
                         return PartialView(model);
                     }
+
                     using (var access = new DataAccess())
                     {
                         var map = access.Maps.GetByID(mapId);
                         if (map == null)
                         {
-                            ModelState.AddModelError("", "Map does not exists.");
-                            return PartialView();
+                            logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", mapId);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                            return PartialView(model);
                         }
                         else if (map.User.Id != User.Identity.GetUser().Id)
                         {
-                            return PartialView("../Home/Forbidden");
+                            logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
+                                 User.Identity.GetUser().Id, mapId);
+
+                            ModelState.AddModelError("", Error.FORBIDDEN);
+                            return PartialView(model);
                         }
+
                         Layer layer = new Layer
                         {
                             Name = model.Name,
@@ -110,7 +155,11 @@ namespace Maps.Controllers
                         var duplicateLayer = access.Layers.Get(l => l.Name.Equals(layer.Name) && l.Map.Id == mapId);
                         if (duplicateLayer.Count() != 0)
                         {
-                            ModelState.AddModelError("", "Layer with name '" + layer.Name + "' already exists.");
+
+                            logger.ErrorFormat("UserId={0} -- Duplicate layer name", User.Identity.GetUser().Id);
+
+                            ModelState.AddModelError("", string.Format("Layer with name '{0}' already exists.", layer.Name));
+                            return PartialView(model);
                         }
                         else
                         {
@@ -120,11 +169,17 @@ namespace Maps.Controllers
                         }
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    ModelState.AddModelError("", ex);
+                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
                 }
             }
+            catch (Exception ex)
+            {
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
+            }
+
             return PartialView(model);
         }
 
@@ -133,29 +188,45 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0} -- mapId={1}", User.Identity.GetUser().Id, id);
+
                 if (id == null)
                 {
-                    return PartialView("../Home/BadRequest");
+                    logger.ErrorFormat("BAD_REQUEST -- id is null.");
+
+                    ModelState.AddModelError("", Error.BAD_REQUEST);
+                    return PartialView(new DetailsLayerViewModel());
                 }
+
                 using (var access = new DataAccess())
                 {
                     Layer layer = access.Layers.GetByID(id);
                     if (layer == null)
                     {
-                        return HttpNotFound();
+                        logger.ErrorFormat("NOT_FOUND -- Layer with id={0} not found.", id);
+
+                        ModelState.AddModelError("", Error.NOT_FOUND);
+                        return PartialView(new DetailsLayerViewModel());
                     }
                     else if (layer.Map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return PartialView("../Home/Forbidden");
+                        logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access layer with id={1}.",
+                                 User.Identity.GetUser().Id, id);
+
+                        ModelState.AddModelError("", Error.FORBIDDEN);
+                        return PartialView(new DetailsLayerViewModel());
                     }
+
                     return PartialView(new DetailsLayerViewModel(layer));
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
-            return PartialView();
+
+            return PartialView(new DetailsLayerViewModel());
         }
 
         [AjaxOnly]
@@ -163,29 +234,44 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0} -- mapId={1}", User.Identity.GetUser().Id, id);
+
                 if (id == null)
                 {
-                    return PartialView("../Home/BadRequest");
+                    logger.ErrorFormat("BAD_REQUEST -- id is null.");
+
+                    ModelState.AddModelError("", Error.BAD_REQUEST);
+                    return PartialView(new EditLayerViewModel());
                 }
+
                 using (var access = new DataAccess())
                 {
                     Layer layer = access.Layers.GetByID(id);
                     if (layer == null)
                     {
-                        return PartialView("../Home/NotFound");
+                        logger.ErrorFormat("NOT_FOUND -- Layer with id={0} not found.", id);
+
+                        ModelState.AddModelError("", Error.NOT_FOUND);
+                        return PartialView(new EditLayerViewModel());
                     }
                     else if (layer.Map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return PartialView("../Home/Forbidden");
+                        logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access layer with id={1}.",
+                                 User.Identity.GetUser().Id, id);
+
+                        ModelState.AddModelError("", Error.FORBIDDEN);
+                        return PartialView(new EditLayerViewModel());
                     }
-                    var model = new EditLayerViewModel(layer);
-                    return PartialView(model);
+
+                    return PartialView(new EditLayerViewModel(layer));
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
+
             return PartialView();
         }
 
@@ -196,6 +282,8 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
                 if (ModelState.IsValid)
                 {
                     using (var access = new DataAccess())
@@ -203,20 +291,30 @@ namespace Maps.Controllers
                         var layer = access.Layers.GetByID(model.Id);
                         if (layer == null)
                         {
-                            ModelState.AddModelError("", "Layer does not exists.");
+                            logger.ErrorFormat("NOT_FOUND -- Layer with id={0} not found.", model.Id);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                            return PartialView(model);
                         }
                         else if (layer.Map.User.Id != User.Identity.GetUser().Id)
                         {
-                            return PartialView("../Home/Forbidden");
+                            logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access layer with id={1}.",
+                                User.Identity.GetUser().Id, model.Id);
+
+                            ModelState.AddModelError("", Error.FORBIDDEN);
+                            return PartialView(model);
                         }
                         else
                         {
                             var sameNameLayer = access.Layers.Get(l => l.Name.Equals(model.Name) && l.Map.Id == layer.Map.Id).SingleOrDefault();
                             if (sameNameLayer != null && !sameNameLayer.Id.Equals(layer.Id))
                             {
-                                ModelState.AddModelError("", "Layer with name '" + model.Name + "' already exists.");
+                                logger.ErrorFormat("UserId={0} -- Duplicate layer name", User.Identity.GetUser().Id);
+
+                                ModelState.AddModelError("", string.Format("Layer with name '{0}' already exists.", layer.Name));
                                 return PartialView(model);
                             }
+
                             layer.Name = model.Name;
                             access.Layers.Update(layer);
                             access.Save();
@@ -224,11 +322,15 @@ namespace Maps.Controllers
                         }
                     }
                 }
-                return PartialView(model);
+                else
+                {
+                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
             return PartialView(model);
         }
@@ -241,6 +343,8 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
                 if (ModelState.IsValid)
                 {
                     using (var access = new DataAccess())
@@ -248,11 +352,18 @@ namespace Maps.Controllers
                         var layer = access.Layers.GetByID(model.Id);
                         if (layer == null)
                         {
-                            ModelState.AddModelError("", "Layer does not exists.");
+                            logger.ErrorFormat("NOT_FOUND -- Layer with id={0} not found.", model.Id);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                            return PartialView(model);
                         }
                         else if (layer.Map.User.Id != User.Identity.GetUser().Id)
                         {
-                            return PartialView("../Home/Forbidden");
+                            logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access layer with id={1}.",
+                                User.Identity.GetUser().Id, model.Id);
+
+                            ModelState.AddModelError("", Error.FORBIDDEN);
+                            return PartialView(model);
                         }
                         else
                         {
@@ -262,11 +373,17 @@ namespace Maps.Controllers
                         }
                     }
                 }
+                else
+                {
+                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
+
             return PartialView("Details", model);
         }
 
@@ -277,6 +394,8 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
                 if (ModelState.IsValid)
                 {
                     using (var access = new DataAccess())
@@ -284,18 +403,30 @@ namespace Maps.Controllers
                         var layer = access.Layers.Get(l => l.Id == model.LayerId, includeProperties: "Map,Columns").SingleOrDefault();
                         if (layer == null)
                         {
-                            ModelState.AddModelError("", "Layer does not exists.");
+                            logger.ErrorFormat("NOT_FOUND -- Layer with id={0} not found.", model.LayerId);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
                             return PartialView(model);
                         }
+
                         if (layer.Map.User.Id != User.Identity.GetUser().Id)
                         {
-                            return PartialView("../Home/Forbidden");
-                        }
-                        if (layer.HasData)
-                        {
-                            ModelState.AddModelError("", "Layer already has data.");
+                            logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access layer with id={1}.",
+                                 User.Identity.GetUser().Id, model.LayerId);
+
+                            ModelState.AddModelError("", Error.FORBIDDEN);
                             return PartialView(model);
                         }
+
+                        if (layer.HasData)
+                        {
+                            logger.ErrorFormat("UserId={0} -- Layer with id={1} already has data",
+                                User.Identity.GetUser().Id, model.LayerId);
+
+                            ModelState.AddModelError("", string.Format("Layer with id={0} already has data", model.LayerId));
+                            return PartialView(model);
+                        }
+
                         var extension = Path.GetExtension(model.DataFile.FileName);
                         if (extension == ".json")
                         {
@@ -306,10 +437,14 @@ namespace Maps.Controllers
                                 layer.HasData = true;
                                 access.Layers.Update(layer);
                                 access.Save();
+
+                                logger.InfoFormat("UserId={0} -- successful data load.", User.Identity.GetUser().Id);
+
                                 ModelState.AddModelError("", "Successful data load!");
 
                                 return RedirectToAction("Filter", new { id = model.LayerId });
                             }
+
                             foreach (var message in messages)
                             {
                                 ModelState.AddModelError("", message);
@@ -321,11 +456,17 @@ namespace Maps.Controllers
                         }
                     }
                 }
+                else
+                {
+                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
+
             return PartialView(model);
         }
 
@@ -334,34 +475,52 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
                 if (mapId == null)
                 {
-                    return PartialView("../Home/BadRequest");
+                    logger.ErrorFormat("BAD_REQUEST -- mapId is null.");
+
+                    ModelState.AddModelError("", Error.BAD_REQUEST);
+                    return PartialView(new List<DropdownItemLayerViewModel>());
                 }
+
                 using (var access = new DataAccess())
                 {
                     var map = access.Maps.Get(m => m.Id == mapId, includeProperties: "Layers").SingleOrDefault();
                     if (map == null)
                     {
-                        return PartialView("../Home/NotFound");
+                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", mapId);
+
+                        ModelState.AddModelError("", Error.NOT_FOUND);
+                        return PartialView(new List<DropdownItemLayerViewModel>());
                     }
+
                     if (map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return PartialView("../Home/Forbidden");
+                        logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
+                        User.Identity.GetUser().Id, mapId);
+
+                        ModelState.AddModelError("", Error.FORBIDDEN);
+                        return PartialView(new List<DropdownItemLayerViewModel>());
                     }
+
                     IList<DropdownItemLayerViewModel> items = new List<DropdownItemLayerViewModel>();
                     foreach (var layer in map.Layers)
                     {
                         items.Add(new DropdownItemLayerViewModel(layer));
                     }
+
                     return PartialView(items);
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
-            return PartialView();
+
+            return PartialView(new List<DropdownItemLayerViewModel>());
         }
 
         [AjaxOnly]
@@ -369,59 +528,89 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
                 if (mapId == null)
                 {
-                    return PartialView("../Home/BadRequest");
+                    logger.ErrorFormat("BAD_REQUEST -- mapId is null.");
+
+                    ModelState.AddModelError("", Error.BAD_REQUEST);
+                    return PartialView(new List<DropdownItemLayerViewModel>());
                 }
+
                 using (var access = new DataAccess())
                 {
                     var map = access.Maps.Get(m => m.Id == mapId, includeProperties: "Layers").SingleOrDefault();
                     if (map == null)
                     {
-                        return PartialView("../Home/NotFound");
+                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", mapId);
+
+                        ModelState.AddModelError("", Error.NOT_FOUND);
+                        return PartialView(new List<DropdownItemLayerViewModel>());
                     }
+
                     if (map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return PartialView("../Home/Forbidden");
+                        logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
+                        User.Identity.GetUser().Id, mapId);
+
+                        ModelState.AddModelError("", Error.FORBIDDEN);
+                        return PartialView(new List<DropdownItemLayerViewModel>());
                     }
+
                     IList<DropdownItemLayerViewModel> items = new List<DropdownItemLayerViewModel>();
                     foreach (var layer in map.Layers)
                     {
                         items.Add(new DropdownItemLayerViewModel(layer));
                     }
+
                     return PartialView(items);
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
-            return PartialView();
+
+            return PartialView(new List<DropdownItemLayerViewModel>());
         }
 
         public ActionResult Filter(Guid? id)
         {
             try
             {
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
                 if (id == null)
                 {
-                    return PartialView("../Home/BadRequest");
+                    logger.ErrorFormat("BAD_REQUEST -- id is null.");
+
+                    ModelState.AddModelError("", Error.BAD_REQUEST);
+                    return PartialView(new FilterLayerViewModel());
                 }
+
                 using (var access = new DataAccess())
                 {
                     var layer = access.Layers.GetByID(id);
                     if (layer == null)
                     {
-                        return PartialView("../Home/NotFound");
+                        logger.ErrorFormat("NOT_FOUND -- Layer with id={0} not found.", id);
+
+                        ModelState.AddModelError("", Error.NOT_FOUND);
+                        return PartialView(new FilterLayerViewModel());
                     }
+
                     return PartialView(new FilterLayerViewModel(layer));
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
-            return PartialView();
+
+            return PartialView(new FilterLayerViewModel());
         }
 
         [AjaxOnly]
@@ -430,6 +619,8 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
                 if (ModelState.IsValid)
                 {
                     using (var access = new DataAccess())
@@ -437,20 +628,30 @@ namespace Maps.Controllers
                         var layer = access.Layers.GetByID(model.Id);
                         if (layer == null)
                         {
-                            return PartialView("../Home/NotFound");
+                            logger.ErrorFormat("NOT_FOUND -- Layer with id={0} not found.", model.Id);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                            return PartialView(model);
                         }
+
                         layer.Icon = model.Icon;
                         access.Layers.Update(layer);
                         access.Save();
                         return PartialView(model);
                     }
                 }
+                else
+                {
+                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
-            return PartialView();
+
+            return PartialView(model);
         }
 
 
@@ -460,6 +661,8 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
                 if (ModelState.IsValid)
                 {
                     using (var access = new DataAccess())
@@ -467,20 +670,30 @@ namespace Maps.Controllers
                         var layer = access.Layers.GetByID(model.Id);
                         if (layer == null)
                         {
-                            return PartialView("../Home/NotFound");
+                            logger.ErrorFormat("NOT_FOUND -- Layer with id={0} not found.", model.Id);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                            return PartialView(model);
                         }
+
                         layer.IsVisible = model.IsVisible;
                         access.Layers.Update(layer);
                         access.Save();
                         return PartialView(model);
                     }
                 }
+                else
+                {
+                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
-            return PartialView();
+
+            return PartialView(model);
         }
     }
 }

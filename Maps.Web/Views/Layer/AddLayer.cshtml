@@ -1,9 +1,14 @@
 ﻿@model Maps.Entities.DetailsLayerViewModel
 
 <div class="card" id="newLayer">
-    @Ajax.ActionLink("Add layer", "Create", "Layer", 
-                    new { mapId = Model.HeaderModel.MapId }, 
-                    new AjaxOptions { InsertionMode = InsertionMode.ReplaceWith, HttpMethod = "get", UpdateTargetId = "newLayer" }, 
+    @if (!Html.ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    }
+
+    @Ajax.ActionLink("Add layer", "Create", "Layer",
+                    new { mapId = Model.HeaderModel.MapId },
+                    new AjaxOptions { InsertionMode = InsertionMode.ReplaceWith, HttpMethod = "get", UpdateTargetId = "newLayer" },
                     new { @class = "btn btn-link text-right" })
 </div>
 

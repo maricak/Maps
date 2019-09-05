@@ -5,7 +5,6 @@ using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 
 namespace Maps.Controllers
@@ -440,7 +439,6 @@ namespace Maps.Controllers
 
                             ModelState.AddModelError("", Error.NOT_FOUND);
                             return PartialView(model);
-
                         }
 
                         map.IsPublic = model.IsPublic;
@@ -468,6 +466,8 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0} -- id={1}", User.Identity.GetUser().Id, id);
+
                 if (id == null)
                 {
                     logger.ErrorFormat("BAD_REQUEST -- id is null.");

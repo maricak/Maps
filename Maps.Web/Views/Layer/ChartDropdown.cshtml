@@ -1,20 +1,16 @@
 ﻿@model IList<Maps.Entities.DropdownItemLayerViewModel>
 
-@{
-    ViewBag.Title = "Chart dropdown";
-    Layout = null;
+@if (!Html.ViewData.ModelState.IsValid)
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 }
 
-
-@if (Model != null)
+@foreach (var layer in Model)
 {
-    foreach (var layer in Model)
-    {
-        @Ajax.ActionLink(layer.Name, "Chart", "Data",
-                        new { id = layer.Id },
-                        new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "nav-chart", OnComplete = "showChartComplete()" },
-                        new { @class = "dropdown-item", data_toggle = "tab", role = "tab", aria_controls = "nav-chart", aria_selected = "false", id = "nav-chart-tab" })
-    }
+    @Ajax.ActionLink(layer.Name, "Chart", "Data",
+                    new { id = layer.Id },
+                    new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "nav-chart", OnComplete = "showChartComplete()" },
+                    new { @class = "dropdown-item", data_toggle = "tab", role = "tab", aria_controls = "nav-chart", aria_selected = "false", id = "nav-chart-tab" })
 }
 
 <script>
@@ -26,4 +22,3 @@
         $('#nav-map').removeClass('active')
     }
 </script>
-

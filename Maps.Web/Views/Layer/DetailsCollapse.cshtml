@@ -1,6 +1,11 @@
 ﻿@model Maps.Entities.DetailsCollapseLayerViewModel
 
 <div id="@string.Concat("collapse", Model.Id)" class="collapse card" aria-labelledby="@string.Concat("heading", Model.Id)">
+    @if (!Html.ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    }
+
     @if (Model.HasData)
     {
         @Html.Action("Filter", "Layer", new { id = Model.Id })
@@ -9,7 +14,6 @@
     {
         <div id="@string.Concat("schema", Model.Id)">
             @Html.Partial("../Layer/LoadData", new Maps.Entities.LoadDataViewModel(Model.Id))
-
         </div>
     }
     else
@@ -19,4 +23,3 @@
         </div>
     }
 </div>
-

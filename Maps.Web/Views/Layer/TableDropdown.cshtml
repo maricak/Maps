@@ -1,20 +1,11 @@
 ﻿@model IList<Maps.Entities.DropdownItemLayerViewModel>
 
-@{
-    ViewBag.Title = "Table dropdown";
-    Layout = null;
-}
-
-
-@if (Model != null)
+@foreach (var layer in Model)
 {
-    foreach (var layer in Model)
-    {
-        @Ajax.ActionLink(layer.Name, "Table", "Data",
-                        new { id = layer.Id },
-                        new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "nav-table", OnComplete = "showTableComplete()" },
-                        new { @class = "dropdown-item", data_toggle = "tab", role = "tab", aria_controls = "nav-table", aria_selected = "false", id = "nav-table-tab" })
-    }
+    @Ajax.ActionLink(layer.Name, "Table", "Data",
+                    new { id = layer.Id },
+                    new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "nav-table", OnComplete = "showTableComplete()" },
+                    new { @class = "dropdown-item", data_toggle = "tab", role = "tab", aria_controls = "nav-table", aria_selected = "false", id = "nav-table-tab" })
 }
 
 <script>
@@ -26,4 +17,3 @@
         $('#nav-map').removeClass('active')
     }
 </script>
-
