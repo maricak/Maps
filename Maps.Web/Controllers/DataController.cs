@@ -56,6 +56,7 @@ namespace Maps.Controllers
                 logger.Fatal("", ex);
                 ModelState.AddModelError("", Error.ERROR);
             }
+
             return PartialView(new TableDataViewModel());
         }
 
@@ -99,8 +100,10 @@ namespace Maps.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
+
             return PartialView(new ChartDataViewModel());
         }
     }

@@ -1,7 +1,5 @@
 ﻿@model Maps.Entities.DetailsMapViewModel
-@{
-    ViewBag.Title = "Details";
-}
+@{ ViewBag.Title = "Details"; }
 
 @if (!Html.ViewData.ModelState.IsValid)
 {
@@ -11,6 +9,7 @@
         </div>
     </div>
 }
+
 <div class="row h-100">
     <div class="col-sm-4 col-md-3 p-0" id="sidebar">
         @Html.Partial("Sidebar", Model)
@@ -96,5 +95,3 @@
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWR3laZI1dX9pVrFjK2R9vA8ijTKy9zzg&callback=updateMap">
 </script>
-
-

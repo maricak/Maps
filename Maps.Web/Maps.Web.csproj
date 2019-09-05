@@ -545,7 +545,6 @@
     <Content Include="Views\Layer\ChartDropdown.cshtml" />
     <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Views\Home\ServerError.cshtml" />
-    <Content Include="Views\Map\Tabs.cshtml" />
     <Content Include="Views\Data\HorizontalBarChart.cshtml" />
     <Content Include="Views\Schema\Create.cshtml" />
     <Content Include="Views\Schema\DisplayForm.cshtml" />

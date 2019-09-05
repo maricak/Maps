@@ -1,8 +1,14 @@
 ﻿@model Maps.Entities.ListItemMapViewModel
 
-<div id="newMap" class="card" >
+<div id="newMap" class="card">
+    @if (!Html.ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    }
     <div class="text-right">
-        @Ajax.ActionLink("Add map", "Create", null, new AjaxOptions { HttpMethod = "get", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = "newMap" }, new { @class = "btn btn-link" })
+        @Ajax.ActionLink("Add map", "Create", null,
+                        new AjaxOptions { HttpMethod = "get", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = "newMap" },
+                        new { @class = "btn btn-link" })
         &nbsp;
     </div>
 </div>

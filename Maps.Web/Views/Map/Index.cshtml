@@ -1,9 +1,7 @@
 ﻿@model PagedList.IPagedList<Maps.Entities.ListItemMapViewModel>
 @using PagedList.Mvc;
 
-@{
-    ViewBag.Title = "Maps";
-}
+@{ ViewBag.Title = "Maps"; }
 
 <div class="card my-3">
     <div class="card-header">
@@ -16,11 +14,13 @@
                 @Html.ValidationSummary(false, "", new { @class = "text-danger" })
             </div>
         }
+
         @Html.Partial("AddMap", new ViewDataDictionary())
         @foreach (var item in Model)
         {
             @Html.Partial("ListItem", item)
         }
+
         @if (@Model.PageCount > 1)
         {
             <div class="text-center">

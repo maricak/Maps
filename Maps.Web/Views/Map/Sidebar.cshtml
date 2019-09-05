@@ -1,16 +1,12 @@
 ﻿@model Maps.Entities.DetailsMapViewModel
-
-@{
-    ViewBag.Title = "Details";
-    Layout = null;
-}
+@{ ViewBag.Title = "Details"; }
 
 <div class="card h-100">
     <div class="card-header pr-0">
         <big class="font-weight-bold">
             @Html.DisplayFor(model => model.Name)
         </big>
-        @Html.ActionLink("Back to list", "Index", "Map", null, new { @class = "btn btn-link float-right pt-1 text-right"})
+        @Html.ActionLink("Back to list", "Index", "Map", null, new { @class = "btn btn-link float-right pt-1 text-right" })
     </div>
     @if (!Html.ViewData.ModelState.IsValid)
     {
@@ -64,7 +60,7 @@
             updateMap();
         });
     }
-    
+
     function updateVisibility(layerId, visible) {
         $.ajax({
             type: "post",

@@ -1,5 +1,6 @@
 ﻿using Maps.Data;
 using Maps.Entities;
+using Maps.Utils;
 using PagedList;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace Maps.Controllers
         {
             try
             {
-                logger.InfoFormat("page={0}", page);
+                logger.InfoFormat("UserId={0} -- page={1}", User.Identity.GetUser().Id, page);
 
                 var userId = User.Identity.GetUser().Id;
                 using (var access = new DataAccess())
@@ -32,13 +33,16 @@ namespace Maps.Controllers
                     {
                         models.Add(new ListItemMapViewModel(map));
                     }
+
                     return View(models.ToPagedList(page ?? 1, PAGE_SIZE));
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
+
             return View();
         }
 
@@ -47,69 +51,106 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0} -- id={1}", User.Identity.GetUser().Id, id);
+
                 if (id == null)
                 {
-                    return PartialView("../Home/BadRequest");
+                    logger.ErrorFormat("BAD_REQUEST -- id is null.");
+
+                    ModelState.AddModelError("", Error.BAD_REQUEST);
+                    return PartialView(new ListItemMapViewModel());
                 }
+
                 using (var access = new DataAccess())
                 {
                     Map map = access.Maps.GetByID(id);
                     if (map == null)
                     {
-                        return PartialView("../Home/NotFound");
+                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
+
+                        ModelState.AddModelError("", Error.NOT_FOUND);
+                        return PartialView(new ListItemMapViewModel());
                     }
+
                     if (map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return PartialView("../Home/Forbidden");
+                        logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
+                           User.Identity.GetUser().Id, id);
+
+                        ModelState.AddModelError("", Error.FORBIDDEN);
+                        return PartialView(new ListItemMapViewModel());
                     }
+
                     return PartialView(new ListItemMapViewModel(map));
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
-            return PartialView();
+
+            return PartialView(new ListItemMapViewModel());
         }
 
         public ActionResult Details(Guid? id)
         {
             try
             {
+                logger.InfoFormat("UserId={0} -- id={1}", User.Identity.GetUser().Id, id);
+
                 if (id == null)
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    logger.ErrorFormat("BAD_REQUEST -- id is null.");
+
+                    ModelState.AddModelError("", Error.BAD_REQUEST);
+                    return View(new DetailsMapViewModel());
                 }
                 using (var access = new DataAccess())
                 {
                     Map map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers").SingleOrDefault();
                     if (map == null)
                     {
-                        return HttpNotFound();
+                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
+
+                        ModelState.AddModelError("", Error.NOT_FOUND);
+                        return View(new DetailsMapViewModel());
                     }
+
                     if (map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                        logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
+                         User.Identity.GetUser().Id, id);
+
+                        ModelState.AddModelError("", Error.FORBIDDEN);
+                        return View(new DetailsMapViewModel());
                     }
+
                     return View(new DetailsMapViewModel(map));
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
-            return View();
+
+            return View(new DetailsMapViewModel());
         }
 
         [AjaxOnly]
         public ActionResult AddMap()
         {
+            logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
             return PartialView(null);
         }
 
         [AjaxOnly]
         public ActionResult Create()
         {
+            logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
             return PartialView();
         }
 
@@ -118,9 +159,11 @@ namespace Maps.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Name")] CreateMapViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
+                if (ModelState.IsValid)
                 {
                     using (var access = new DataAccess())
                     {
@@ -129,7 +172,9 @@ namespace Maps.Controllers
 
                         if (user == null)
                         {
-                            ModelState.AddModelError("", "Unknown user.");
+                            logger.ErrorFormat("NOT_FOUND -- User with id={0} not found.", userId);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
                             return PartialView(model);
                         }
 
@@ -144,7 +189,10 @@ namespace Maps.Controllers
                         var duplicateMap = access.Maps.Get(m => m.Name.Equals(map.Name) && m.User.Id == userId);
                         if (duplicateMap.Count() != 0)
                         {
-                            ModelState.AddModelError("", "Map with name '" + map.Name + "' already exists.");
+                            logger.ErrorFormat("UserId={0} -- Duplicate map name", User.Identity.GetUser().Id);
+
+                            ModelState.AddModelError("", string.Format("Map with name '{0}' already exists.", map.Name));
+                            return PartialView(model);
                         }
                         else
                         {
@@ -154,11 +202,17 @@ namespace Maps.Controllers
                         }
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    ModelState.AddModelError("", ex);
+                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
                 }
             }
+            catch (Exception ex)
+            {
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
+            }
+
             return PartialView(model);
         }
 
@@ -167,30 +221,45 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0} -- id={1}", User.Identity.GetUser().Id, id);
+
                 if (id == null)
                 {
-                    return PartialView("../Home/BadRequest");
+                    logger.ErrorFormat("BAD_REQUEST -- id is null.");
+
+                    ModelState.AddModelError("", Error.BAD_REQUEST);
+                    return PartialView(new EditMapViewModel());
                 }
+
                 using (var access = new DataAccess())
                 {
                     Map map = access.Maps.GetByID(id);
                     if (map == null)
                     {
-                        return PartialView("../Home/NotFound");
+                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
+
+                        ModelState.AddModelError("", Error.NOT_FOUND);
+                        return PartialView(new EditMapViewModel());
                     }
+
                     if (map.User.Id != User.Identity.GetUser().Id)
                     {
-                        return PartialView("../Home/Forbidden");
+                        logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
+                           User.Identity.GetUser().Id, id);
+
+                        ModelState.AddModelError("", Error.FORBIDDEN);
+                        return PartialView(new EditMapViewModel());
                     }
-                    var model = new EditMapViewModel(map);
-                    return PartialView(model);
+
+                    return PartialView(new EditMapViewModel(map));
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
-            return PartialView();
+            return PartialView(new EditMapViewModel());
         }
 
         [AjaxOnly]
@@ -200,6 +269,8 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
                 if (ModelState.IsValid)
                 {
                     using (var access = new DataAccess())
@@ -208,20 +279,30 @@ namespace Maps.Controllers
                         var map = access.Maps.GetByID(model.Id);
                         if (map == null)
                         {
-                            ModelState.AddModelError("", "Map does not exists.");
+                            logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", model.Id);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                            return PartialView(model);
                         }
                         else if (map.User.Id != userId)
                         {
-                            return PartialView("../Home/Forbidden");
+                            logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
+                                User.Identity.GetUser().Id, model.Id);
+
+                            ModelState.AddModelError("", Error.FORBIDDEN);
+                            return PartialView(model);
                         }
                         else
                         {
                             var sameNameMap = access.Maps.Get(m => m.Name.Equals(model.Name) && m.User.Id == userId).SingleOrDefault();
                             if (sameNameMap != null && !sameNameMap.Id.Equals(map.Id))
                             {
-                                ModelState.AddModelError("", "Map with name '" + model.Name + "' already exists.");
+                                logger.ErrorFormat("UserId={0} -- Duplicate map name", User.Identity.GetUser().Id);
+
+                                ModelState.AddModelError("", string.Format("Map with name '{0}' already exists.", map.Name));
                                 return PartialView("Edit", model);
                             }
+
                             map.Name = model.Name;
                             access.Maps.Update(map);
                             access.Save();
@@ -229,12 +310,17 @@ namespace Maps.Controllers
                         }
                     }
                 }
-                return PartialView(model);
+                else
+                {
+                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
+
             return PartialView(model);
         }
 
@@ -245,6 +331,8 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
                 if (ModelState.IsValid)
                 {
                     using (var access = new DataAccess())
@@ -252,11 +340,17 @@ namespace Maps.Controllers
                         var map = access.Maps.GetByID(model.Id);
                         if (map == null)
                         {
-                            ModelState.AddModelError("", "Map does not exists.");
+                            logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", model.Id);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                            return PartialView("ListItem", model);
                         }
                         else if (map.User.Id != User.Identity.GetUser().Id)
                         {
-                            return PartialView("../Home/Forbidden");
+                            logger.ErrorFormat("UserId={0} -- Duplicate map name", User.Identity.GetUser().Id);
+
+                            ModelState.AddModelError("", string.Format("Map with name '{0}' already exists.", map.Name));
+                            return PartialView("ListItem", model);
                         }
                         else
                         {
@@ -266,11 +360,17 @@ namespace Maps.Controllers
                         }
                     }
                 }
+                else
+                {
+                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
+
             return PartialView("ListItem", model);
         }
 
@@ -278,20 +378,33 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
                 if (id == null)
                 {
-                    return PartialView("../Home/BadRequest");
+                    logger.ErrorFormat("BAD_REQUEST -- id is null.");
+
+                    ModelState.AddModelError("", Error.BAD_REQUEST);
+                    return PartialView(new DisplayMapViewModel());
                 }
+
                 using (var access = new DataAccess())
                 {
                     var map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers,Layers.Data,Layers.Columns").SingleOrDefault();
                     if (map == null)
                     {
-                        ModelState.AddModelError("", "Map does not exists.");
+                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
+
+                        ModelState.AddModelError("", Error.NOT_FOUND);
+                        return PartialView(new DisplayMapViewModel());
                     }
                     else if (map.User.Id != User.Identity.GetUser().Id && !map.IsPublic)
                     {
-                        return PartialView("../Home/Forbidden");
+                        logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
+                                User.Identity.GetUser().Id, id);
+
+                        ModelState.AddModelError("", Error.FORBIDDEN);
+                        return PartialView(new DisplayMapViewModel());
                     }
                     else
                     {
@@ -301,9 +414,11 @@ namespace Maps.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
-            return PartialView();
+
+            return PartialView(new DisplayMapViewModel());
         }
 
         [AjaxOnly]
@@ -312,6 +427,8 @@ namespace Maps.Controllers
         {
             try
             {
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+
                 if (ModelState.IsValid)
                 {
                     using (var access = new DataAccess())
@@ -319,20 +436,31 @@ namespace Maps.Controllers
                         var map = access.Maps.GetByID(model.Id);
                         if (map == null)
                         {
-                            return PartialView("../Home/NotFound");
+                            logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", model.Id);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                            return PartialView(model);
+
                         }
+
                         map.IsPublic = model.IsPublic;
                         access.Maps.Update(map);
                         access.Save();
                         return PartialView(model);
                     }
                 }
+                else
+                {
+                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
-            return PartialView();
+
+            return PartialView(model);
         }
 
         [AllowAnonymous]
@@ -342,27 +470,41 @@ namespace Maps.Controllers
             {
                 if (id == null)
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    logger.ErrorFormat("BAD_REQUEST -- id is null.");
+
+                    ModelState.AddModelError("", Error.BAD_REQUEST);
+                    return View(new ViewMapViewModel());
                 }
+
                 using (var access = new DataAccess())
                 {
                     Map map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers").SingleOrDefault();
                     if (map == null)
                     {
-                        return HttpNotFound();
+                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
+
+                        ModelState.AddModelError("", Error.NOT_FOUND);
+                        return View(new ViewMapViewModel());
                     }
+
                     if (!map.IsPublic)
                     {
-                        return HttpNotFound();
+                        logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
+
+                        ModelState.AddModelError("", Error.NOT_FOUND);
+                        return View(new ViewMapViewModel());
                     }
+
                     return View(new ViewMapViewModel(map));
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
             }
-            return View();
+
+            return View(new ViewMapViewModel());
         }
 
         [AjaxOnly]
@@ -379,14 +521,22 @@ namespace Maps.Controllers
                         var map = access.Maps.Get(m => m.Id == model.Id, includeProperties: "Layers,Layers.Columns,Layers.Data").SingleOrDefault();
                         if (map == null)
                         {
-                            return PartialView("../Home/NotFound");
+                            logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", model.Id);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                            return PartialView(model);
                         }
+
                         var userId = User.Identity.GetUser().Id;
                         var user = access.Users.GetByID(userId);
                         if (user == null)
                         {
-                            return PartialView("../Home/BadRequest");
+                            logger.ErrorFormat("NOT_FOUND -- User with id={0} not found.", userId);
+
+                            ModelState.AddModelError("", Error.NOT_FOUND);
+                            return PartialView(model);
                         }
+
                         Map newMap = new Map()
                         {
                             Id = newMapId,
@@ -395,6 +545,10 @@ namespace Maps.Controllers
                             User = user,
                         };
                         access.Maps.Insert(newMap);
+
+                        logger.InfoFormat("UserId={0} -- copy map object from map with id={1} to map with id={2}",
+                            User.Identity.GetUser().Id, map.Id, newMapId); ;
+
                         foreach (var layer in map.Layers)
                         {
                             Layer newLayer = new Layer()
@@ -420,7 +574,12 @@ namespace Maps.Controllers
                                 };
                                 access.Columns.Insert(newColumn);
                             }
+
                             access.Save();
+
+                            logger.InfoFormat("UserId={0} -- copy layer with id={1} with columns from map with id={2} to map with id={3}",
+                                User.Identity.GetUser().Id, layer.Id, map.Id, newMapId);
+
                             var dataList = new List<Entities.Data>();
                             foreach (var data in layer.Data)
                             {
@@ -432,30 +591,43 @@ namespace Maps.Controllers
                                 };
                                 dataList.Add(newData);
                             }
+
                             access.Data.BulkInsert(dataList);
                             access.Save();
+
+                            logger.InfoFormat("UserId={0} -- copy data from layer with id={1} to layer with id={2}",
+                                User.Identity.GetUser().Id, layer.Id, newLayer.Id);
                         }
+
                         ModelState.AddModelError("", "Successful copy!");
-                        return PartialView();
+                        return PartialView(model);
                     }
+                }
+                else
+                {
+                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex);
+                logger.Fatal("", ex);
+                ModelState.AddModelError("", Error.ERROR);
                 try
                 {
                     using (var access = new DataAccess())
                     {
+                        logger.InfoFormat("UserId={0} -- Delete new map with id={1} after failure", newMapId);
+
                         access.Maps.Delete(newMapId);
                     }
                 }
                 catch (Exception exc)
                 {
-                    ModelState.AddModelError("", exc);
+                    logger.Fatal("", exc);
+                    ModelState.AddModelError("", Error.ERROR);
                 }
             }
-            return PartialView();
+            return PartialView(model);
         }
     }
 }
