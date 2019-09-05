@@ -2,21 +2,15 @@
 
 @if (Request.IsAuthenticated)
 {
-    <ul class="nav justify-content-end bg-white">
-        @if (!Html.ViewData.ModelState.IsValid)
+    using (Ajax.BeginForm("Copy", "Map", null,
+        new AjaxOptions { UpdateTargetId = "copy", InsertionMode = InsertionMode.Replace },
+        new { @class = "form-inline bg-white w-100" }))
+    {
+        @Html.HiddenFor(m => m.Id)
+        <input type="submit" value="Copy" class="btn btn-link" />
+        if (!Html.ViewData.ModelState.IsValid)
         {
-            <li class="nav-item">
-                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-            </li>
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
         }
-        <li class="nav-item">
-            @using (Ajax.BeginForm("Copy", "Map", null,
-                new AjaxOptions { UpdateTargetId = "copy", InsertionMode = InsertionMode.Replace },
-                new { @class = "nav-link" }))
-            {
-                @Html.HiddenFor(m => m.Id)
-                <input type="submit" value="Copy" class="btn btn-link" />
-            }
-        </li>
-    </ul>
+    }
 }

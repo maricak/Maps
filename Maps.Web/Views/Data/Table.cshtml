@@ -1,9 +1,13 @@
 ﻿@model Maps.Entities.TableDataViewModel
+@{ ViewBag.Title = "Table"; }
 
-@{
-    ViewBag.Title = "Table";
-    Layout = null;
+@if (!Html.ViewData.ModelState.IsValid)
+{
+    <div class="card">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    </div>
 }
+
 <div class="card m-2">
     @if (Model.HasData && Model.Data.Count != 0)
     {

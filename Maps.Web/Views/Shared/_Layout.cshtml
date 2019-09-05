@@ -24,7 +24,7 @@
     {
         @Html.Partial("~/Views/Home/HomeHeaderPartial.cshtml");
     }
-    <main class="@(controller.Equals("Map") && (action.Equals("Details") || action.Equals("View")) ? "container-fluid h-100 p-0" : "container p-0")">
+    <main class="@(controller.Equals("Map") && (action.Equals("Details") || action.Equals("View")) ? "container-fluid h-100" : "container")">
         @RenderBody()
     </main>
     @if (!controller.Equals("Map") || !(action.Equals("Details")|| action.Equals("View")))

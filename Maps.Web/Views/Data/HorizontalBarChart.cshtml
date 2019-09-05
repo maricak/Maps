@@ -1,8 +1,11 @@
 ﻿@model  Maps.Entities.HorizontalBarViewModel
+@{ ViewBag.Title = "HorizontalBarChart"; }
 
-@{
-    ViewBag.Title = "HorizontalBarChart";
-    Layout = null;
+@if (!Html.ViewData.ModelState.IsValid)
+{
+    <div class="card mt-4">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    </div>
 }
 
 @if (Model.LabelArray?.Count != 0)

@@ -12,15 +12,17 @@ namespace Maps.Controllers
     [Authorize]
     public class MapController : Controller
     {
-        private const int PAGE_SIZE = 10;
         readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        private const int PAGE_SIZE = 10;
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public ActionResult Index(int? page)
         {
-            logger.InfoFormat("page={0}", page);
             try
             {
+                logger.InfoFormat("page={0}", page);
+
                 var userId = User.Identity.GetUser().Id;
                 using (var access = new DataAccess())
                 {

@@ -1,9 +1,5 @@
 ﻿@model Maps.Entities.ChartDataViewModel
-
-@{
-    ViewBag.Title = "Chart";
-    Layout = null;
-}
+@{ ViewBag.Title = "Chart"; }
 
 <script>
     function dynamicColors() {
@@ -22,7 +18,13 @@
     }
 </script>
 
-<div class="ml-2 mr-4">
+<div class="m-2">
+    @if (!Html.ViewData.ModelState.IsValid)
+    {
+        <div class="card">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        </div>
+    }
     @if (Model.HasData)
     {
         if (Model.ChartModels.Count() == 0)
