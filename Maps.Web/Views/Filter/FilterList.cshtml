@@ -1,4 +1,4 @@
-﻿@model IList<Maps.Entities.FilterViewModel>
+﻿@model IList<Maps.Entities.IFilterViewModel>
 
 <ul class="list-group list-group-flush">
     @if (!Html.ViewData.ModelState.IsValid)
@@ -10,7 +10,24 @@
     @foreach (var item in Model)
     {
         <li class="list-group-item p-0 pl-3" id="@string.Concat("filter", item.Id)">
-            @Html.Partial("../Filter/Filter", item)
+            @switch (item.Type)
+            {
+                case Maps.Entities.FilterType.RANGE:
+                    {
+                        @Html.Partial("../Filter/Range", item)
+                        break;
+                    }
+                case Maps.Entities.FilterType.UNIQUE_LIST:
+                    {
+                        @Html.Partial("../Filter/UniqueList", item)
+                        break;
+                    }
+                case Maps.Entities.FilterType.DISTANCE:
+                    {
+                        @Html.Partial("../Filter/Distance", item)
+                        break;
+                    }
+            }
         </li>
     }
 </ul>

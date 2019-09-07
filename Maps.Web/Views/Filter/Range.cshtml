@@ -1,0 +1,42 @@
+﻿@model Maps.Entities.RangeFilterViewModel
+
+@using (Ajax.BeginForm("Range", "Filter", null,
+                        new AjaxOptions { HttpMethod = "post", UpdateTargetId = string.Concat("filter", Model.Id), InsertionMode = InsertionMode.Replace }))
+{
+    if (!Html.ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    }
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Name)
+    <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+
+    <div class="form-row">
+        <div class="col-10">
+            <span class="font-weight-bold">@Model.Name</span>
+        </div>
+        <div class="col-auto">
+            @Html.CheckBoxFor(m => m.IsVisible)
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-4">
+            @Html.LabelFor(m => m.RangeStart)
+        </div>
+        <div class="col-auto">
+            @Html.EditorFor(m => m.RangeStart, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-4">
+            @Html.LabelFor(m => m.RangeEnd)
+        </div>
+        <div class="col-auto">
+            @Html.EditorFor(m => m.RangeEnd, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+        </div>
+    </div>
+
+    <input type="submit" value="Update filter" class="btn btn-link float-right" />
+}

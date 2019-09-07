@@ -598,7 +598,7 @@ namespace Maps.Controllers
                 {
                     using (var access = new DataAccess())
                     {
-                        var layer = access.Layers.Get(l => l.Id == id, includeProperties:"Columns").SingleOrDefault();
+                        var layer = access.Layers.Get(l => l.Id == id, includeProperties: "Columns").SingleOrDefault();
                         if (layer == null)
                         {
                             logger.ErrorFormat("NOT_FOUND -- Layer with id={0} not found.", id);

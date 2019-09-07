@@ -1,8 +1,7 @@
 namespace Maps.Data.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class AddFilters : DbMigration
     {
         public override void Up()
@@ -10,7 +9,7 @@ namespace Maps.Data.Migrations
             AddColumn("dbo.Column", "Filter_", c => c.String());
             AddColumn("dbo.Column", "IsFilterVisible", c => c.Boolean(nullable: false));
         }
-        
+
         public override void Down()
         {
             DropColumn("dbo.Column", "IsFilterVisible");

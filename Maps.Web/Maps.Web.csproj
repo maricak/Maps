@@ -564,7 +564,9 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Views\Filter\FilterList.cshtml" />
-    <Content Include="Views\Filter\Filter.cshtml" />
+    <Content Include="Views\Filter\Range.cshtml" />
+    <Content Include="Views\Filter\UniqueList.cshtml" />
+    <Content Include="Views\Filter\Distance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

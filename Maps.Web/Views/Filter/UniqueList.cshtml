@@ -1,0 +1,46 @@
+﻿@model Maps.Entities.UniqueListFilterViewModel
+
+@using (Ajax.BeginForm("UniqueList", "Filter", null,
+                        new AjaxOptions { HttpMethod = "post", UpdateTargetId = string.Concat("filter", Model.Id), InsertionMode = InsertionMode.Replace }))
+{
+    if (!Html.ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    }
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Name)
+    <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+
+    <div class="form-row">
+        <div class="col-10">
+            <span class="font-weight-bold">@Model.Name</span>
+        </div>
+        <div class="col-auto">
+            @Html.CheckBoxFor(m => m.IsVisible)
+        </div>
+    </div>
+
+    foreach (var pair in Model.UniqueValues)
+    {
+        <div class="form-row">
+            <div class="col-10">
+                <input type="hidden" name="UniqueValues[@pair.Key].Key" value="@pair.Key" />
+                @Html.DisplayTextFor(m => pair.Key)
+            </div>
+            <div class="col-auto">
+                @if (pair.Value)
+                {
+                    <input type="checkbox" name="UniqueValues[@pair.Key]" id="UniqueValues[@pair.Key]" value="true" checked="checked" />
+                }
+                else
+                {
+                    <input type="checkbox" name="UniqueValues[@pair.Key]" id="UniqueValues[@pair.Key]" value="true"/>
+                }
+                @*@Html.CheckBoxFor(m => pair.Value, new { htmlAttributes = new { @class = "form-check-input form-control-sm" } })*@
+            </div>
+        </div>
+    }
+
+    <input type="submit" value="Update filter" class="btn btn-link float-right" />
+}

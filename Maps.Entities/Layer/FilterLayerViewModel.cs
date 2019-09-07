@@ -12,30 +12,35 @@ namespace Maps.Entities
 
         public VisibilityLayerViewModel Visibility { get; set; }
 
-        public IList<FilterViewModel> ColumnFilters { get; set; }
+        public IList<IFilterViewModel> Filters { get; set; }
 
         public FilterLayerViewModel()
         {
             SelectIcon = new SelectIconLayerViewModel();
             Visibility = new VisibilityLayerViewModel();
-            ColumnFilters = new List<FilterViewModel>();
+            Filters = new List<IFilterViewModel>();
         }
 
         public FilterLayerViewModel(Layer layer)
         {
             SelectIcon = new SelectIconLayerViewModel(layer);
             Visibility = new VisibilityLayerViewModel(layer);
-            ColumnFilters = new List<FilterViewModel>();
+            Filters = new List<IFilterViewModel>();
             if (layer != null)
             {
                 foreach (var column in layer.Columns)
                 {
-                    if (column.HasChart || column.DataType == UserDataType.NUMBER)
+                    if (column.HasChart)
                     {
-                        ColumnFilters.Add(new FilterViewModel(column));
+                        Filters.Add(new UniqueListFilterViewModel(column));
+                    }
+                    else if (column.DataType == UserDataType.NUMBER)
+                    {
+                        Filters.Add(new RangeFilterViewModel(column));
                     }
                 }
-                ColumnFilters.Add(new FilterViewModel(layer));
+
+                Filters.Add(new DistanceFilterViewModel(layer));
             }
         }
     }

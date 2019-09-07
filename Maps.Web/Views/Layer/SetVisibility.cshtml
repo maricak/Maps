@@ -8,15 +8,21 @@
         </li>
     }
     <li class="list-group-item p-0 pl-3">
-        <span class="pt-2 font-weight-bold">Visibile:</span>
         @Html.HiddenFor(m => m.Id)
-        @if (Model.IsVisible)
-        {
-            <input type="checkbox" checked="checked" id="IsVisible" name="IsVisible" onchange="updateVisibility('@Model.Id', this.checked)" />
-        }
-        else
-        {
-            <input type="checkbox" id="IsVisible" name="IsVisible" onchange="updateVisibility('@Model.Id', this.checked)" />
-        }
+        <div class="form-row">
+            <div class="col-10">
+                <span class="pt-2 font-weight-bold">Layer visibility:</span>
+            </div>
+            <div class="col-auto">
+                @if (Model.IsVisible)
+                {
+                    <input type="checkbox" checked="checked" id="IsVisible" name="IsVisible" onchange="updateVisibility('@Model.Id', this.checked)" />
+                }
+                else
+                {
+                    <input type="checkbox" id="IsVisible" name="IsVisible" onchange="updateVisibility('@Model.Id', this.checked)" />
+                }
+            </div>
+        </div>
     </li>
 </ul>
