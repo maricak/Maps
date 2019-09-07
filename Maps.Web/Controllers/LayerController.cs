@@ -172,7 +172,7 @@ namespace Maps.Controllers
                 }
                 else
                 {
-                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                    logger.ErrorFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
                 }
             }
             catch (Exception ex)
@@ -326,7 +326,7 @@ namespace Maps.Controllers
                 }
                 else
                 {
-                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                    logger.ErrorFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
                 }
             }
             catch (Exception ex)
@@ -375,7 +375,7 @@ namespace Maps.Controllers
                 }
                 else
                 {
-                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                    logger.ErrorFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
                 }
             }
             catch (Exception ex)
@@ -432,6 +432,8 @@ namespace Maps.Controllers
                                 {
                                     foreach (var message in messages)
                                     {
+                                        logger.ErrorFormat("USerId={0} -- Error message={1}", User.Identity.GetUser().Id, message);
+
                                         ModelState.AddModelError("", message);
                                     }
                                 }
@@ -450,14 +452,16 @@ namespace Maps.Controllers
                             }
                             else
                             {
-                                ModelState.AddModelError("", "Extension '" + extension + "' is not supported");
+                                logger.ErrorFormat("UserId={0} -- Extension {1} is not supported", User.Identity.GetUser().Id, extension);
+
+                                ModelState.AddModelError("", string.Format("Extension '{0}' is not supported", extension));
                             }
                         }
                     }
                 }
                 else
                 {
-                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                    logger.ErrorFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
                 }
             }
             catch (Exception ex)
@@ -643,7 +647,7 @@ namespace Maps.Controllers
                 }
                 else
                 {
-                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                    logger.ErrorFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
                 }
             }
             catch (Exception ex)
@@ -686,7 +690,7 @@ namespace Maps.Controllers
                 }
                 else
                 {
-                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                    logger.ErrorFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
                 }
             }
             catch (Exception ex)

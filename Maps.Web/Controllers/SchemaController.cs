@@ -46,7 +46,7 @@ namespace Maps.Controllers
                 }
                 else
                 {
-                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                    logger.ErrorFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
                 }
             }
             catch (Exception ex)
@@ -121,7 +121,7 @@ namespace Maps.Controllers
                 }
                 else
                 {
-                    logger.InfoFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
+                    logger.ErrorFormat("UserId={0} -- Model state is invalid", User.Identity.GetUser().Id);
                 }
             }
             catch (Exception ex)

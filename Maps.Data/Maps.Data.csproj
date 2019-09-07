@@ -132,6 +132,10 @@
     <Compile Include="Migrations\201909020622438_AddMapIsPublic.Designer.cs">
       <DependentUpon>201909020622438_AddMapIsPublic.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909070914100_AddFilters.cs" />
+    <Compile Include="Migrations\201909070914100_AddFilters.Designer.cs">
+      <DependentUpon>201909070914100_AddFilters.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
@@ -185,6 +189,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909020622438_AddMapIsPublic.resx">
       <DependentUpon>201909020622438_AddMapIsPublic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909070914100_AddFilters.resx">
+      <DependentUpon>201909070914100_AddFilters.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

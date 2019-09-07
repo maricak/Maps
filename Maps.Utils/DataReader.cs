@@ -20,5 +20,14 @@ namespace Maps.Utils
         /// <param name="messages">List of error messages which will be populated in the case of failure.</param>
         /// <returns></returns>
         public abstract bool LoadFile(Stream stream, Layer layer, ref IList<string> messages);
+
+        protected void CreateFilters()
+        {
+
+        }
+        protected void CreateCharts()
+        {
+
+        }
     }
 }

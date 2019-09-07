@@ -80,8 +80,7 @@ namespace Maps.Utils
 
                     schemaString += "]}}";
 
-                    // Since properties cannot be set programmatically the schema will be parsed from
-                    // the created string.
+                    // Since properties cannot be set programmatically the schema will be parsed from the created string.
                     JSchema schema = JSchema.Parse(schemaString);
                     return schema;
                 }
@@ -89,6 +88,22 @@ namespace Maps.Utils
             catch (Exception ex)
             {
                 messages.Add(ex.Message);
+                try
+                {
+                    using (var access = new DataAccess())
+                    {
+                        foreach(var data in access.Data.Get(d => d.Layer.Id == id).ToList())
+                        {
+                            access.Data.Delete(data);
+                        }
+                        access.Save();
+                    }
+                }
+                catch (Exception exe)
+                {
+                    messages.Add(exe.Message);
+                }
+
                 return null;
             }
         }
@@ -104,7 +119,6 @@ namespace Maps.Utils
                     Layer = layer,
                     Values = JObject.Parse(item.ToString())
                 };
-
                 data.Add(d);
             }
 

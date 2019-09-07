@@ -31,6 +31,11 @@ namespace Maps.Data
                 .Property(d => d.Values_).HasColumnName("Values");
 
             // OnDeleteCascade setup
+            modelBuilder.Entity<Map>()
+                .HasOptional(m => m.User)
+                .WithMany(u => u.Maps)
+                .WillCascadeOnDelete(true);
+
             modelBuilder.Entity<Layer>()
               .HasOptional(l => l.Map)
               .WithMany(m => m.Layers)
