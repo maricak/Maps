@@ -1,6 +1,9 @@
-﻿using Maps.Entities;
+﻿using Maps.Data;
+using Maps.Entities;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Maps.Utils
 {
@@ -21,13 +24,75 @@ namespace Maps.Utils
         /// <returns></returns>
         public abstract bool LoadFile(Stream stream, Layer layer, ref IList<string> messages);
 
-        protected void CreateFilters()
+        /// <summary>
+        /// Creates default filters for all columns of the given layer.
+        /// </summary>
+        /// <param name="layer">Creates filters for columns of this layer.</param>
+        protected void CreateFilters(Layer layer)
         {
+            using (var access = new DataAccess())
+            {
+                IList<Entities.Data> data = access.Data.Get(d => d.Layer.Id == layer.Id).ToList();
 
+                foreach (var column in access.Columns.Get(c => c.Layer.Id == layer.Id).ToList())
+                {
+                    if (column.HasChart)
+                    {
+                        var uniqueValues = data.GroupBy(d => d.Values[column.Name]).Select(grp => new { Name = grp.Key });
+                        foreach (var unique in uniqueValues)
+                        {
+                            column.Filter[unique.Name.ToString()] = false;
+                        }
+                    }
+                    else if (column.DataType == UserDataType.NUMBER)
+                    {
+                        column.Filter["min"] = 0;
+                        column.Filter["max"] = 0;
+                    }
+
+                    if (column.DataType == UserDataType.LATITUDE)
+                    {
+                        column.Filter["lng"] = 0;
+                        column.Filter["lat"] = 0;
+                        column.Filter["radius"] = 0;
+                    }
+
+                    access.Columns.Update(column);
+                }
+
+                access.Save();
+            }
         }
-        protected void CreateCharts()
-        {
 
+        /// <summary>
+        /// Calculates chart data for the columns of the given layer that have HasChart set.
+        /// </summary>
+        /// <param name="layer">Calulates chart data for the columns of this layer.</param>
+        protected void CreateCharts(Layer layer)
+        {
+            using (var access = new DataAccess())
+            {
+                IList<Entities.Data> data = access.Data.Get(d => d.Layer.Id == layer.Id).ToList();
+
+                foreach (var column in access.Columns.Get(c => c.Layer.Id == layer.Id).ToList())
+                {
+                    if (column.HasChart)
+                    {
+                        var res = data.GroupBy(d => d.Values[column.Name])
+                                .Select(grp => new
+                                {
+                                    label = grp.Key,
+                                    count = grp.Select(d => d.Values[column.Name]).Count()
+                                });
+                        column.Chart["labels"] = new JArray(res.Select(r => r.label).ToArray());
+                        column.Chart["counts"] = new JArray(res.Select(r => r.count).ToArray());
+
+                        access.Columns.Update(column);
+                    }
+                }
+
+                access.Save();
+            }
         }
     }
 }

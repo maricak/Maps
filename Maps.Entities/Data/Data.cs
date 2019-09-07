@@ -21,7 +21,7 @@ namespace Maps.Entities
         public string Values_
         {
             get { return Values != null ? JsonConvert.SerializeObject(Values) : null; }
-            set { Values = JsonConvert.DeserializeObject<JObject>(value); }
+            set { Values = string.IsNullOrEmpty(value) ? new JObject() : JsonConvert.DeserializeObject<JObject>(value); }
         }
 
         [NotMapped]

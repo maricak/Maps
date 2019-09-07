@@ -5,6 +5,7 @@ using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 
 namespace Maps.Controllers
@@ -102,8 +103,7 @@ namespace Maps.Controllers
                 {
                     logger.ErrorFormat("BAD_REQUEST -- id is null.");
 
-                    ModelState.AddModelError("", Error.BAD_REQUEST);
-                    return View(new DetailsMapViewModel());
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 else
                 {
@@ -114,15 +114,14 @@ namespace Maps.Controllers
                         {
                             logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
 
-                            ModelState.AddModelError("", Error.NOT_FOUND);
+                            return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+
                         }
                         else if (map.User.Id != User.Identity.GetUser().Id)
                         {
-                            logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
-                             User.Identity.GetUser().Id, id);
+                            logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.", User.Identity.GetUser().Id, id);
 
-                            ModelState.AddModelError("", Error.FORBIDDEN);
-                            return View(new DetailsMapViewModel());
+                            return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                         }
                         else
                         {

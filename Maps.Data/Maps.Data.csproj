@@ -136,6 +136,10 @@
     <Compile Include="Migrations\201909070914100_AddFilters.Designer.cs">
       <DependentUpon>201909070914100_AddFilters.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909071012400_MapDeleteOncascade.cs" />
+    <Compile Include="Migrations\201909071012400_MapDeleteOncascade.Designer.cs">
+      <DependentUpon>201909071012400_MapDeleteOncascade.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
@@ -192,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909070914100_AddFilters.resx">
       <DependentUpon>201909070914100_AddFilters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909071012400_MapDeleteOncascade.resx">
+      <DependentUpon>201909071012400_MapDeleteOncascade.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

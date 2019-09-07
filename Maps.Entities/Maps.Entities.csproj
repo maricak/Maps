@@ -96,7 +96,6 @@
     <Compile Include="Account\RegisterViewModel.cs" />
     <Compile Include="Account\ResetPasswordViewModel.cs" />
     <Compile Include="Account\SetPasswordViewModel.cs" />
-    <Compile Include="Column\ChartColumnViewModel.cs" />
     <Compile Include="Column\Column.cs" />
     <Compile Include="Column\CreateColumnViewModel.cs" />
     <Compile Include="Layer\VisibilityLayerViewModel.cs" />

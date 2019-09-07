@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Maps.Entities
 {
@@ -24,18 +22,12 @@ namespace Maps.Entities
         public Guid ColumnId { get; set; }
         public string ColumnName { get; set; }
 
-        public HorizontalBarViewModel(ChartColumnViewModel column, ICollection<Data> data)
+        public HorizontalBarViewModel(Column column)
         {
-            ColumnName = column.Name;
             ColumnId = column.Id;
-            var res = data.GroupBy(d => d.Values[column.Name])
-                    .Select(grp => new
-                    {
-                        label = grp.Key,
-                        count = grp.Select(d => d.Values[column.Name]).Count()
-                    });
-            LabelArray = new JArray(res.Select(r => r.label).ToArray());
-            CountArray = new JArray(res.Select(r => r.count).ToArray());
+            ColumnName = column.Name;
+            LabelArray = column.Chart["labels"] as JArray;
+            CountArray = column.Chart["counts"] as JArray;
         }
     }
 }

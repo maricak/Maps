@@ -36,7 +36,7 @@ namespace Maps.Entities
         public string Chart_
         {
             get { return Chart != null ? JsonConvert.SerializeObject(Chart) : null; }
-            set { Chart = JsonConvert.DeserializeObject<JObject>(value); }
+            set { Chart = string.IsNullOrEmpty(value) ? new JObject() : JsonConvert.DeserializeObject<JObject>(value); }
         }
 
         [NotMapped]
@@ -56,7 +56,7 @@ namespace Maps.Entities
         public string Filter_
         {
             get { return Filter != null ? JsonConvert.SerializeObject(Filter) : null; }
-            set { Filter = JsonConvert.DeserializeObject<JObject>(value); }
+            set { Filter = string.IsNullOrEmpty(value) ? new JObject() : JsonConvert.DeserializeObject<JObject>(value); }
         }
 
         [NotMapped]

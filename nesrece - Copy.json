@@ -1,65 +1,74 @@
 [
-  {
-    "id": 1203537,
-    "datum": "01.01.2018,17:50",
-    "longitude": 20.46804,
-    "latitude": 44.78468,
-    "steta": "Sa mat.stetom",
-    "vozila": "SN SA PARKIRANIM VOZILIMA",
-    "opis": "Sudar sa parkiranim vozilom sa desne strane kolovoza"
-  },
-  {
-    "id": 1203512,
-    "datum": "01.01.2018,15:25",
-    "longitude": 20.45529,
-    "latitude": 44.80735,
-    "steta": "Sa mat.stetom",
-    "vozila": "SN SA NAJMANjE DVA VOZILA � BEZ SKRETANjA",
-    "opis": "Najmanje dva vozila koja se kre�u u istom smeru � uklju�ivanje u saobra�aj"
-  },
-  {
-    "id": 1203466,
-    "datum": "01.01.2018,00:10",
-    "longitude": 20.51509,
-    "latitude": 44.813862,
-    "steta": "Sa mat.stetom",
-    "vozila": "SN SA JEDNIM VOZILOM",
-    "opis": "Nezgoda sa jednim vozilom na kolovozu"
-  },
-  {
-    "id": 1203518,
-    "datum": "01.01.2018,13:20",
-    "longitude": 20.388714,
-    "latitude": 44.822182,
-    "steta": "Sa mat.stetom",
-    "vozila": "SN SA PARKIRANIM VOZILIMA",
-    "opis": "Ostali sudari sa parkiranim vozilom"
-  },
-  {
-    "id": 1203513,
-    "datum": "01.01.2018,01:00",
-    "longitude": 20.26463,
-    "latitude": 44.38069,
-    "steta": "Sa mat.stetom",
-    "vozila": "SN SA PARKIRANIM VOZILIMA",
-    "opis": "Ostali sudari sa parkiranim vozilom"
-  },
-  {
-    "id": 1203776,
-    "datum": "02.01.2018,12:00",
-    "longitude": 20.48126,
-    "latitude": 44.80691,
-    "steta": "Sa mat.stetom",
-    "vozila": "SN SA NAJMANjE DVA VOZILA � BEZ SKRETANjA",
-    "opis": "Najmanje dva vozila koja se kre�u u istom smeru � uklju�ivanje u saobra�aj"
-  },
-  {
-    "id": 1203676,
-    "datum": "02.01.2018,18:30",
-    "longitude": 20.450106,
-    "latitude": 44.74827,
-    "steta": "Sa mat.stetom",
-    "vozila": "SN SA NAJMANjE DVA VOZILA � BEZ SKRETANjA",
-    "opis": "Najmanje dva vozila koja se kre�u u istom smeru � uklju�ivanje u saobra�aj"
-  }
+    {
+        "id": 1203537,
+        "datum": "01.01.2018,17:50",
+        "longitude": 20.46804,
+        "latitude": 44.78468,
+        "steta": "Sa mat.stetom",
+        "vozila": "SN SA PARKIRANIM VOZILIMA",
+        "opis": "Sudar sa parkiranim vozilom sa desne strane kolovoza"
+    },
+    {
+        "id": 1203512,
+        "datum": "01.01.2018,15:25",
+        "longitude": 20.45529,
+        "latitude": 44.80735,
+        "steta": "Sa mat.stetom",
+        "vozila": "SN SA NAJMANjE DVA VOZILA � BEZ SKRETANjA",
+        "opis": "Najmanje dva vozila koja se kre�u u istom smeru � uklju�ivanje u saobra�aj"
+    },
+    {
+        "id": 1203466,
+        "datum": "01.01.2018,00:10",
+        "longitude": 20.51509,
+        "latitude": 44.813862,
+        "steta": "Sa mat.stetom",
+        "vozila": "SN SA JEDNIM VOZILOM",
+        "opis": "Nezgoda sa jednim vozilom na kolovozu"
+    },
+    {
+        "id": 1203518,
+        "datum": "01.01.2018,13:20",
+        "longitude": 20.388714,
+        "latitude": 44.822182,
+        "steta": "Sa mat.stetom",
+        "vozila": "SN SA PARKIRANIM VOZILIMA",
+        "opis": "Ostali sudari sa parkiranim vozilom"
+    },
+    {
+        "id": 1203513,
+        "datum": "01.01.2018,01:00",
+        "longitude": 20.26463,
+        "latitude": 44.38069,
+        "steta": "Sa mat.stetom",
+        "vozila": "SN SA PARKIRANIM VOZILIMA",
+        "opis": "Ostali sudari sa parkiranim vozilom"
+    },
+    {
+        "id": 1203776,
+        "datum": "02.01.2018,12:00",
+        "longitude": 20.48126,
+        "latitude": 44.80691,
+        "steta": "Sa mat.stetom",
+        "vozila": "SN SA NAJMANjE DVA VOZILA � BEZ SKRETANjA",
+        "opis": "Najmanje dva vozila koja se kre�u u istom smeru � uklju�ivanje u saobra�aj"
+    },
+    {
+        "id": 1203676,
+        "datum": "02.01.2018,18:30",
+        "longitude": 20.450106,
+        "latitude": 44.74827,
+        "steta": "Sa mat.stetom",
+        "vozila": "SN SA NAJMANjE DVA VOZILA � BEZ SKRETANjA",
+        "opis": "Najmanje dva vozila koja se kre�u u istom smeru � uklju�ivanje u saobra�aj"
+    },
+    {
+        "id": 1223473,
+        "datum": "22.07.2018,10:10",
+        "longitude": 20.51676,
+        "latitude": 44.78637,
+        "steta": "Sa povredjenim",
+        "vozila": "SN SA JEDNIM VOZILOM",
+        "opis": "Nezgoda sa jednim vozilom na kolovozu"
+    }
 ]

@@ -17,33 +17,27 @@ namespace Maps.Utils
     {
         public override bool LoadFile(Stream stream, Layer layer, ref IList<string> messages)
         {
-            try
+            // Creates validation schema from the columns of the layer.
+            JSchema schema = CreateSchema(layer.Id, ref messages);
+            if (schema == null)
             {
-                // Creates validation schema from the columns of the layer.
-                JSchema schema = CreateSchema(layer.Id, ref messages);
-                if (schema == null)
+                return false;
+            }
+
+            using (StreamReader file = new StreamReader(stream))
+            using (JsonTextReader reader = new JsonTextReader(file))
+            {
+                JArray array = JToken.ReadFrom(reader) as JArray;
+                // Check whether the data is valid.
+                if (!array.IsValid(schema, out messages))
                 {
                     return false;
                 }
-
-                using (StreamReader file = new StreamReader(stream))
-                using (JsonTextReader reader = new JsonTextReader(file))
-                {
-                    JArray array = JToken.ReadFrom(reader) as JArray;
-                    // Check whether the data is valid.
-                    if (!array.IsValid(schema, out messages))
-                    {
-                        return false;
-                    }
-                    StoreData(array, layer);
-                    return true;
-                }
+                StoreData(array, layer);
+                CreateCharts(layer);
+                CreateFilters(layer);
+                return true;
             }
-            catch (Exception ex)
-            {
-                messages.Add(ex.Message);
-            }
-            return false;
         }
 
         private static readonly Dictionary<UserDataType, string> UserTypeToJsonType = new Dictionary<UserDataType, string>
@@ -87,24 +81,16 @@ namespace Maps.Utils
             }
             catch (Exception ex)
             {
-                messages.Add(ex.Message);
-                try
+                using (var access = new DataAccess())
                 {
-                    using (var access = new DataAccess())
+                    foreach (var data in access.Data.Get(d => d.Layer.Id == id).ToList())
                     {
-                        foreach(var data in access.Data.Get(d => d.Layer.Id == id).ToList())
-                        {
-                            access.Data.Delete(data);
-                        }
-                        access.Save();
+                        access.Data.Delete(data);
                     }
-                }
-                catch (Exception exe)
-                {
-                    messages.Add(exe.Message);
+                    access.Save();
                 }
 
-                return null;
+                throw ex;
             }
         }
 
