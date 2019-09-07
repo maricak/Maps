@@ -19,7 +19,10 @@ namespace Maps.Entities
         /// </summary>
         public JArray Layers { get; set; }
 
-        public DisplayMapViewModel() { }
+        public DisplayMapViewModel()
+        {
+            Layers = new JArray();
+        }
 
         public DisplayMapViewModel(Map map)
         {

@@ -12,7 +12,7 @@ namespace Maps.Entities
         /// List of all awailable icons. Item in the list must match 
         /// name of the icon file.
         /// </summary>
-        public static readonly List<string> ICON_NAMES = new List<string>()
+        public static readonly IList<string> ICON_NAMES = new List<string>()
             {
                 "red", "red-dot",
                 "green", "green-dot",

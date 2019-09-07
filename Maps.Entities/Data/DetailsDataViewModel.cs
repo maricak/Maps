@@ -9,9 +9,9 @@ namespace Maps.Entities
     {
         public JObject Values { get; set; }
 
-        public string Values_
+        public DetailsDataViewModel()
         {
-            get; set;
+            Values = new JObject();
         }
 
         public DetailsDataViewModel(Data data)

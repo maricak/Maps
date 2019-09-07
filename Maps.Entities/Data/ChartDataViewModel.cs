@@ -10,7 +10,10 @@ namespace Maps.Entities
 
         public IDictionary<string, HorizontalBarViewModel> ChartModels { get; set; }
 
-        public ChartDataViewModel() { }
+        public ChartDataViewModel()
+        {
+            ChartModels = new Dictionary<string, HorizontalBarViewModel>();
+        }
 
         public ChartDataViewModel(Layer layer)
         {

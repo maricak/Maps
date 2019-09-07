@@ -8,7 +8,9 @@ namespace Maps.Entities
     public class TableDataViewModel
     {
         public string LayerName { get; set; }
+
         public bool HasData { get; set; }
+
         public IList<DetailsDataViewModel> Data { get; set; }
 
         public TableDataViewModel()

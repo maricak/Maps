@@ -1,5 +1,12 @@
 ﻿@model IList<Maps.Entities.DropdownItemLayerViewModel>
 
+@if (!Html.ViewData.ModelState.IsValid)
+{
+    <div class="dropdown-item">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    </div>
+}
+
 @foreach (var layer in Model)
 {
     @Ajax.ActionLink(layer.Name, "Table", "Data",

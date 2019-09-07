@@ -10,7 +10,11 @@
 
         public VisibilityLayerViewModel Visibility { get; set; }
 
-        public FilterLayerViewModel() { }
+        public FilterLayerViewModel()
+        {
+            SelectIcon = new SelectIconLayerViewModel();
+            Visibility = new VisibilityLayerViewModel();
+        }
 
         public FilterLayerViewModel(Layer layer)
         {

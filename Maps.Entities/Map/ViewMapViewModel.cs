@@ -13,8 +13,6 @@ namespace Maps.Entities
 
         public string Name { get; set; }
 
-        public List<DetailsLayerViewModel> Layers { get; set; }
-
         public ViewMapViewModel() { }
 
         public ViewMapViewModel(Map map)

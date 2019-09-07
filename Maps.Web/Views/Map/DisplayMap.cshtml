@@ -1,5 +1,10 @@
 ﻿@model Maps.Entities.DisplayMapViewModel
 
+@if (!Html.ViewData.ModelState.IsValid)
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+}
+
 <div id="@string.Concat("googlemap", Model.Id)" class="map w-100 h-100"></div>
 
 <script>

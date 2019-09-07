@@ -15,12 +15,12 @@ namespace Maps.Entities
         /// <summary>
         /// Details about map's layers.
         /// </summary>
-        public List<DetailsLayerViewModel> Layers { get; set; }
+        public IList<DetailsLayerViewModel> Layers { get; set; }
 
         /// <summary>
         /// List of layers for the dropdown menu.
         /// </summary>
-        public List<DropdownItemLayerViewModel> DropdownLayerItems { get; set; }
+        public IList<DropdownItemLayerViewModel> DropdownLayerItems { get; set; }
 
         public PublicMapViewModel SetPublic { get; set; }
 

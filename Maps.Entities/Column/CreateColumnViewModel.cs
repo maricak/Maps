@@ -21,6 +21,7 @@ namespace Maps.Entities
         public bool HasChart { get; set; }
 
         public CreateColumnViewModel() { }
+
         public CreateColumnViewModel(Column column)
         {
             Name = column.Name;

@@ -1,10 +1,5 @@
 ﻿@model Maps.Entities.CreateSchemaViewModel
 
-@if (!Html.ViewData.ModelState.IsValid)
-{
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-}
-
 @using (Ajax.BeginForm("Create", "Schema", null,
                 new AjaxOptions { UpdateTargetId = string.Concat("schema", Model.LayerId), HttpMethod = "post" },
                 new { role = "form" }))
@@ -26,4 +21,9 @@
     <div class="text-right">
         <input type="submit" value="Save" formaction="AddColumn" class="btn btn-link" />
     </div>
+
+    if (!Html.ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    }
 }

@@ -12,7 +12,11 @@ namespace Maps.Entities
 
         public DetailsHeaderLayerViewModel HeaderModel { get; set; }
 
-        public DetailsLayerViewModel() { }
+        public DetailsLayerViewModel()
+        {
+            CollapseModel = new DetailsCollapseLayerViewModel();
+            HeaderModel = new DetailsHeaderLayerViewModel();
+        }
 
         public DetailsLayerViewModel(Layer layer)
         {
@@ -26,6 +30,7 @@ namespace Maps.Entities
             {
                 MapId = mapId
             };
+            CollapseModel = new DetailsCollapseLayerViewModel();
         }
     }
 }

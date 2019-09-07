@@ -20,7 +20,14 @@ namespace Maps.Entities
         public JArray CountArray { get; set; }
 
         public Guid ColumnId { get; set; }
+
         public string ColumnName { get; set; }
+
+        public HorizontalBarViewModel()
+        {
+            LabelArray = new JArray();
+            CountArray = new JArray();
+        }
 
         public HorizontalBarViewModel(Column column)
         {
