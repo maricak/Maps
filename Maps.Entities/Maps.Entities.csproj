@@ -98,6 +98,7 @@
     <Compile Include="Account\SetPasswordViewModel.cs" />
     <Compile Include="Column\Column.cs" />
     <Compile Include="Column\CreateColumnViewModel.cs" />
+    <Compile Include="Filter\FilteViewModel.cs" />
     <Compile Include="Layer\VisibilityLayerViewModel.cs" />
     <Compile Include="Layer\FilterLayerViewModel.cs" />
     <Compile Include="Layer\SelectIconLayerViewModel.cs" />

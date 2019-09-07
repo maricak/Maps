@@ -440,6 +440,10 @@ namespace Maps.Controllers
                                 else
                                 {
                                     layer.HasData = true;
+                                    layer.Center["lng"] = 0;
+                                    layer.Center["lat"] = 0;
+                                    layer.Center["radius"] = 0;
+
                                     access.Layers.Update(layer);
                                     access.Save();
 
@@ -594,7 +598,7 @@ namespace Maps.Controllers
                 {
                     using (var access = new DataAccess())
                     {
-                        var layer = access.Layers.GetByID(id);
+                        var layer = access.Layers.Get(l => l.Id == id, includeProperties:"Columns").SingleOrDefault();
                         if (layer == null)
                         {
                             logger.ErrorFormat("NOT_FOUND -- Layer with id={0} not found.", id);
@@ -658,7 +662,6 @@ namespace Maps.Controllers
 
             return PartialView(model);
         }
-
 
         [AjaxOnly]
         [HttpPost]

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -31,6 +33,24 @@ namespace Maps.Entities
         public bool HasColumns { get; set; }
 
         public bool IsVisible { get; set; }
+
+        /// <summary>
+        /// Represents filtering based on marker position. This object has values for 
+        /// latitude, longitude and radius.
+        /// </summary>
+        public string Center_
+        {
+            get { return Center != null ? JsonConvert.SerializeObject(Center) : null; }
+            set { Center = string.IsNullOrEmpty(value) ? new JObject() : JsonConvert.DeserializeObject<JObject>(value); }
+        }
+
+        [NotMapped]
+        public JObject Center { get; set; }
+
+        /// <summary>
+        /// If this filed is set filtering above is visible on the map.
+        /// </summary>
+        public bool IsFilterVisible { get; set; }
 
         /// <summary>
         /// Layer has a collection of its data.

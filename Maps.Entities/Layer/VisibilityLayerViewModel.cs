@@ -3,8 +3,7 @@
 namespace Maps.Entities
 {
     /// <summary>
-    /// ViewModel used for changing visibility on a 
-    /// map of the given layer.
+    /// ViewModel used for changing visibility of the given layer on a map.
     /// </summary>
     public class VisibilityLayerViewModel
     {

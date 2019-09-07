@@ -1,0 +1,16 @@
+﻿@model IList<Maps.Entities.FilterViewModel>
+
+<ul class="list-group list-group-flush">
+    @if (!Html.ViewData.ModelState.IsValid)
+    {
+        <li class="list-group-item">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        </li>
+    }
+    @foreach (var item in Model)
+    {
+        <li class="list-group-item p-0 pl-3" id="@string.Concat("filter", item.Id)">
+            @Html.Partial("../Filter/Filter", item)
+        </li>
+    }
+</ul>

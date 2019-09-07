@@ -50,13 +50,6 @@ namespace Maps.Utils
                         column.Filter["max"] = 0;
                     }
 
-                    if (column.DataType == UserDataType.LATITUDE)
-                    {
-                        column.Filter["lng"] = 0;
-                        column.Filter["lat"] = 0;
-                        column.Filter["radius"] = 0;
-                    }
-
                     access.Columns.Update(column);
                 }
 

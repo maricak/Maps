@@ -140,6 +140,14 @@
     <Compile Include="Migrations\201909071012400_MapDeleteOncascade.Designer.cs">
       <DependentUpon>201909071012400_MapDeleteOncascade.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909071543184_AddCenterToLayer.cs" />
+    <Compile Include="Migrations\201909071543184_AddCenterToLayer.Designer.cs">
+      <DependentUpon>201909071543184_AddCenterToLayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909071600118_AddIsFilterVisibleToLayer.cs" />
+    <Compile Include="Migrations\201909071600118_AddIsFilterVisibleToLayer.Designer.cs">
+      <DependentUpon>201909071600118_AddIsFilterVisibleToLayer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
@@ -199,6 +207,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909071012400_MapDeleteOncascade.resx">
       <DependentUpon>201909071012400_MapDeleteOncascade.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909071543184_AddCenterToLayer.resx">
+      <DependentUpon>201909071543184_AddCenterToLayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909071600118_AddIsFilterVisibleToLayer.resx">
+      <DependentUpon>201909071600118_AddIsFilterVisibleToLayer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

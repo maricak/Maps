@@ -2,7 +2,7 @@
 
 @foreach (var layer in Model)
 {
-    @if (!Html.ViewData.ModelState.IsValid)
+    if (!Html.ViewData.ModelState.IsValid)
     {
         <div class="dropdown-item">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
