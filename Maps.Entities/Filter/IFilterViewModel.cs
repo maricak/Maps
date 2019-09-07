@@ -4,9 +4,9 @@ namespace Maps.Entities
 {
     /// <summary>
     /// Now exsits three types of filters:
-    ///  - UNIQU_LIST: filter by possible values of the column.
-    ///  - DISTANCE: filter by distance of the row in user data from given point.
-    ///  - RANGE: filter by numeric values and whether they belong to the given range.
+    ///     1. UNIQU_LIST: filter by possible values of the column.
+    ///     2. DISTANCE: filter by distance of the row in user data from given point.
+    ///     3. RANGE: filter by numeric values and whether they belong to the given range.
     /// </summary>
     public enum FilterType { UNIQUE_LIST, DISTANCE, RANGE }
 

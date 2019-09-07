@@ -22,7 +22,7 @@ namespace Maps.Entities
         public double Latitude { get; set; }
 
         [Required(ErrorMessage = "Longitude is required")]
-        [Range(-90, 90, ErrorMessage = "Longitude must be in range [-180, 180]")]
+        [Range(-180, 180, ErrorMessage = "Longitude must be in range [-180, 180]")]
         public double Longitude { get; set; }
 
         [Display(Name = "Radius in meters")]

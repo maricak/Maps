@@ -87,18 +87,4 @@
             $('#mapPublic' + mapId).replaceWith(response);
         });
     }
-
-    function updateVisibility(layerId, visible) {
-        $.ajax({
-            type: "post",
-            url: "../../Filter/SetVisibility",
-            data: {
-                Id: layerId,
-                IsVisible: visible
-            }
-        }).done(function (response) {
-            $('#layerVisibility' + layerId).replaceWith(response);
-            updateMap();
-        });
-    }
 </script>

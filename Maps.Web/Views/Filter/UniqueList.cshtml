@@ -1,7 +1,7 @@
 ﻿@model Maps.Entities.UniqueListFilterViewModel
 
 @using (Ajax.BeginForm("UniqueList", "Filter", null,
-                        new AjaxOptions { HttpMethod = "post", UpdateTargetId = string.Concat("filter", Model.Id), InsertionMode = InsertionMode.Replace }))
+                        new AjaxOptions { HttpMethod = "post", UpdateTargetId = string.Concat("filter", Model.Id), OnComplete = "updateMap()", InsertionMode = InsertionMode.Replace }))
 {
     if (!Html.ViewData.ModelState.IsValid)
     {
@@ -35,7 +35,7 @@
                 }
                 else
                 {
-                    <input type="checkbox" name="UniqueValues[@pair.Key]" id="UniqueValues[@pair.Key]" value="true"/>
+                    <input type="checkbox" name="UniqueValues[@pair.Key]" id="UniqueValues[@pair.Key]" value="true" />
                 }
                 @*@Html.CheckBoxFor(m => pair.Value, new { htmlAttributes = new { @class = "form-check-input form-control-sm" } })*@
             </div>
