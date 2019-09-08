@@ -8,12 +8,12 @@ using Microsoft.Owin.Security.Google;
 using Owin;
 using Owin.Security.Providers.GitHub;
 using System;
+using System.Configuration;
 
 namespace Maps
 {
     public partial class Startup
     {
-        // For more information on configuring authentication, please visit https://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configure the db context, user manager and signin manager to use a single instance per request
@@ -44,28 +44,26 @@ namespace Maps
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
             app.UseGitHubAuthentication(
-                clientId: "ec12008720d9c8f6ae1a",
-                clientSecret: "5a8a65fedd1ce82798439385e3dec7dc423c20cc");
+                clientId: ConfigurationManager.AppSettings["GitHubClientId"],
+                clientSecret: ConfigurationManager.AppSettings["GitHubClientSecret"]);
 
-            // Uncomment the following lines to enable logging in with third party login providers
             app.UseMicrosoftAccountAuthentication(
-                clientId: "3248f9fa-7186-4d7c-8ae3-f75e7400cc14",
-                clientSecret: "[cPkBv7SF7e.3LbYmVcwAn1fHvVe[We/");
+                clientId: ConfigurationManager.AppSettings["MicrosoftClientId"],
+                clientSecret: ConfigurationManager.AppSettings["MicrosoftClientSecret"]);
 
             //app.UseTwitterAuthentication(
             //   consumerKey: "",
             //   consumerSecret: "");
 
             app.UseFacebookAuthentication(
-               appId: "355864615088208",
-               appSecret: "1e978de4f1d56960d4448455f9012c09");
+               appId: ConfigurationManager.AppSettings["FacebookAppId"],
+               appSecret: ConfigurationManager.AppSettings["FacebookAppSecret"]);
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
-                ClientId = "959161207695-hs1uefh9utbufoe731iv8m372lji4nqc.apps.googleusercontent.com",
-                ClientSecret = "uRlWvE1U7FXILYAuolaX4qLh"
+                ClientId = ConfigurationManager.AppSettings["GoogleClientId"],
+                ClientSecret = ConfigurationManager.AppSettings["GoogleClientSecret"]
             });
-
         }
     }
 }

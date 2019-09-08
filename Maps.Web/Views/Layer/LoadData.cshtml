@@ -9,15 +9,13 @@
 
     @using (Ajax.BeginForm("LoadData", "Layer", null,
                         new AjaxOptions { HttpMethod = "post", UpdateTargetId = string.Concat("schema", Model.LayerId), OnComplete = "updateMap()" },
-                        new { enctype = "multipart/form-data", id = string.Concat("upload", Model.LayerId), @class = "form-inline" }))
+                        new { enctype = "multipart/form-data", id = string.Concat("upload", Model.LayerId) }))
     {
         @Html.AntiForgeryToken()
         <input type="hidden" id="LayerId" name="LayerId" value="@Model.LayerId" />
-        <div class="form-row">
-            <div class="form-group col">
-                <label for="Datafile">File</label>
-                <input type="file" name="DataFile" id="DataFile" required class="form-control-file form-control-sm" />
-            </div>
+        <div class="custom-file">
+            <label class="custom-file-label" for="DataFile">Choose file</label>
+            <input type="file" name="DataFile" id="DataFile" required class="custom-file-input form-control form-control-sm">
         </div>
         <div class="float-right">
             <input type="submit" value="Load" class="btn btn-link" />

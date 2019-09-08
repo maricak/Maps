@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 
 namespace Maps.Entities
 {
@@ -8,23 +9,12 @@ namespace Maps.Entities
     /// </summary>
     public class SelectIconLayerViewModel
     {
+        public Guid Id { get; set; }
+
         /// <summary>
         /// List of all awailable icons. Item in the list must match 
         /// name of the icon file.
         /// </summary>
-        public static readonly IList<string> ICON_NAMES = new List<string>()
-            {
-                "red", "red-dot",
-                "green", "green-dot",
-                "blue", "blue-dot",
-                "orange", "orange-dot",
-                "yellow", "yellow-dot",
-                "purple","purple-dot",
-                "lightblue", "lightblue-dot",
-                "pink", "pink-dot"
-            };
-        public Guid Id { get; set; }
-
         public string Icon { get; set; }
 
         /// <summary>
@@ -34,12 +24,17 @@ namespace Maps.Entities
 
         public SelectIconLayerViewModel()
         {
-            Icons = ICON_NAMES;
+            Icons = new List<string>();
         }
 
-        public SelectIconLayerViewModel(Layer layer)
+        public SelectIconLayerViewModel(IList<string> icons)
         {
-            Icons = ICON_NAMES;
+            Icons = icons;
+        }
+
+        public SelectIconLayerViewModel(Layer layer, IList<string> icons)
+        {
+            Icons = icons;
             if (layer != null)
             {
                 Id = layer.Id;

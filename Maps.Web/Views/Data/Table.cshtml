@@ -19,19 +19,29 @@
                 <table class="table table-striped table-bordered table-sm">
                     <thead>
                         <tr>
+                            <th>#</th>
                             @foreach (var property in Model.Data.FirstOrDefault().Values)
                             {
-                                <td>@property.Key</td>
+                                <th>@property.Key</th>
                             }
                         </tr>
                     </thead>
                     <tbody>
+                        @{
+                            var i = 1;
+                        }
                         @foreach (var data in Model.Data)
                         {
                             <tr>
+                                <th>
+                                    @i
+                                </th>
                                 @foreach (var property in data.Values)
                                 {
                                     <td>@property.Value</td>
+                                }
+                                @{
+                                    i++;
                                 }
                             </tr>
                         }

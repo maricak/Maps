@@ -3,6 +3,7 @@ using Maps.Entities;
 using Maps.Utils;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -584,6 +585,8 @@ namespace Maps.Controllers
 
         public ActionResult Filter(Guid? id)
         {
+            string[] iconsArray = ConfigurationManager.AppSettings["Icons"].Split(',').Select(s => s.Trim()).ToArray();
+
             try
             {
                 logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
@@ -607,7 +610,7 @@ namespace Maps.Controllers
                         }
                         else
                         {
-                            return PartialView(new FilterLayerViewModel(layer));
+                            return PartialView(new FilterLayerViewModel(layer, new List<string>(iconsArray)));
                         }
                     }
                 }
@@ -618,7 +621,7 @@ namespace Maps.Controllers
                 ModelState.AddModelError("", Error.ERROR);
             }
 
-            return PartialView(new FilterLayerViewModel());
+            return PartialView(new FilterLayerViewModel(new List<string>(iconsArray)));
         }
 
         [AjaxOnly]
@@ -627,6 +630,9 @@ namespace Maps.Controllers
         {
             try
             {
+                string[] iconsArray = ConfigurationManager.AppSettings["Icons"].Split(',').Select(s => s.Trim()).ToArray();
+                model.Icons = new List<string>(iconsArray);
+
                 logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
 
                 if (ModelState.IsValid)

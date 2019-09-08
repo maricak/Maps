@@ -27,7 +27,7 @@ namespace Maps.Utils
             }
             if (columns.Where(c => c.DataType == UserDataType.LONGITUDE).ToList().Count() != 1)
             {
-                messages.Add("There must be exactly one latitude column");
+                messages.Add("There must be exactly one longitude column");
             }
 
             return messages.Count() == 0;

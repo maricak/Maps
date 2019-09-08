@@ -3,14 +3,13 @@
 <div class="card-body">
     <h5>Load data</h5>
     @using (Ajax.BeginForm("NumColumnsForm", "Schema", null,
-                             new AjaxOptions { HttpMethod = "post", UpdateTargetId = string.Concat("schema", Model.LayerId) },
-                             new { @class = "inline-form" }))
+                             new AjaxOptions { HttpMethod = "post", UpdateTargetId = string.Concat("schema", Model.LayerId) }))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.LayerId)
         @Html.LabelFor(model => model.NumColumns)
         <span>:&nbsp;</span>
-        @Html.EditorFor(m => m.NumColumns, new { htmlAttributes = new { autofocus = "autofocus" } })
+        @Html.EditorFor(m => m.NumColumns, new { htmlAttributes = new { autofocus = "autofocus", @class = "form-control form-control-sm" } })
         <div class="float-right">
             <input type="submit" value="Save" class="btn btn-link" />
         </div>

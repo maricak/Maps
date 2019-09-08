@@ -373,11 +373,12 @@ namespace Maps.Controllers
             return PartialView("ListItem", model);
         }
 
+        [AllowAnonymous]
         public ActionResult DisplayMap(Guid? id)
         {
             try
             {
-                logger.InfoFormat("UserId={0}", User.Identity.GetUser().Id);
+                logger.InfoFormat("UserId={0}", User.Identity.GetUser()?.Id);
 
                 if (id == null)
                 {
@@ -396,7 +397,13 @@ namespace Maps.Controllers
 
                             ModelState.AddModelError("", Error.NOT_FOUND);
                         }
-                        else if (map.User.Id != User.Identity.GetUser().Id && !map.IsPublic)
+                        else if (!User.Identity.IsAuthenticated && !map.IsPublic)
+                        {
+                            logger.ErrorFormat("FORBIDDEN -- NOT AUTHENTICATED user cannot access map with id={1}.", id);
+
+                            ModelState.AddModelError("", Error.FORBIDDEN);
+                        }
+                        else if (User.Identity.IsAuthenticated && map.User.Id != User.Identity.GetUser().Id && !map.IsPublic)
                         {
                             logger.ErrorFormat("FORBIDDEN -- User with id={0} cannot access map with id={1}.",
                                     User.Identity.GetUser().Id, id);
@@ -466,7 +473,7 @@ namespace Maps.Controllers
         {
             try
             {
-                logger.InfoFormat("UserId={0} -- id={1}", User.Identity.GetUser().Id, id);
+                logger.InfoFormat("UserId={0} -- id={1}", User.Identity.GetUser()?.Id, id);
 
                 if (id == null)
                 {

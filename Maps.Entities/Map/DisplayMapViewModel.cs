@@ -64,12 +64,7 @@ namespace Maps.Entities
                                     continue;
                                 }
 
-                                if (!CheckUniquList(data, layer.Columns.ToList()))
-                                {
-                                    continue;
-                                }
-
-                                if (!CheckRange(data, layer.Columns.ToList()))
+                                if (!CheckUniquListAndRange(data, layer.Columns.ToList()))
                                 {
                                     continue;
                                 }
@@ -98,38 +93,35 @@ namespace Maps.Entities
             return first.GetDistanceTo(second) < (double)layer.Center["radius"];
         }
 
-        private bool CheckUniquList(Data data, IList<Column> columns)
+        private bool CheckUniquListAndRange(Data data, IList<Column> columns)
         {
             foreach (var column in columns)
             {
-                if (column.HasChart)
+                if (column.IsFilterVisible)
                 {
-                    var value = (string)data.Values[column.Name];
-                    if (column.IsFilterVisible && !(bool)column.Filter[value])
+                    // Check unique list.
+                    if (column.HasChart)
                     {
-                        return false;
+                        var value = (string)data.Values[column.Name];
+                        if (!(bool)column.Filter[value])
+                        {
+                            return false;
+                        }
+                    }
+                    // Check range.
+                    else if (column.DataType != UserDataType.STRING)
+                    {
+                        var value = (double)data.Values[column.Name];
+                        var min = (double)column.Filter["min"];
+                        var max = (double)column.Filter["max"];
+                        if (value < min || value > max)
+                        {
+                            return false;
+                        }
                     }
                 }
             }
 
-            return true;
-        }
-
-        private bool CheckRange(Data data, IList<Column> columns)
-        {
-            foreach (var column in columns)
-            {
-                if (!column.HasChart && column.DataType != UserDataType.STRING)
-                {
-                    var value = (double)data.Values[column.Name];
-                    var min = (double)column.Filter["min"];
-                    var max = (double)column.Filter["max"];
-                    if (column.IsFilterVisible && (value < min || value > max))
-                    {
-                        return false;
-                    }
-                }
-            }
             return true;
         }
     }

@@ -21,9 +21,16 @@ namespace Maps.Entities
             Filters = new List<IFilterViewModel>();
         }
 
-        public FilterLayerViewModel(Layer layer)
+        public FilterLayerViewModel(IList<string> icons)
         {
-            SelectIcon = new SelectIconLayerViewModel(layer);
+            SelectIcon = new SelectIconLayerViewModel(icons);
+            Visibility = new VisibilityLayerViewModel();
+            Filters = new List<IFilterViewModel>();
+        }
+
+        public FilterLayerViewModel(Layer layer, IList<string> icons)
+        {
+            SelectIcon = new SelectIconLayerViewModel(layer, icons);
             Visibility = new VisibilityLayerViewModel(layer);
             Filters = new List<IFilterViewModel>();
             if (layer != null)
@@ -34,7 +41,7 @@ namespace Maps.Entities
                     {
                         Filters.Add(new UniqueListFilterViewModel(column));
                     }
-                    else if (column.DataType == UserDataType.NUMBER)
+                    else if (column.DataType != UserDataType.STRING)
                     {
                         Filters.Add(new RangeFilterViewModel(column));
                     }

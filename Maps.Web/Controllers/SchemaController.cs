@@ -92,6 +92,8 @@ namespace Maps.Controllers
 
                                 foreach (var message in messages)
                                 {
+                                    logger.InfoFormat("UserId={0} -- message={1}", User.Identity.GetUser().Id, message);
+
                                     ModelState.AddModelError("", message);
                                 }
                             }

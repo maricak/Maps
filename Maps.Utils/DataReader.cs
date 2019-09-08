@@ -44,7 +44,7 @@ namespace Maps.Utils
                             column.Filter[unique.Name.ToString()] = false;
                         }
                     }
-                    else if (column.DataType == UserDataType.NUMBER)
+                    else if (column.DataType != UserDataType.STRING)
                     {
                         column.Filter["min"] = 0;
                         column.Filter["max"] = 0;
