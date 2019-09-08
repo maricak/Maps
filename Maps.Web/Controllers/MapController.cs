@@ -479,13 +479,7 @@ namespace Maps.Controllers
                     using (var access = new DataAccess())
                     {
                         Map map = access.Maps.Get(m => m.Id == id, includeProperties: "Layers").SingleOrDefault();
-                        if (map == null)
-                        {
-                            logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
-
-                            ModelState.AddModelError("", Error.NOT_FOUND);
-                        }
-                        else if (!map.IsPublic)
+                        if (map == null || !map.IsPublic)
                         {
                             logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", id);
 
@@ -519,7 +513,7 @@ namespace Maps.Controllers
                     using (var access = new DataAccess())
                     {
                         var map = access.Maps.Get(m => m.Id == model.Id, includeProperties: "Layers,Layers.Columns,Layers.Data").SingleOrDefault();
-                        if (map == null)
+                        if (map == null || !map.IsPublic)
                         {
                             logger.ErrorFormat("NOT_FOUND -- Map with id={0} not found.", model.Id);
 
@@ -537,7 +531,6 @@ namespace Maps.Controllers
                             }
                             else
                             {
-
                                 Map newMap = new Map()
                                 {
                                     Id = newMapId,
