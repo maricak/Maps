@@ -560,7 +560,9 @@ namespace Maps.Controllers
                                         HasData = layer.HasData,
                                         IsVisible = layer.IsVisible,
                                         Name = layer.Name,
-                                        Icon = layer.Icon
+                                        Icon = layer.Icon,
+                                        Center_ = layer.Center_,
+                                        IsFilterVisible = layer.IsFilterVisible
                                     };
                                     access.Layers.Insert(newLayer);
                                     foreach (var column in layer.Columns)
@@ -571,7 +573,10 @@ namespace Maps.Controllers
                                             DataType = column.DataType,
                                             HasChart = column.HasChart,
                                             Layer = newLayer,
-                                            Name = column.Name
+                                            Name = column.Name,
+                                            Filter_ = column.Filter_,
+                                            Chart_ = column.Chart_,
+                                            IsFilterVisible = column.IsFilterVisible, 
                                         };
                                         access.Columns.Insert(newColumn);
                                     }
@@ -588,7 +593,7 @@ namespace Maps.Controllers
                                         {
                                             Id = Guid.NewGuid(),
                                             Layer = newLayer,
-                                            Values = data.Values
+                                            Values_ = data.Values_,
                                         };
                                         dataList.Add(newData);
                                     }
