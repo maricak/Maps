@@ -1,14 +1,11 @@
 ﻿@model Maps.Entities.ManageLoginsViewModel
 @using Microsoft.Owin.Security
-@{
-    ViewBag.Title = "Manage your external logins";
-}
+@{ ViewBag.Title = "Manage your external logins"; }
 
 <div class="card my-3">
     <div class="card-header">
         <h3 class="card-title m-0">@ViewBag.Title</h3>
     </div>
-
     <ul class="list-group list-group-flush">
         @if (ViewBag.StatusMessage != null && ViewBag.StatusMessage != "")
         {
@@ -52,4 +49,3 @@
         }
     </ul>
 </div>
-

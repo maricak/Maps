@@ -19,9 +19,6 @@
 
     function initMap() {
         var map = new google.maps.Map(document.getElementById('googlemap' + '@Model.Id'), { zoom: 0 });
-        map.addListener('tilesloaded', function(e) {
-			$('.dismissButton').click();
-		});
         var bounds = new google.maps.LatLngBounds();
         var layers = @Html.Raw(Model.Layers);
 
@@ -79,12 +76,4 @@
             map.setZoom(2);
         }
     }
-   
-	setInterval(function(){
-		$("*").each(function() {
-				if ($(this).css("zIndex") >= 100) {
-					$(this).css("zIndex", "-100");
-					//alert("test");
-				}
-  		})}, 10);
 </script>

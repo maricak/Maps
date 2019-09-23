@@ -18,7 +18,7 @@ namespace Maps.Utils
         public override bool LoadFile(Stream stream, Layer layer, ref IList<string> messages)
         {
             // Creates validation schema from the columns of the layer.
-            JSchema schema = CreateSchema(layer.Id, ref messages);
+            JSchema schema = CreateSchema(layer.Id);
             if (schema == null)
             {
                 return false;
@@ -48,49 +48,33 @@ namespace Maps.Utils
             { UserDataType.LATITUDE, "number"},
         };
 
-        private JSchema CreateSchema(Guid id, ref IList<string> messages)
+        private JSchema CreateSchema(Guid id)
         {
-            try
+            using (var access = new DataAccess())
             {
-                using (var access = new DataAccess())
+                var columns = access.Columns.Get(c => c.Layer.Id == id).ToList();
+                if (columns == null || columns.Count() == 0)
                 {
-                    var columns = access.Columns.Get(c => c.Layer.Id == id).ToList();
-                    if (columns == null || columns.Count() == 0)
-                    {
-                        return null;
-                    }
-
-                    string schemaString = @"{'type':'array', 'items': {'type': 'object', 'properties': {";
-                    foreach (var column in columns)
-                    {
-                        schemaString += string.Format("'{0}':{{'type':'{1}'}},", column.Name, UserTypeToJsonType[column.DataType]);
-                    }
-
-                    schemaString += "},'required':[";
-                    foreach (var column in columns)
-                    {
-                        schemaString += string.Format("'{0}',", column.Name);
-                    }
-
-                    schemaString += "]}}";
-
-                    // Since properties cannot be set programmatically the schema will be parsed from the created string.
-                    JSchema schema = JSchema.Parse(schemaString);
-                    return schema;
-                }
-            }
-            catch (Exception ex)
-            {
-                using (var access = new DataAccess())
-                {
-                    foreach (var data in access.Data.Get(d => d.Layer.Id == id).ToList())
-                    {
-                        access.Data.Delete(data);
-                    }
-                    access.Save();
+                    return null;
                 }
 
-                throw ex;
+                string schemaString = @"{'type':'array', 'items': {'type': 'object', 'properties': {";
+                foreach (var column in columns)
+                {
+                    schemaString += string.Format("'{0}':{{'type':'{1}'}},", column.Name, UserTypeToJsonType[column.DataType]);
+                }
+
+                schemaString += "},'required':[";
+                foreach (var column in columns)
+                {
+                    schemaString += string.Format("'{0}',", column.Name);
+                }
+
+                schemaString += "]}}";
+
+                // Since properties cannot be set programmatically the schema will be parsed from the created string.
+                JSchema schema = JSchema.Parse(schemaString);
+                return schema;
             }
         }
 

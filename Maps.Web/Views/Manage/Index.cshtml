@@ -1,14 +1,11 @@
 ﻿@using Microsoft.AspNet.Identity
 @model Maps.Entities.ManageIndexViewModel
-@{
-    ViewBag.Title = "Manage your account settings";
-}
+@{ ViewBag.Title = "Manage your account settings"; }
 
 <div class="card my-3">
     <div class="card-header">
         <h3 class="card-title m-0">@ViewBag.Title</h3>
     </div>
-
     <ul class="list-group list-group-flush">
         @if (ViewBag.StatusMessage != null && ViewBag.StatusMessage != "")
         {

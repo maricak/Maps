@@ -39,7 +39,7 @@ namespace Maps.Controllers
 
                             access.Save();
 
-                            logger.InfoFormat("UserId={0} -- successful RANGE/UNIQUE_LIST update", User.Identity.GetUser().Id);
+                            logger.InfoFormat("UserId={0} -- successful RANGE update", User.Identity.GetUser().Id);
 
                             ModelState.AddModelError("", "Successful filter update!");
 
@@ -143,7 +143,7 @@ namespace Maps.Controllers
                         }
                         access.Save();
 
-                        logger.InfoFormat("UserId={0} -- successful RANGE/UNIQUE_LIST update", User.Identity.GetUser().Id);
+                        logger.InfoFormat("UserId={0} -- successful UNIQUE_LIST update", User.Identity.GetUser().Id);
 
                         ModelState.AddModelError("", "Successful filter update!");
 
